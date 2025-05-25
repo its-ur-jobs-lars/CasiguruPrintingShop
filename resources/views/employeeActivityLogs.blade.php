@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Users</title>
+    <title>Employee Activity Logs</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -169,7 +169,7 @@
 
         <!-- Dashboard -->
         <li class="side-nav-menu-item">
-            <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard-homepage') ? : '' }}" href="/dashboard-homepage">
+            <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard') ? : '' }}" href="/dashboard">
                 <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-sharp fa-solid fa-square-poll-horizontal"></i>
                 </span>
@@ -178,22 +178,22 @@
         </li>
         <!-- End Dashboard -->
            
-            <!-- Electronics -->
+            <!-- Order Management -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
-                   data-target="#subElectronics">
+                   data-target="#subOrderManagement">
                   <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-plug"></i>
                   </span>
-                    <span class="side-nav-fadeout-on-closed media-body">Electronics</span>
+                    <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
               </span>
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-              <!-- Electronics: subElectronics -->
-              <ul id="subElectronics" class="side-nav-menu side-nav-menu-second-level mb-0">
+              <!-- Order Management: subOrder Management -->
+              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/laptopSubcategories">
                         <i class="fas fa-solid fa-laptop"></i>Laptop and Accessories</a>
@@ -212,9 +212,9 @@
                     </li>
                  
                 </ul>
-                <!-- End Electronics: subElectronics -->
+                <!-- End Order Management: subOrder Management -->
             </li>
-            <!-- End Electronics -->
+            <!-- End Order Management -->
             
             <!-- Department -->
             <li class="side-nav-menu-item side-nav-has-menu">
@@ -357,7 +357,7 @@
 
                 <!-- Personnel: subPersonnel -->
                 <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0" style="display: block;">
-                    <li class="side-nav-menu-item active">
+                    <li class="side-nav-menu-item">
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
                         </li>
@@ -376,7 +376,7 @@
                         <i class="fas fa-solid fa-user-plus"></i>Personnel Information</a>
                     </li>
 
-                     <li class="side-nav-menu-item">
+                     <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/employeeActivityLogs">
                          <i class="fas fa-solid fa-chart-line"></i>Employee Activity Logs</a>
                     </li>
@@ -400,7 +400,7 @@
        <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Add Users</div>
+                <div class="h3 mb-0">Employee Activity Logs</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -421,8 +421,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                    @livewire('add-user')
-                                   @livewire('add-user-table')
+                                    {{--@livewire('add-user')
+                                   @livewire('add-user-table')--}}
                             </div>
                         </div>
                     </div>

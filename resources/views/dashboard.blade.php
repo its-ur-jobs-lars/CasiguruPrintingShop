@@ -170,7 +170,7 @@
 
         <!-- Dashboard -->
         <li class="side-nav-menu-item active">
-            <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard-homepage') ? : '' }}" href="/dashboard-homepage">
+            <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard') ? : '' }}" href="/dashboard">
                 <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-sharp fa-solid fa-square-poll-horizontal"></i>
                 </span>

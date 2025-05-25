@@ -169,7 +169,7 @@
 
         <!-- Dashboard -->
         <li class="side-nav-menu-item">
-            <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard-homepage') ? : '' }}" href="/dashboard-homepage">
+            <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard') ? : '' }}" href="/dashboard">
                 <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-sharp fa-solid fa-square-poll-horizontal"></i>
                 </span>
@@ -178,22 +178,22 @@
         </li>
         <!-- End Dashboard -->
            
-            <!-- Electronics -->
+            <!-- Order Management -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
-                   data-target="#subElectronics">
+                   data-target="#subOrderManagement">
                   <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-plug"></i>
                   </span>
-                    <span class="side-nav-fadeout-on-closed media-body">Electronics</span>
+                    <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
               </span>
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-              <!-- Electronics: subElectronics -->
-              <ul id="subElectronics" class="side-nav-menu side-nav-menu-second-level mb-0">
+              <!-- Order Management: subOrder Management -->
+              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/laptopSubcategories">
                         <i class="fas fa-solid fa-laptop"></i>Laptop and Accessories</a>
@@ -212,9 +212,9 @@
                     </li>
                  
                 </ul>
-                <!-- End Electronics: subElectronics -->
+                <!-- End Order Management: subOrder Management -->
             </li>
-            <!-- End Electronics -->
+            <!-- End Order Management -->
             
             <!-- Department -->
             <li class="side-nav-menu-item side-nav-has-menu">
