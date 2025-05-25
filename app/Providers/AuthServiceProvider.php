@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('view-personnel-profile', function ($user) {
+        return $user->role !== '2'; // Only allow if NOT 'user'
+    });
     }
 }

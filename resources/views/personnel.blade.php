@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Add Personnel</title>
+    <title>Add Employee</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -337,32 +337,8 @@
                         <a class="side-nav-menu-link" href="/categoryDivisionManufacturer">
                         <i class="fas fa-solid fa-layer-group"></i>Category</a>
                     </li>
-                </ul>
-                <!-- End Manufacturer: subManufacturer -->
-            </li>
-            <!-- End Manufacturer -->
-            
-                <!-- Personnel -->
-                <li class="side-nav-menu-item side-nav-has-menu">
-                <a class="side-nav-menu-link media align-items-center" href="#"
-                   data-target="#subPersonnel">
-              <span class="side-nav-menu-icon d-flex mr-3">
-                    <i class="fas fa-sharp fa-solid fa-user-tie"></i>
-              </span>
-                    <span class="side-nav-fadeout-on-closed media-body">Personnel Profile</span>
-                    <span class="side-nav-control-icon d-flex">
-                        <i class="fas fa-solid fa-caret-right"></i>
-              </span>
-                    <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
-                </a>
 
-                <!-- Personnel: subPersonnel -->
-                <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    <li class="side-nav-menu-item">
-                            <a class="side-nav-menu-link" href="/addUser">
-                            <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
-                        </li>
-                    <li class="side-nav-menu-item">
+                      <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/personnelProductSearching">
                         <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
                     </li>
@@ -371,10 +347,37 @@
                         <a class="side-nav-menu-link" href="/personnelDepartment">
                         <i class="fas fa-solid fa-building"></i>List of Department</a>
                     </li>
+                </ul>
+                <!-- End Manufacturer: subManufacturer -->
+            </li>
+            <!-- End Manufacturer -->
+            
+              @can('view-personnel-profile')
+            <li class="side-nav-menu-item side-nav-has-menu">
+                <a class="side-nav-menu-link media align-items-center" href="#" data-target="#subPersonnel">
+                    <span class="side-nav-menu-icon d-flex mr-3">
+                        <i class="fas fa-sharp fa-solid fa-user-tie"></i>
+                    </span>
+                    <span class="side-nav-fadeout-on-closed media-body">Personnel Profile</span>
+                    <span class="side-nav-control-icon d-flex">
+                        <i class="fas fa-solid fa-caret-right"></i>
+                    </span>
+                    <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
+                </a>
+                <!-- Personnel: subPersonnel -->
+            </li>
+
+                <!-- Personnel: subPersonnel -->
+                <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0">
+                    <li class="side-nav-menu-item">
+                            <a class="side-nav-menu-link" href="/addUser">
+                            <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
+                        </li>
+                  
 
                      <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/personnel">
-                        <i class="fas fa-solid fa-user-plus"></i>Personnel Information</a>
+                        <i class="fas fa-solid fa-user-plus"></i>Employee Information</a>
                     </li>
 
                       <li class="side-nav-menu-item">
@@ -384,6 +387,7 @@
                 </ul>
                 <!-- End Personnel: subPersonnel -->
             </li>
+             @endcan
           
        <!-- Dark Mode Toggle -->
        <div class="ml-3">

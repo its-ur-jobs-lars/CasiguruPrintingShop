@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
+use App\Models\EmployeeActivityLogs; 
 
 class EmployeeLoginController extends Controller
 {
@@ -32,9 +33,22 @@ public function login(Request $request)
         return back()->with('withErrors', 'Your account is inactive.')->withInput();
     }
 
-    // Attempt to log the user in
     if (Auth::attempt(['employee_number' => $request->employee_number, 'password' => $request->password])) {
-        // Redirect to the intended page with a success message
+        // Before logging new login, update any previous login logs for this user to isActive = 0
+        EmployeeActivityLogs::where('user_id', Auth::id())
+            ->where('isActive', 1)
+            ->where('action', 'login')
+            ->update(['isActive' => 0, 'action' => 'logout', 'description' => 'Auto-logout on new login']);
+
+        // Log the new login activity
+        EmployeeActivityLogs::create([
+            'user_id' => Auth::id(),
+            'user_name' => Auth::user()->username,
+            'action' => 'login',
+            'description' => 'User logged in',
+            'ip_address' => $request->ip(),
+            'isActive' => 1,
+        ]);
         return redirect()->intended('/dashboard')->with('Login_Sucessfully', 'Login successful!');
     }
 
@@ -44,7 +58,18 @@ public function login(Request $request)
 
     public function logout(Request $request)
     {
-        auth()->logout();
-        return redirect('/login');
+        EmployeeActivityLogs::create([
+        'user_id' => Auth::id(),
+        'user_name' => Auth::user()->username,
+        'action' => 'logout',
+        'description' => 'User logged out',
+        'ip_address' => $request->ip(),
+        'isActive' => 0,
+    ]);
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login');
+      
     }
 }
