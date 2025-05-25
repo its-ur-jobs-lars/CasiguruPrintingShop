@@ -43,7 +43,16 @@
                             {{-- Extension Name --}}
                             <div class="form-group">
                                 <label style="color:black;">Extension Name</label>
-                                <input type="text" wire:model="data.ext_name" class="form-control" required>
+                               <select wire:model="data.ext_name" class="form-control" required>
+                                 <option value="" disabled selected hidden>Select extension name...</option>
+                                <option value="0">N/A</option>
+                                <option value="1">Jr.</option>
+                                <option value="2">Sr.</option>
+                                <option value="3">II</option>
+                                <option value="4">III</option>
+                                <option value="5">IV</option>
+                                <option value="6">V</option>
+                             </select>
                             </div>
 
                             {{-- Username --}}

@@ -26,5 +26,10 @@ class PrintingShopContoller extends Controller
         return view('employeeActivityLogs');
     }
 
+    public function profile()
+    {
+        return view('profile');
+    }
+
    
 }

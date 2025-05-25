@@ -326,8 +326,7 @@ public function render()
         });
     }
 
-    // Fetch data with pagination
-    $records = $query->paginate(10); // Adjust the number of items per page as needed
+      $records = $query->get(); // Get all records without pagination
 
     // Calculate the total row count after applying filters
     $rowCount = $query->count();

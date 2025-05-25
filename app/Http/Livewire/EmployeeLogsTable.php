@@ -152,11 +152,9 @@ class EmployeeLogsTable extends Component implements HasTable
             });
         });
 
-    // Fetch data with pagination
-    $records = $query->paginate(10);
-
-    // Get the total row count after applying filters
-    $rowCount = $records->total();
+      $records = $query->get(); // Get all records without pagination
+ // Calculate the total row count after applying filters
+    $rowCount = $query->count();
 
     return view('livewire.employee-logs-table', [
         'records' => $records,

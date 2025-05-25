@@ -38,7 +38,20 @@
 
                                     <td class="px-4 py-2">{{ $record->middlename }}</td>
 
-                                    <td class="px-4 py-2">{{ $record->ext_name }}</td>
+                                     <td class="px-4 py-2">
+                                        @php 
+                                        $extention_name = [
+                                            0 => 'N/A',
+                                            1 => 'Jr.',
+                                            2 => 'Sr.',
+                                            3 => 'II',
+                                            4 => 'III',
+                                            5 => 'IV',
+                                            6 => 'V',
+                                        ];
+                                        @endphp
+                                        {{ $extention_name[$record->ext_name] ?? 'Not Applicable' }}
+                                    </td>
 
                                     <td class="px-4 py-2">{{ $record->username }}</td>
 
@@ -143,7 +156,7 @@
 
                             {{-- Next Button--}}
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-secondary" wire:click="closeModal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" wire:click="closeModal1()">Cancel</button>
                                 <button type="button" class="btn btn-success" wire:click="nextStep()">Next</button>
                             </div>
                             
