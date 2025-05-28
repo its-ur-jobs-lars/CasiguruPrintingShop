@@ -13,6 +13,8 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/public/img/casiguroLogo.png')}}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
     <!-- DEMO CHARTS -->
     <link rel="stylesheet" href="{{asset('assets/public/demo/chartist.css')}}">
@@ -91,8 +93,9 @@
 
             <!-- Logo For Desktop View -->
             <a class="navbar-brand navbar-brand-desktop" href="" >
-                <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/casiguroLogo.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
-                <img class="side-nav-hide-on-closed" src="{{asset('assets/public/img/casiguroLogo.png')}}" alt="Graindashboard" style="width: auto; height: 200px; margin: auto; margin-top: 40px; align-items: center;">
+                <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
+                <img class="side-nav-hide-on-closed" src="{{ asset('assets/public/img/CasiguroInc.png') }}"
+                 style="width: 200px; height: 75px; display: block; margin: 40px auto 0 auto;">
             </a>
             <!-- End Logo For Desktop View -->
         </div>
@@ -179,7 +182,7 @@
         </li>
         <!-- End Dashboard -->
            
-            <!-- Electronics -->
+            <!-- Order Management -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#SubOrderManagement">
@@ -193,7 +196,7 @@
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-              <!-- Electronics: subElectronics -->
+              <!-- Order Management: subOrder Management -->
               <ul id="SubOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/laptopSubcategories">
@@ -213,9 +216,9 @@
                     </li>
                  
                 </ul>
-                <!-- End Electronics: subElectronics -->
+                <!-- End Order Management: subOrder Management -->
             </li>
-            <!-- End Electronics -->
+            <!-- End Order Management -->
             
             <!-- Department -->
             <li class="side-nav-menu-item side-nav-has-menu">

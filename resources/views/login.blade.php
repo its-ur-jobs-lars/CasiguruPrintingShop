@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <!-- Title -->
-    <title> Login</title>
+    <title>Casiguro IMS</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,6 +10,8 @@
 
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/public/img/casiguroLogo.png')}}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Template -->
     <link rel="stylesheet" href="{{asset('assets/public/graindashboard/css/graindashboard.css')}}">
@@ -232,11 +234,11 @@
           <div class="row justify-content-md-center">
             <div class="card-wrapper col-12 col-md-4 mt-5">
               <div class="brand text-center mb-3">
-                <a href="/"><img src="{{asset('assets/public/img/casiguroLogo.png')}}" width="25%" height="25%" alt="logo"></a>
+              <a href="/"><img src="{{asset('assets/public/img/CasiguroInc.png')}}" width="50%" height="50%" alt="logo"></a>
               </div>
               <div class="card-login">
 							<div class="card-body-login">
-								<h4 class="card-title-login">Casiguro Printing Inventory Management System</h4>
+								<h4 class="card-title-login">Casiguro Inventory Management System</h4>
 
                  {{-- ALERTS --}}
                   @if (session('Login_Sucessfully'))
@@ -292,9 +294,24 @@
                         <input id="employee_number" type="text" class="form-control-login" name="employee_number" required autofocus placeholder="Employee Number">
                   </div>
                                 
-                  <div class="form-group-login">
-                    <input id="password" type="password" class="form-control-login" name="password" required placeholder="Password">
-                  </div>
+                 <div class="form-group-login" style="position: relative;">
+                    <input id="password" type="password" class="form-control-login" name="password" required placeholder="Password" style="padding-right: 40px;">
+                    <span class="toggle-password" toggle="#password"
+                          style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; color: #888;">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                </div>
+
+                  <!-- <div class="input-container">
+                  <input placeholder="Enter password" type="password">
+
+                  <span>
+                    <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+                      <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+                    </svg>
+                  </span>
+                </div> -->
                                 
                   <div class="form-group-login no-margin">
                     <button type="submit" class="btn btn-primary-login btn-block-login">
@@ -307,7 +324,7 @@
               <footer class="footer mt-3-1">
                 <div class="container-fluid-login">
                   <div class="footer-content text-center small-1">
-                    <span class="text-muted-login">&copy; Lariosa Personal Project</span>
+                  <span class="text-muted-login">&copy; Casiguro Enterprises, Inc.</span>
                   </div>
                 </div>
               </footer>
@@ -318,6 +335,21 @@
 
       
     </main>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).on('click', '.toggle-password', function() {
+        let input = $($(this).attr('toggle'));
+        let icon = $(this).find('i');
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>

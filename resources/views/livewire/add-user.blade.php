@@ -44,7 +44,7 @@
                             <div class="form-group">
                                 <label style="color:black;">Extension Name</label>
                                <select wire:model="data.ext_name" class="form-control" required>
-                                 <option value="" disabled selected hidden>Select extension name...</option>
+                                 <option value="">Select extension name...</option>
                                 <option value="0">N/A</option>
                                 <option value="1">Jr.</option>
                                 <option value="2">Sr.</option>

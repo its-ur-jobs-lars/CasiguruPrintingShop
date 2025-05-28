@@ -91,8 +91,8 @@
 
             <!-- Logo For Desktop View -->
             <a class="navbar-brand navbar-brand-desktop" href="" >
-                <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/casiguroLogo.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
-                <img class="side-nav-hide-on-closed" src="{{asset('assets/public/img/casiguroLogo.png')}}" alt="Graindashboard" style="width: auto; height: 200px; margin: auto; margin-top: 40px; align-items: center;">
+                <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
+                <img class="side-nav-hide-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}" style="width: 200px; height: 75px; margin: auto; margin-top: 40px; align-items: center;">
             </a>
             <!-- End Logo For Desktop View -->
         </div>
@@ -368,14 +368,14 @@
 
                 <!-- Personnel: subPersonnel -->
                 <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item active">
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
                         </li>
                   
 
                      <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/personnel">
+                        <a class="side-nav-menu-link" href="/employee">
                         <i class="fas fa-solid fa-user-plus"></i>Employee Information</a>
                     </li>
 

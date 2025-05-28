@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <!-- Title -->
-    <title>Welcome</title>
+    <title>Casiguro IMS</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <!-- Favicon-->
-<link rel="shortcut icon" href="{{asset('assets/public/img/casiguroLogo.png')}}">
+    <link rel="shortcut icon" href="{{asset('assets/public/img/casiguroLogo.png')}}">
 
     <!-- Template -->
     <link rel="stylesheet" href="{{asset('assets/public/graindashboard/css/graindashboard.css')}}">
@@ -81,7 +81,7 @@
           overflow: hidden; /* Prevent spans from overflowing outside the card */
       }
 
-      .k span {
+      /* .k span {
           position: absolute;
           top: -120px;
           height: 50px;
@@ -187,7 +187,7 @@
           background-image: url("{{ asset('assets/public/img/SERVER.png') }}"); 
           background-size: cover; 
           background-position: center; 
-      }
+      } */
 
       .btn-block-login {
           display: block;
@@ -228,7 +228,7 @@
           <div class="row justify-content-md-center">
             <div class="card-wrapper col-12 col-md-4 mt-5">
               <div class="brand text-center mb-3">
-                <a href="/"><img src="{{asset('assets/public/img/casiguroLogo.png')}}" width="25%" height="25%" alt="logo"></a>
+                <a href="/"><img src="{{asset('assets/public/img/CasiguroInc.png')}}" width="50%" height="50%" alt="logo"></a>
               </div>
               <div class="card-login">
                 <!-- Floating Animation Inside Card -->
@@ -245,12 +245,12 @@
                     <span></span>
                 </div>
                 <div class="card-body-login">
-                  <h4 class="card-title-login"> Casiguro Printing Inventory Management System</h4>
+                  <h4 class="card-title-login">Casiguro Inventory Management System</h4>
                   <form>
                     <div class="form-group-login">
                       <div class="form-group-login no-margin">
                         <a href="/login" class="btn btn-primary-login btn-block-login">
-                          Welcome to our Inventory Management System
+                          Welcome to our Casiguro IMS! Click here to log in.
                         </a>
                       </div>
                     </div>
@@ -260,7 +260,7 @@
               <footer class="footer mt-3-1">
                 <div class="container-fluid-login">
                   <div class="footer-content text-center small-1">
-                    <span class="text-muted-login">&copy; Lariosa Personal Project</span>
+                    <span class="text-muted-login">&copy; Casiguro Enterprises, Inc.</span>
                   </div>
                 </div>
               </footer>

@@ -89,7 +89,7 @@
             </a>
             <!-- End Logo For Mobile View -->
 
-           <!-- Logo For Desktop View -->
+            <!-- Logo For Desktop View -->
             <a class="navbar-brand navbar-brand-desktop" href="" >
                 <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
                 <img class="side-nav-hide-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}" style="width: 200px; height: 75px; margin: auto; margin-top: 40px; align-items: center;">
@@ -405,7 +405,7 @@
         <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Add Personnel</div>
+                <div class="h3 mb-0">Add Employee</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -426,8 +426,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   {{-- @livewire('useradd-modal')
-                                    @livewire('user-table')--}}
+                                   @livewire('add-employee')
+                                   @livewire('employee-table')
                             </div>
                         </div>
                     </div>

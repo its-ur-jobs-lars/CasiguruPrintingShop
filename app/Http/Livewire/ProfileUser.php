@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileUser extends Component
 {
+    // In ProfileUser.php
+    protected $listeners = ['passwordChanged'];
+
     public function render()
     {
           $query = User::query();
@@ -33,6 +36,12 @@ class ProfileUser extends Component
         ]);
     }
 
+    public function passwordChanged($timestamp)
+{
+    $this->lastPasswordChange = \Carbon\Carbon::parse($timestamp);
+}
+
+    public $modalUserName = '';
     public $lastPasswordChange;
     public $isChangePasswordModalOpen = false;
     public $passwordData = [
@@ -172,12 +181,14 @@ public function edit($id)
         session()->flash('error', 'Product not found.');
     }
 }
- public function openChangePasswordModal()
-    {
-        $this->passwordData['new_password'] = '';
-        $this->passwordData['confirm_password'] = '';
-        $this->isChangePasswordModalOpen = true;
-    }
+public function openChangePasswordModal()
+{
+    $user = Auth::user();
+    $this->modalUserName = $user ? $user->username : '';
+    $this->passwordData['new_password'] = '';
+    $this->passwordData['confirm_password'] = '';
+    $this->isChangePasswordModalOpen = true;
+}
 
     public function closeChangePasswordModal()
     {
@@ -185,27 +196,6 @@ public function edit($id)
         $this->reset('passwordData');
     }
 
-    public function changePassword()
-    {
-        $this->validate([
-            'passwordData.new_password' => 'required|min:8',
-            'passwordData.confirm_password' => 'required|same:passwordData.new_password',
-        ]);
-
-        $user = Auth::user();
-
-        if ($user) {
-            $user->update([
-                'password' => Hash::make($this->passwordData['new_password']),
-                // 'password_changed_at' => now(), // Uncomment if you have this column
-            ]);
-            session()->flash('message', 'Password changed successfully!');
-        } else {
-            session()->flash('error', 'Unable to retrieve your user record.');
-        }
-
-        $this->closeChangePasswordModal();
-    }
 }
 
     

@@ -31,5 +31,10 @@ class PrintingShopContoller extends Controller
         return view('profile');
     }
 
+    public function EmployeeInfo()
+    {
+        return view('employee');
+    }
+
    
 }

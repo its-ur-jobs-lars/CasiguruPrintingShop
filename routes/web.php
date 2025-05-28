@@ -24,6 +24,7 @@ Route::post('/login', [App\Http\Controllers\EmployeeLoginController::class, 'log
 Route::get('/dashboard', [App\Http\Controllers\PrintingShopContoller::class, 'PrintingShop'])->name('dashboard');
 
 Route::get('/personnel', [App\Http\Controllers\PrintingShopContoller::class, 'Personnel'])->name('personnel');
+Route::get('/employee', [App\Http\Controllers\PrintingShopContoller::class, 'EmployeeInfo'])->name('Employee Information');
 Route::get('/addUser', [App\Http\Controllers\PrintingShopContoller::class, 'addUser'])->name('addUser');
 Route::get('/employeeActivityLogs', [App\Http\Controllers\PrintingShopContoller::class, 'ActivityLogs'])->name('activityLogs');
 Route::get('/profile', [App\Http\Controllers\PrintingShopContoller::class, 'profile'])->name('profile');
