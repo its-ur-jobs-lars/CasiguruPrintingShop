@@ -310,14 +310,14 @@
                 </a>
 
                    <!-- Manufacturer: subManufacturer-->
-               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0"  style="display: block;">
+               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
                     
                   <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
                   </li>
 
-                  <li class="side-nav-menu-item active">
+                  <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
@@ -418,8 +418,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   {{-- @livewire('add-user')
-                                   @livewire('add-user-table')--}}
+                                   @livewire('price-list-item')
+                                   @livewire('price-list-item-table')
                             </div>
                         </div>
                     </div>

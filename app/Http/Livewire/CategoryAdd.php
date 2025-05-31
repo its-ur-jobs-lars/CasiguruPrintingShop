@@ -65,21 +65,28 @@ class CategoryAdd extends Component
             }
 
 
-            // Get the last category globally
-        $lastCategory = Category::where('category_id', 'like', 'CTG-%')
-            ->orderByDesc('category_id')
-            ->first();
+                        // Get the first 3 letters of each word in the category name, uppercase
+                $words = explode(' ', strtoupper($this->data['category_name']));
+                $prefix = '';
+                foreach ($words as $word) {
+                    $prefix .= substr($word, 0, 1);
+                }
 
-        if ($lastCategory && preg_match('/CTG-(\d{4})$/', $lastCategory->category_id, $matches)) {
-            $nextSequence = intval($matches[1]) + 1;
-        } else {
-            $nextSequence = 1;
-        }
-        $sequence = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
-        $category_id = "CTG-{$sequence}";
+                // Find the last category with this prefix
+                $lastCategory = Category::where('category_id', 'like', "CTG-{$prefix}-%")
+                    ->orderByDesc('category_id')
+                    ->first();
+
+                if ($lastCategory && preg_match('/-(\d{4})$/', $lastCategory->category_id, $matches)) {
+                    $nextSequence = intval($matches[1]) + 1;
+                } else {
+                    $nextSequence = 1;
+                }
+                $sequence = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
+                $category_id = "CTG-{$prefix}-{$sequence}";
 
 
-            $categoryName = $this->data['category_name']; 
+           
 
 
             Category::create([
@@ -100,7 +107,7 @@ class CategoryAdd extends Component
       
 
             // Show a success message
-            session()->flash('messageInsert', 'Category "' . $categoryName . '" added successfully!');
+            session()->flash('messageInsert', 'Category is added successfully!');
         } catch (\Exception $e) {
             // Handle the exception and show an error message
             session()->flash('errorInsert', $e->getMessage());

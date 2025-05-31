@@ -26,7 +26,7 @@ use WithPagination, InteractsWithTable {
 
     public $isEditModalOpen = false;
 
-    public $editCategory = [
+    public $editSubCategory = [
         'id' => null,
         'subcategory_name' => null,
         'description' => null,
@@ -40,10 +40,10 @@ use WithPagination, InteractsWithTable {
     protected $updatesQueryString = ['search', 'filterStatus'];
 
     protected $rules = [
-        'editCategory.subcategory_name' => 'required|string|max:20',
-        'editCategory.description' => 'required|string|max:50',
-        'editCategory.image' => 'required|string|max:50',
-        'editCategory.isActive' => 'required|string|max:255'
+        'editSubCategory.subcategory_name' => 'required|string|max:20',
+        'editSubCategory.description' => 'required|string|max:50',
+        'editSubCategory.image' => 'required|string|max:50',
+        'editSubCategory.isActive' => 'required|string|max:255'
     ];
 
     public function getTableQuery(){
@@ -56,7 +56,7 @@ use WithPagination, InteractsWithTable {
         $categorydetails = SubCategory::find($id);
 
         if ($categorydetails) {
-            $this->editCategory = [
+            $this->editSubCategory = [
                 'id' => $categorydetails->id,
                 'subcategory_name' => $categorydetails->subcategory_name,
                 'description' => $categorydetails->description,
@@ -71,23 +71,28 @@ use WithPagination, InteractsWithTable {
 
     public function update()
     {
-        $this->validate();
+        $this->validate([
+            'editSubCategory.subcategory_name' => 'required|string|max:20',
+            'editSubCategory.description' => 'required|string|max:50',
+            'editSubCategory.image' => 'required|string|max:50',
+           'editSubCategory.isActive' => 'required|string|max:255'
+        ]);
 
-        $categorydetails = SubCategory::find($this->editCategory['id']);
+        $categorydetails = SubCategory::find($this->editSubCategory['id']);
 
         if ($categorydetails) {
             $categorydetails->update([
-                'subcategory_name' => $this->editCategory['subcategory_name'],
-                'description' => $this->editCategory['description'],
-                'image' => $this->editCategory['image'],
-                'isActive' => $this->editCategory['isActive'],
+                'subcategory_name' => $this->editSubCategory['subcategory_name'],
+                'description' => $this->editSubCategory['description'],
+                'image' => $this->editSubCategory['image'],
+                'isActive' => $this->editSubCategory['isActive'],
                 'updated_by' => Auth::user()->username,
             ]);
 
                 // Emit an event to refresh the table
             $this->emit('refreshTable');
 
-            $this->reset('editCategory');
+            $this->reset('editSubCategory');
             $this->isEditModalOpen = false;
 
             session()->flash('messageInsert', 'Category "' . $categoryName . '" updated successfully!');
@@ -106,14 +111,14 @@ use WithPagination, InteractsWithTable {
     }
 
     public function cancelEdit(){
-        $this->reset('editCategory');
+        $this->reset('editSubCategory');
         $this->isEditModalOpen = false;
     }
 
     public function closeModal1()
     {
         $this->isEditModalOpen = false;
-        $this->reset('editCategory');
+        $this->reset('editSubCategory');
         $this->reset('updatedSelectedSerialNumber');
     }
 

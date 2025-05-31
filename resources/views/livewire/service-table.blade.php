@@ -1,7 +1,4 @@
 <div>
-    {{-- The best athlete wants his opponent at his best. --}}
-</div>
-<div>
     {{-- <h2 class="text-lg font-semibold mb-4">Laptop Inventory</h2> --}}
 
     
@@ -41,15 +38,7 @@
 
                                     <td class="px-4 py-2">{{ $record->description }}</td>
 
-                                    <!-- <td class="px-4 py-2">
-                                        @if ($record->image)
-                                            <img src="{{ asset('storage/' . $record->image) }}" alt="Category Image"
-                                                class="w-16 h-16 object-cover">
-                                        @else
-                                            <span class="text-gray-500">No Image</span>
-                                        @endif
-                                    </td> -->
-
+                                  
                                     <td class="px-4 py-2">{{ $record->updated_by ?? 'New Added' }}</td>
                                     <td class="px-4 py-2">{{ $record->updated_at ?? 'Unknown' }}</td>
                                 
@@ -66,19 +55,21 @@
                                 </td>  
                         <td class="px-4 py-2">
                             <div class="button-column">
-
                                 <!-- Edit Button -->
-                                <button wire:click="edit({{ $record->subcategory_id }})"
+                                <button wire:click="edit({{ $record->id }})"
                                     class="bg-blue-500 text-white px-3 py-1 rounded-1">
                                     <i class="fas fa-solid fa-pen-to-square"></i></button>
 
-                                      
+                                        <!-- Delete Button
+                                        <button wire:click="openChangePasswordModal({{ $record->id }})"
+                                            class="bg-red-500 text-white px-3 py-1 rounded-2">
+                                            <i class="fas fa-solid fa-key"></i></button> -->
                                     </div>
                                 </td>    
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center">No records found.</td>
+                                <td colspan="20" class="text-center">No records found.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -90,25 +81,31 @@
 
 <!-- Fixed Footer for Row Count -->
 <div class="fixed bottom-0 left-0 w-full p-2 z-20">
-    <span class="text-sm text-gray-600">Total number of SubCategory : {{ $this->rowCount }}</span>
+    <span class="text-sm text-gray-600">Total number of Services : {{ $this->rowCount }}</span>
 </div>
        
             {{-- Edit Function --}}
-       @if($isEditModalOpen)
+        @if($isEditModalOpen)
         <div class="modal-backdrop show"></div>
         <div class="modal fade show d-block" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="color:black;">Edit Category</h5>
+                        <h5 class="modal-title" style="color:black;">Edit PriceList Information</h5>
                     </div>
                     <div class="modal-body">
                         <form>
 
-                            {{-- Category Name --}}
+                         {{-- Category Name --}}
                             <div class="form-group">
-                                <label style="color:black;">Category Name</label>
-                                <input type="text" wire:model="editSubCategory.subcategory_name" class="form-control" required>
+                                <label style="color:black;">Category ID</label>
+                                <input type="text" wire:model="editServices.category_id" class="form-control" readonly disabled>
+                            </div>
+
+                           {{-- SubCategory Name --}}
+                            <div class="form-group">
+                                <label style="color:black;">SubCategory Name</label>
+                                <input type="text" wire:model="editServices.subcategory_name" class="form-control" required>
                             </div>
 
                            
@@ -116,22 +113,21 @@
                             {{-- Description --}}
                             <div class="form-group">
                                 <label style="color:black;">Description</label>
-                                <input type="text" wire:model="editSubCategory.description" class="form-control" required>
+                                <input type="text" wire:model="editServices.description" class="form-control" required>
                             </div>
                             
-                            {{-- Image --}}     
+                            <!-- {{-- Image --}}     
                             <div class="form-group">
                                 <label style="color:black;">Image</label>
-                                <input type="file" wire:model="editSubCategory.image" class="form-control-file">
-                                @if ($editSubCategory->image)
-                                    <img src="{{ asset('storage/' . $editSubCategory->image) }}" alt="Category Image"
-                                        class="w-16 h-16 object-cover mt-2">
+                                <input type="file" wire:model="editServices.image" class="form-control-file">
+                               @if ($editServices['image'])
+                                    <img src="{{ asset('storage/' . $editServices['image']) }}" alt="Image" width="50">
                                 @endif
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <label style="color:black;">Status</label>
-                               <select wire:model="editSubCategory.isActive" class="form-control" required>
+                               <select wire:model="editServices.isActive" class="form-control" required>
                                     <option value="">-- Select --</option>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
@@ -143,15 +139,13 @@
                                 <button type="button" class="btn btn-secondary" wire:click="previousStep()">Previous</button>
                                {{-- <button wire:click="update()" class="bg-green-500 text-white px-3 py-1 rounded-3 mt-2">Apply changes</button> --}}
                                <button type="button"  class="btn btn-success"  wire:click="update()">Apply changes</button>
-                           
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     @endif
-
-     
 
 @if (session()->has('message') || session()->has('error'))
     <div class="fixed-3 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">

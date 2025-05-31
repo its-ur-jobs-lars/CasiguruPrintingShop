@@ -59,7 +59,7 @@ class CategoryTable extends Component implements HasTable
     // Edit modal logic
     public function edit($id)
     {
-        $CategoryDetail = Category::find($id);
+         $CategoryDetail = Category::where('category_id', $id)->first();
 
         if ($CategoryDetail) {
             $this->editCat = [
@@ -78,7 +78,7 @@ class CategoryTable extends Component implements HasTable
     {
         $this->validate();
 
-        $CategoryDetail = Category::find($this->editCat['id']);
+        $CategoryDetail = Category::where('category_id', $id)->first();
         $categoryName = $this->editCat['category_name'];
 
         if ($CategoryDetail) {
@@ -101,6 +101,25 @@ class CategoryTable extends Component implements HasTable
             session()->flash('error', 'Category not found.');
         }
     }
+
+    // //for editing the product
+    // public function edit($id)
+    // {
+    //     $this->reset('editCat'); // Reset the editProduct property to avoid conflicts
+
+    //     // Find the product by product_type_id
+    //     $category = Category::where('category_id', $id)->first();
+
+    //     if ($category){
+    //         $this->editCat = $category->toArray();
+    //         // $this->dispatchBrowserEvent('openEditModal');
+    //         $this->isEditModalOpen = true;
+    //     }
+    // }
+    
+    
+    
+
 
     public function cancelEdit(){
         $this->reset('editCat');

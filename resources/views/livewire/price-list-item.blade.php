@@ -6,7 +6,7 @@
      @endif --}}
 
     {{-- Button to Open Modal --}}
-    <button wire:click="openModal" class="btn btn-primary">Add SubCategory</button>
+    <button wire:click="openModal" class="btn btn-primary">Add PriceList</button>
 
     {{-- Product Form Modal --}}
     @if($isOpen)
@@ -15,14 +15,11 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="color:black;">Add SubCategory</h5>
+                        <h5 class="modal-title" style="color:black;">Add Prcelist</h5>
                     </div>
                         <div class="modal-body">
                         <form wire:submit.prevent="save">
                         
-
-                            {{--  Name --}}
-
 
                              <div class="form-group">
                                 <label style="color:black;">Category</label>
@@ -34,39 +31,42 @@
                                 </select>
                             </div>
 
-                            {{-- Subcategory --}}
-                            <div class="form-group">
-                                <label style="color:black;">Subcategory Name</label>
-                                <input type="text" wire:model="data.subcategory_name" class="form-control" required>
+                             <div class="form-group">
+                                <label style="color:black;">SubCategory</label>
+                                <select wire:model="data.subcategory_id" class="form-control" required>
+                                    <option value="">-- Select --</option>
+                                    @foreach($SubCategory as $subcategory)
+                                        <option value="{{ $subcategory->subcategory_id }}">{{ $subcategory->subcategory_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            {{-- Description --}}
                             <div class="form-group">
-                                <label style="color:black;">Description</label>
-                                <input type="text" wire:model="data.description" class="form-control" required>
+                                <label style="color:black;">Price (10 to 50 pcs)</label>
+                                <input type="text" wire:model="data.price_10_50" class="form-control" required>
                             </div>
 
-                            {{-- Image Upload --}}
-                        <div class="form-group">
-                            <label style="color:black;">Upload Image</label>
-                            <input type="file" wire:model="image" class="form-control" accept="image/*">
-                            @error('image') <span class="text-danger">{{ $message }}</span> @enderror
 
-                            @if ($image)
-                                <div class="mt-2 d-flex align-items-center">
-                                    <img src="{{ $image->temporaryUrl() }}" alt="Preview" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                                    <span class="ml-2 text-success-1" style="font-size: 17px;">
-                                        <i class="fa fa-check-circle"></i> Uploaded
-                                    </span>
-                                </div>
-                            @endif
-                        </div>
+                            <div class="form-group">
+                                <label style="color:black;">Price (51 to 100 pcs)</label>
+                                <input type="text" wire:model="data.price_51_100" class="form-control" required>
+                            </div>
 
+                           <div class="form-group">
+                                <label style="color:black;">Price (101 to 500 pcs)</label>
+                                <input type="text" wire:model="data.price_101_500" class="form-control" required>
+                            </div>
+
+                              <div class="form-group">
+                                <label style="color:black;">Remarks</label>
+                                <input type="text" wire:model="data.remarks" class="form-control" required>
+                            </div>
+                        
                         
                             {{-- Submit Button --}}
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-secondary" wire:click="closeModal1()">Cancel</button>
-                                <button type="submit" class="btn btn-success">Save SubCategory</button>
+                                <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>
+                                <button type="submit" class="btn btn-success">Save Pricelist</button>
                             </div>
                         </form>
                     </div>

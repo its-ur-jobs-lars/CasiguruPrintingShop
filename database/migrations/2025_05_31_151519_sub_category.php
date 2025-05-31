@@ -16,8 +16,8 @@ class SubCategory extends Migration
         Schema::create('sub-category', function (Blueprint $table) {
             $table->id();
             $table->string('subcategory_id')->unique();
-            $table->string('subcategory_name')->nullable();
             $table->string('category_id')->nullable();
+            $table->string('subcategory_name')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->boolean('isActive')->default(1);

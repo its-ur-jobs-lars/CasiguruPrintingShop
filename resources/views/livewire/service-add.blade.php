@@ -65,7 +65,7 @@
                         
                             {{-- Submit Button --}}
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-secondary" wire:click="closeModal1()">Cancel</button>
+                                <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>
                                 <button type="submit" class="btn btn-success">Save SubCategory</button>
                             </div>
                         </form>
@@ -100,22 +100,7 @@
         document.querySelector('.fixed.inset-0').style.display = 'none';
     }
 
-    function togglePasswordVisibility(fieldId) {
-        const passwordField = document.getElementById(fieldId);
-        const icon = document.getElementById(`${fieldId}-icon`);
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
 </script>
-
-@livewireScripts
 
 </div>
 
