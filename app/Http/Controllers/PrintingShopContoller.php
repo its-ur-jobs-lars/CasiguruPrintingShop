@@ -36,5 +36,30 @@ class PrintingShopContoller extends Controller
         return view('employee');
     }
 
+    public function orderDetails()
+    {
+        return view('orderDetails');
+    }
+
+    public function Pricelist()
+    {
+        return view('priceList');
+    }
+
+    public function Category()
+    {
+        return view('category');
+    }
+
+    public function Services()
+    {
+        return view('services');
+    }
+
+    public function SubCategory()
+    {
+        return view('subCategory');
+    }
+
    
 }

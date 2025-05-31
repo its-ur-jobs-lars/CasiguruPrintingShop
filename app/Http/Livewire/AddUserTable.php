@@ -288,6 +288,7 @@ public function changePassword()
                   ->orWhere('lastname', 'like', "%{$this->search}%")
                    ->orWhere('firstname', 'like', "%{$this->search}%")
                     ->orWhere('middlename', 'like', "%{$this->search}%")
+                    ->orwhere('username', 'like', "%{$this->search}%")
                    ->orWhere('role', 'like', "%{$this->search}%");
                 
               }); // Apply search filter to multiple fields
@@ -322,6 +323,7 @@ public function render()
              ->orWhere('lastname', 'like', "%{$this->search}%")
                    ->orWhere('firstname', 'like', "%{$this->search}%")
                     ->orWhere('middlename', 'like', "%{$this->search}%")
+                    ->orwhere('username', 'like', "%{$this->search}%")
               ->orWhere('role', 'like', "%{$this->search}%");
         });
     }

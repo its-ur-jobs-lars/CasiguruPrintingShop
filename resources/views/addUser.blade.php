@@ -183,7 +183,7 @@
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subOrderManagement">
                   <span class="side-nav-menu-icon d-flex mr-3">
-                    <i class="fas fa-plug"></i>
+                    <i class=" fas fa-solid fa-sitemap"></i>
                   </span>
                     <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
@@ -195,16 +195,16 @@
               <!-- Order Management: subOrder Management -->
               <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/laptopSubcategories">
-                        <i class="fas fa-solid fa-laptop"></i>Laptop and Accessories</a>
+                        <a class="side-nav-menu-link" href="/orderDetails">
+                        <i class="fas fa-solid fa-laptop"></i>Order Details</a>
                     </li>
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/AVRSubcategories">
-                        <i class="fas fa-solid fa-bolt"></i>AVR</a>
+                        <a class="side-nav-menu-link" href="/pricelist">
+                        <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/desktopUnitSubcategories">
-                        <i class="fas fa-solid fa-desktop"></i>Desktop System Unit</a>
+                     <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/services">
+                        <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/externalHDSubcategories">
@@ -294,15 +294,14 @@
             <!-- End History: subHistory -->
         </li>
         <!-- End History -->
-
-             <!-- Manufacturer -->
+    <!-- Manufacturer -->
              <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subManufacturer">
               <span class="side-nav-menu-icon d-flex mr-3">
                 <i class="fas fa-solid fa-bars-progress"></i>
               </span>
-              <span class="side-nav-fadeout-on-closed media-body">Product Management</span>
+              <span class="side-nav-fadeout-on-closed media-body">Store Management</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
               </span>
@@ -311,11 +310,15 @@
 
                   <!-- Manufacturer: subManufacturer-->
                <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    
-                  <li class="side-nav-menu-item">
-                      <a class="side-nav-menu-link" href="/Manufacturer">
-                       <i class="fas fa-industry"></i>Manufacturer</a>
+                     <li class="side-nav-menu-item">
+                      <a class="side-nav-menu-link" href="/category">
+                       <i class="fas fa-industry"></i>Category</a>
                   </li>
+                   <li class="side-nav-menu-item">
+                      <a class="side-nav-menu-link" href="/subcategory">
+                       <i class="fas fa-industry"></i>SubCategory</a>
+                  </li>
+                
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
@@ -324,56 +327,40 @@
                         <a class="side-nav-menu-link" href="/modelDivisionManufacturer">
                         <i class="fas fa-cubes"></i> Model</a>
                     </li>
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/specDivisionManufacturer">
-                        <i class="fas fa-solid fa-clipboard-list"></i>Specification</a>
-                    </li>
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/productTypeDivisionManufacturer">
-                        <i class="fas fa-solid fa-box-open"></i>Product Type</a>
-                    </li>
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/categoryDivisionManufacturer">
-                        <i class="fas fa-solid fa-layer-group"></i>Category</a>
-                    </li>
+                  
+                 
 
                        <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/personnelProductSearching">
                         <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
                     </li>
 
-                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/personnelDepartment">
-                        <i class="fas fa-solid fa-building"></i>List of Department</a>
-                    </li>
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
             </li>
             <!-- End Manufacturer -->
             
-                @can('view-personnel-profile')
+                 @can('view-personnel-profile')
             <li class="side-nav-menu-item side-nav-has-menu">
-                <a class="side-nav-menu-link media align-items-center" href="#" data-target="#subPersonnel">
-                    <span class="side-nav-menu-icon d-flex mr-3">
-                        <i class="fas fa-sharp fa-solid fa-user-tie"></i>
-                    </span>
+                <a class="side-nav-menu-link media align-items-center" href="#"
+                   data-target="#subPersonnel">
+              <span class="side-nav-menu-icon d-flex mr-3">
+                    <i class="fas fa-solid fa-history"></i>
+              </span>
                     <span class="side-nav-fadeout-on-closed media-body">Personnel Profile</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
-                    </span>
+              </span>
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
-                <!-- Personnel: subPersonnel -->
-            </li>
 
-                <!-- Personnel: subPersonnel -->
-                <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    <li class="side-nav-menu-item active">
+            
+            <!-- History: subHistory -->
+            <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display:block;">
+                 <li class="side-nav-menu-item active">
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
                         </li>
-                  
-
                      <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/employee">
                         <i class="fas fa-solid fa-user-plus"></i>Employee Information</a>
@@ -383,10 +370,14 @@
                         <a class="side-nav-menu-link" href="/employeeActivityLogs">
                          <i class="fas fa-solid fa-chart-line"></i>Employee Activity Logs</a>
                     </li>
-                </ul>
-                <!-- End Personnel: subPersonnel -->
-            </li>
-             @endcan
+                
+            </ul>
+            <!-- End History: subHistory -->
+        </li>
+        <!-- End Personnel Profile -->
+            @endcan
+        <!-- End History -->
+          
           
        <!-- Dark Mode Toggle -->
        <div class="ml-3">

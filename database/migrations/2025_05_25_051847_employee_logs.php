@@ -20,7 +20,7 @@ class EmployeeLogs extends Migration
         $table->string('action');
         $table->text('description')->nullable();
         $table->ipAddress('ip_address')->nullable();
-         $table->boolean('isActive')->nullable();
+        $table->boolean('isActive')->nullable();
         $table->timestamps();
     });
     }

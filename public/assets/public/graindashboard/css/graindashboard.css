@@ -12265,7 +12265,7 @@ input[type=submit].btn-block {
     color: black;
     box-shadow: rgba(0, 0, 0, 0.30) 0 1px 3px 0;
     transition: color 0.3s ease, transform 0.3s ease;
-    border: 1px outset #FF9D23;
+    border: 1px outset darkblue;
     padding: 8px 18px;
     font-size: 15px;
     margin-left: 5px;
@@ -12273,11 +12273,11 @@ input[type=submit].btn-block {
 
 .btn-success:hover {
     color:white;
-    background-color: #FF9D23;
+    background-color: darkblue;
     border-color: rgba(211, 211, 211, 0.08);
     box-shadow: rgba(0, 0, 0, 0.30) 0 1px 3px 0;
     transform: scale(0.9);
-    border: 1px outset #FF9D23;
+    border: 1px outset darkblue;
 }
 
 .card-text {
@@ -26522,4 +26522,12 @@ tr:hover {
   width: 1rem;
   height: 1rem;
 }
+
+.side-nav-menu-second-level.show {
+   display: none;
+}
+
+ .text-success-1{
+    color: #1C992A !important;
+ }
 

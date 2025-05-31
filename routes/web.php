@@ -29,4 +29,11 @@ Route::get('/addUser', [App\Http\Controllers\PrintingShopContoller::class, 'addU
 Route::get('/employeeActivityLogs', [App\Http\Controllers\PrintingShopContoller::class, 'ActivityLogs'])->name('activityLogs');
 Route::get('/profile', [App\Http\Controllers\PrintingShopContoller::class, 'profile'])->name('profile');
 
+Route::get('/orderDetails', [App\Http\Controllers\PrintingShopContoller::class, 'orderDetails'])->name('Order Details');
+Route::get('/pricelist', [App\Http\Controllers\PrintingShopContoller::class, 'Pricelist'])->name('Price List');
+Route::get('/category', [App\Http\Controllers\PrintingShopContoller::class, 'Category'])->name('Category');
+Route::get('/subcategory', [App\Http\Controllers\PrintingShopContoller::class, 'SubCategory'])->name('SubCategory');
+Route::get('/services', [App\Http\Controllers\PrintingShopContoller::class, 'Services'])->name('Services');
+
+
 Route::post('/logout', [App\Http\Controllers\EmployeeLoginController::class, 'logout'])->name('logout');
