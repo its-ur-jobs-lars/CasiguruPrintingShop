@@ -61,5 +61,11 @@ class PrintingShopContoller extends Controller
         return view('subCategory');
     }
 
+    public function Inventory()
+    {
+        return view('inventory');
+    }
+    
+
    
 }

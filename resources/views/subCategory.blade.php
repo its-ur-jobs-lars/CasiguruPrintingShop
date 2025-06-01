@@ -207,8 +207,8 @@
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/externalHDSubcategories">
-                        <i class="fas fa-solid fa-hard-drive"></i>External Hard Drive</a>
+                     <a class="side-nav-menu-link" href="/inventory">
+                        <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
                  
                 </ul>

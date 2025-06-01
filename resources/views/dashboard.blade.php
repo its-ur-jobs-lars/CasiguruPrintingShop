@@ -24,6 +24,10 @@
     {{-- <script src="https://kit.fontawesome.com/d04f2d2105.js" crossorigin="anonymous"></script> --}}
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  @push('styles')
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+@endpush
     
 </head>
 
@@ -203,15 +207,20 @@
                      <a class="side-nav-menu-link" href="/pricelist">
                         <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
-                     <li class="side-nav-menu-item active">
+                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
 
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/externalHDSubcategories">
-                        <i class="fas fa-solid fa-hard-drive"></i>External Hard Drive</a>
+                     <a class="side-nav-menu-link" href="/inventory">
+                        <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
+
+                        <li class="side-nav-menu-item">
+                      <a class="side-nav-menu-link" href="/category">
+                       <i class="fas fa-industry"></i>Category</a>
+                  </li>
                  
                 </ul>
                 <!-- End Order Monitoring: subOrder Monitoring -->
@@ -311,11 +320,8 @@
                 </a>
 
                   <!-- Manufacturer: subManufacturer-->
-               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
-                     <li class="side-nav-menu-item">
-                      <a class="side-nav-menu-link" href="/category">
-                       <i class="fas fa-industry"></i>Category</a>
-                  </li>
+               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0" >
+                 
                  <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
@@ -440,22 +446,26 @@
             
             <div class="row">
                 <div class="col-12">
-                    <div class="card mb-3 mb-md-4">
-                        <div class="card-header">
-                            <h5 class="font-weight-semi-bold mb-0">Inventory Information</h5>
-                        </div>
+                     @livewire('canlendar-order')
+                </div>
+            </div>
 
-                        <div class="card-body pt-0">
-                            <div class="table-responsive-xl">
-                                {{--@livewire('inventory-modal')--}}
-                                {{--@livewire('inventory-table')--}}
-                                
-                            </div>
+
+            <!-- <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="font-weight-semi-bold mb-0">Order Deadlines Calendar</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="orderCalendar"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+
+
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
@@ -681,6 +691,11 @@
             });
         });
         </script>
+       @livewireScripts
+        @stack('scripts')
+
+
+
         
     </body>
 </html>

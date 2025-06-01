@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Price List</title>
+    <title>Inventory</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -111,7 +111,7 @@
 
                  <!-- User Avatar -->
                  <div class="dropdown mx-3 dropdown ml-2">
-                     <a id="profileMenuInvoker" class="header-complex-invoker" href="#" aria-controls="profileMenu" aria-haspopup="true" aria-expanded="false" data-unfold-event="click" data-unfold-target="#profileMenu" data-unfold-type="css-animation" data-unfold-duration="300" data-unfold-animation-in="fadeIn" data-unfold-animation-out="fadeOut">
+                       <a id="profileMenuInvoker" class="header-complex-invoker" href="#" aria-controls="profileMenu" aria-haspopup="true" aria-expanded="false" data-unfold-event="click" data-unfold-target="#profileMenu" data-unfold-type="css-animation" data-unfold-duration="300" data-unfold-animation-in="fadeIn" data-unfold-animation-out="fadeOut">
                         <!--img class="avatar rounded-circle mr-md-2" src="#" alt="Jobelle Lariosa"-->
                         {{ Auth::user()->username }}
                         <span style="display:inline-block; vertical-align:middle; margin-left:7px;">
@@ -138,19 +138,20 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="unfold-item unfold-item-has-divider">
-                        <a class="unfold-link d-flex align-items-center text-nowrap" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <span class="unfold-item-icon d-flex align-items-center">
-                                <i class="fas fa-solid fa-power-off mr-5"></i>
-                                <span style="font-size: 15px;">Logout</span>
-                            </span>
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </li>
-                                    
+                         <li class="unfold-item unfold-item-has-divider">
+                                <a class="unfold-link d-flex align-items-center text-nowrap" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                                <span class="unfold-item-icon d-flex align-items-center">
+                                    <i class="fas fa-solid fa-power-off mr-5"></i>
+                                    <span style="font-size: 15px;">Logout</span>
+                                </span>
+                                </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                   
                     </ul>
                 </div>
                 <!-- End User Avatar -->
@@ -178,10 +179,10 @@
         </li>
         <!-- End Dashboard -->
            
-            <!-- Order Management -->
+            <!-- Order Monitoring -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
-                   data-target="#subOrderManagement">
+                   data-target="#subOrder_Monitoring">
                   <span class="side-nav-menu-icon d-flex mr-3">
                      <i class=" fas fa-solid fa-sitemap"></i>
                   </span>
@@ -198,7 +199,7 @@
                         <a class="side-nav-menu-link" href="/orderDetails">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
                     </li>
-                    <li class="side-nav-menu-item active">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/pricelist">
                        <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
@@ -206,7 +207,7 @@
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
-                   <li class="side-nav-menu-item">
+                   <li class="side-nav-menu-item active">
                      <a class="side-nav-menu-link" href="/inventory">
                         <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
@@ -294,8 +295,7 @@
             <!-- End History: subHistory -->
         </li>
         <!-- End History -->
-
-             <!-- Manufacturer -->
+    <!-- Manufacturer -->
              <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subManufacturer">
@@ -309,19 +309,18 @@
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-                   <!-- Manufacturer: subManufacturer-->
+                  <!-- Manufacturer: subManufacturer-->
                <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    
-                  <li class="side-nav-menu-item">
+                     <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
                   </li>
-
-                  <li class="side-nav-menu-item">
+                 <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
-                  
+                    
+                
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
@@ -330,6 +329,7 @@
                         <a class="side-nav-menu-link" href="/modelDivisionManufacturer">
                         <i class="fas fa-cubes"></i> Model</a>
                     </li>
+                  
                  
 
                        <li class="side-nav-menu-item">
@@ -337,13 +337,12 @@
                         <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
                     </li>
 
-                    
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
             </li>
             <!-- End Manufacturer -->
             
-               @can('view-personnel-profile')
+                 @can('view-personnel-profile')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subPersonnel">
@@ -381,6 +380,7 @@
             @endcan
         <!-- End History -->
           
+          
        <!-- Dark Mode Toggle -->
        <div class="ml-3">
             <button id="darkModeToggle" class="btn-1 btn-sm-1 btn-outline-secondary">
@@ -394,12 +394,12 @@
 <!-- End Sidebar Nav -->
  
     <div class="content">
-       <div class="py-4 px-3 px-md-4">
+        <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Price List</div>
+                <div class="h3 mb-0">Inventory</div>
                 <p id="datetime" class="mb-0"></p>
-            </div>  
+            </div>
 
             <script>
                 function updateDateTime() {
@@ -410,23 +410,51 @@
                 }
                 setInterval(updateDateTime, 1000);
             </script>
+<!-- 
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="card-body-counting card-background-1">
+                        {{--@livewire('total-devices-card')--}}
+                    </div>
+                </div>
 
+                <div class="col-md-3 mb-3">
+                    <div class="card-body-counting card-background-2">
+                        {{--@livewire('recently-added-card')--}}
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card-body-counting card-background-3">
+                        {{--@livewire('number-of-users-card')--}}
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card-body-counting card-background-4">
+                        {{--@livewire('total-items-card')--}}
+                    </div>
+                </div>
+            </div> -->
+            
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-3 mb-md-4">
                         <div class="card-header">
+                            <!-- <h5 class="font-weight-semi-bold mb-0">Inventory Information</h5> -->
                         </div>
+
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   @livewire('price-list-item')
-                                   @livewire('price-list-item-table')
+                                <!-- {{--@livewire('inventory-modal')--}}
+                                {{--@livewire('inventory-table')--}} -->
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
@@ -493,7 +521,7 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-            ['Services', 'Amount'],
+            ['Category', 'Amount'],
             ['Laptop and Accessories', 8000],
             ['Mouse', 5000],
             ['Printer', 3000],

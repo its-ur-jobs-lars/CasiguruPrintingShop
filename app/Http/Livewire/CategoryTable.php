@@ -14,125 +14,135 @@ use Filament\Tables\Table;
 use Livewire\WithPagination;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Models\Category;
+use App\Models\SubCategory;
+use App\Models\Pricelist;
 use Illuminate\Support\Facades\Auth;
+
 
 class CategoryTable extends Component implements HasTable
 {
     use WithPagination, InteractsWithTable {
         WithPagination::resetPage insteadof InteractsWithTable;
     }
+    protected $listeners = ['refreshComponent' => '$refresh'];
 
-    protected $listeners = ['refreshTable' => '$refresh'];
-
-    public $isEditModalOpen = '';
-    public $editCat = [
-        'id' => null,
-        'category_name' => null,
-        'description' => null,
-        'isActive' => null,
-    ];
-
+    
     public $search = '';
-    public $step = 1;
-    public $filterActivation = '';
 
+    
+    
+    protected $updatesQueryString = ['search', 'filterStatus'];
 
-    protected $rules = [
-        'editCat.category_name' => 'required|string|max:20',
-        'editCat.description' => 'required|string|max:50',
-        'editCat.isActive' => 'required|string|max:255'
+ 
+ 
+    public $isEditModalOpen = '';
+  
+
+    
+   //for edit
+   public $editCategory = [
+    'id' => null,
+    'category_name' => null,
+    'description' => null,
+    'isActive' => null,
+];
+
+//for editing
+ protected $rules = [
+        'editCategory.category_name' => 'required|string|max:255',
+        'editCategory.description' => 'required|string|max:50',
+        'editCategory.isActive' => 'required|string|max:255'
+
     ];
 
-    public function getTableQuery(){
-        return Category::where('isActive', 1);
-    }
 
 
+//for update
+public function update()
+{
+    $this->validate([ // Apply validation rules
+         'editCategory.category_name' => 'required|string|max:255',
+        'editCategory.description' => 'required|string|max:50',
+        'editCategory.isActive' => 'required|string|max:255'
+    ]);
 
+    // Find the product by ID
+    $categoryDetails = SubCategory::find($this->editCategory['id']);
 
-    public function confirmDelete($id){
-        $this->productToDelete = $id;
-        $this->confirmDelete = true;
-        $this->dispatchBrowserEvent('show-delete-modal');
-    }
+    if ($categoryDetails) {
+        $categoryDetails->update([
+            'category_name' => $this->editCategory['category_name'],
+            'description' => $this->editCategory['description'],
+            'isActive' => $this->editCategory['isActive'],
+            'updated_by' => Auth::user()->username,// Store the ID of the user who updated the employee
+        ]);
 
-    // Edit modal logic
-    public function edit($id)
-    {
-         $CategoryDetail = Category::where('category_id', $id)->first();
+        // Emit an event to refresh the table
+        $this->emit('refreshTable');
 
-        if ($CategoryDetail) {
-            $this->editCat = [
-                'id' => $CategoryDetail->id,
-                'category_name' => $CategoryDetail->category_name,
-                'description' => $CategoryDetail->description,
-                'isActive' => $CategoryDetail->isActive,
-            ];
-            $this->isEditModalOpen = true;
-        } else {
-            session()->flash('error', 'Category not found.');
-        }
-    }
-
-    public function update()
-    {
-        $this->validate();
-
-        $CategoryDetail = Category::where('category_id', $id)->first();
-        $categoryName = $this->editCat['category_name'];
-
-        if ($CategoryDetail) {
-            $CategoryDetail->update([
-                'category_name' => $this->editCat['category_name'],
-                'description' => $this->editCat['description'],
-                'isActive' => $this->editCat['isActive'],
-                'updated_by' => Auth::user()->username,
-            ]);
-
-                // Emit an event to refresh the table
-            $this->emit('refreshTable');
-
-            $this->reset('editCat');
-            $this->isEditModalOpen = false;
-
-            session()->flash('messageInsert', 'Category "' . $categoryName . '" updated successfully!');
-            $this->dispatchBrowserEvent('closeEditModal');
-        } else {
-            session()->flash('error', 'Category not found.');
-        }
-    }
-
-    // //for editing the product
-    // public function edit($id)
-    // {
-    //     $this->reset('editCat'); // Reset the editProduct property to avoid conflicts
-
-    //     // Find the product by product_type_id
-    //     $category = Category::where('category_id', $id)->first();
-
-    //     if ($category){
-    //         $this->editCat = $category->toArray();
-    //         // $this->dispatchBrowserEvent('openEditModal');
-    //         $this->isEditModalOpen = true;
-    //     }
-    // }
-    
-    
-    
-
-
-    public function cancelEdit(){
-        $this->reset('editCat');
+        // Close the modal
         $this->isEditModalOpen = false;
-    }
 
-    public function closeModal1()
+
+        // Show a success message
+        session()->flash('messageUpdate', 'SubCategory information is updated successfully.');
+
+        // Dispatch a browser event to close the modal
+        $this->dispatchBrowserEvent('closeEditModal');
+    } else {
+        session()->flash('error', 'Product not found.');
+    }
+}
+
+public function edit($id)
+{
+    $categoryDetails = Category::find($id);
+
+    if ($categoryDetails) {
+        $this->editCategory = [
+            'id' => $categoryDetails->id,
+            'category_name' => $categoryDetails->category_name,
+            'description' => $categoryDetails->description,
+            'isActive' => $categoryDetails->isActive,
+        ];
+
+        $this->isEditModalOpen = true;
+    } else {
+        session()->flash('error', 'Employee not found.');
+    }
+}
+
+   public $Category = [];
+   public $SubCategory = [];
+
+    public function mount()
     {
-        $this->isEditModalOpen = false;
-        $this->reset('editCat');
-        $this->reset('updatedSelectedSerialNumber');
+       $this->Category = Category::pluck('category_name', 'category_name')->toArray();
+        $this->SubCategory = SubCategory::pluck('subcategory_name', 'subcategory_name')->toArray();
     }
 
+    public $step = 1;
+
+    
+    public function openModal()
+    {
+        $this->isOpen = true;
+        $this->step = 1;
+    }
+
+    public function closeModal()
+    {
+        $this->isOpen = false;
+    }
+
+    public function openModal1()
+    {
+        $this->isOpen = true;
+        $this->step = 1;
+    }
+
+ 
+   
     public function updatingSearch(){
         $this->resetPage();
     }
@@ -142,34 +152,86 @@ class CategoryTable extends Component implements HasTable
         $this->resetPage();
     }
 
-    // Filtering table by brand
-    protected function getFilteredRecords()
-    {
-        return Category::query()
-            ->when($this->filterActivation !== '', function ($query) {
-                return $query->where('isActive', $this->filterActivation);
-            })
-            ->when($this->search !== '', function ($query) {
-                return $query->where(function ($q) {
-                    $q->where('category_id', 'like', "%{$this->search}%")
-                     ->orWhere('category_name', 'like', "%{$this->search}%")
-                      ->orWhere('description', 'like', "%{$this->search}%");
-                });
-            })
-            ->get();
+    
+    public function cancelEdit(){
+        $this->reset('editCategory');
+        $this->isEditModalOpen = false;
     }
 
-    public function getRowCountProperty()
-    {
-        return $this->getFilteredRecords()->count();
+    // 
+    
+
+
+    public function getTableQuery(){
+        return Category::where('isActive', 1);
     }
 
- public function render()
+    //for closing the edit modal
+    public function closeModal1()
 {
-    $records = $this->getFilteredRecords();
+    $this->isEditModalOpen = false; // Close the modal
+    $this->reset('editCategory'); // Optionally reset the editCategory data
+  
+}
+       // Filtering table by brand
+  public $filterActivation = ''; // Default value for the dropdown filter
+  // Fetch records and calculate row count dynamically
+  protected function getFilteredRecords()
+  {
+      return Category::query() // Start with a query builder instance
+          ->when($this->filterActivation !== '', function ($query) {
+              return $query->where('isActive', $this->filterActivation); // Apply brand filter
+          })
+          ->when($this->search !== '', function ($query) {
+              return $query->where(function ($q) {
+                  $q->where('category_id', 'like', "%{$this->search}%")
+                        ->orWhere('category_name', 'like', "%{$this->search}%");
+                    
+                
+              }); // Apply search filter to multiple fields
+          })
+          ->get(); // Fetch the records as a collection
+  }
+  
+  // Dynamically calculate the row count based on the current filter
+  public function getRowCountProperty()
+  {
+      return $this->getFilteredRecords()->count(); // Count the filtered records
+  }
+  
+  
+public function render()
+{
+    // Base query to fetch users
+    $query = Category::query();
+
+    // Apply activation filter if selected
+    if ($this->filterActivation !== '') {
+        $query->where('isActive', $this->filterActivation);
+    } else {
+        // Default behavior: Exclude inactive users
+        $query->where('isActive', 1);
+    }
+
+    // Apply search filter if search term is provided
+    if (!empty($this->search)) {
+        $query->where(function ($q) {
+           $q->where('category_id', 'like', "%{$this->search}%")
+                        ->orWhere('category_name', 'like', "%{$this->search}%");
+        });
+    }
+
+      $records = $query->get(); // Get all records without pagination
+
+    // Calculate the total row count after applying filters
+    $rowCount = $query->count();
 
     return view('livewire.category-table', [
-        'records' => $records,
+        'records' => $records, // Paginated data
+        'rowCount' => $rowCount, // Total filtered row count
     ]);
 }
 }
+
+
+

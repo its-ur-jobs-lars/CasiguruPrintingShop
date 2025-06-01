@@ -34,6 +34,7 @@ Route::get('/pricelist', [App\Http\Controllers\PrintingShopContoller::class, 'Pr
 Route::get('/category', [App\Http\Controllers\PrintingShopContoller::class, 'Category'])->name('Category');
 Route::get('/subcategory', [App\Http\Controllers\PrintingShopContoller::class, 'SubCategory'])->name('SubCategory');
 Route::get('/services', [App\Http\Controllers\PrintingShopContoller::class, 'Services'])->name('Services');
+Route::get('/inventory', [App\Http\Controllers\PrintingShopContoller::class, 'Inventory'])->name('Inventory');
 
 
 Route::post('/logout', [App\Http\Controllers\EmployeeLoginController::class, 'logout'])->name('logout');

@@ -6465,7 +6465,7 @@ input {
     --breakpoint-md: 768px;
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
-    --font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    --font-family: "Times New Roman", Times, serif;
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
 }
 
@@ -6476,7 +6476,7 @@ input {
 }
 
 html {
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-family: "Times New Roman", Times, serif;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
@@ -6497,7 +6497,7 @@ section {
 
 body {
     margin: 0;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-family: "Times New Roman", Times, serif;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -12115,7 +12115,7 @@ input[type=submit].btn-block {
     padding: 8px 25px;
     margin-right: 0;
     border-radius: 5px;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+   font-family: "Times New Roman", Times, serif;
 }
 .card-body .bag-button{
     color: black;
@@ -13891,7 +13891,7 @@ a.close.disabled {
     z-index: 1070;
     display: block;
     margin: 0;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-family: "Times New Roman", Times, serif;
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -14014,7 +14014,7 @@ a.close.disabled {
     left: 0;
     z-index: 1060;
     max-width: 276px;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+    font-family: "Times New Roman", Times, serif;
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -26531,3 +26531,33 @@ tr:hover {
     color: #1C992A !important;
  }
 
+ .text-yellow-600{
+    color: yellow;
+     font-weight : bold;
+ }
+
+.text-green-600{
+    color: green;
+     font-weight : bold;
+ }
+
+.text-red-600{
+    color: red;
+     font-weight : bold;
+    }
+
+.text-blue-600{
+    color: blue;
+     font-weight : bold;
+}
+
+.text-purple-600{
+    color: darkgreen;
+    font-weight : bold;
+}
+
+ #orderCalendar {
+        min-height: 600px;
+ }
+
+ 

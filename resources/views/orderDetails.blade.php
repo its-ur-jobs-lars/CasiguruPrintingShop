@@ -206,9 +206,9 @@
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/externalHDSubcategories">
-                        <i class="fas fa-solid fa-hard-drive"></i>External Hard Drive</a>
+                       <li class="side-nav-menu-item">
+                     <a class="side-nav-menu-link" href="/inventory">
+                        <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
                  
                 </ul>
@@ -417,8 +417,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   {{-- @livewire('add-user')
-                                   @livewire('add-user-table')--}}
+                                    @livewire('add-order')
+                                    @livewire('order-table')
                             </div>
                         </div>
                     </div>
@@ -429,7 +429,7 @@
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
-                    &copy; 2025 Sunwest Inc. All Rights Reserved.
+                    &copy; Casiguro Enterprises Inc. All Rights Reserved.
             </div>
         </div>
         </footer>
