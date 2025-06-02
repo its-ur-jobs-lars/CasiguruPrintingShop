@@ -65,6 +65,7 @@ public function updatedOrderId($value)
         $this->data['balance'] = $order->balance;
         $this->data['amount'] = $order->amount;
         $this->data['price'] = $order->price;
+         $this->data['status'] = $order->status;
     }
 }
 
@@ -172,7 +173,7 @@ public function save()
             'payment_method' => $this->data['payment_method'] ?? null,
             'reference_number' => $this->data['reference_number'] ?? null,
             'payment_date' => $paymentDate,
-            'status' => $this->data['status'] ?? 'Active',
+            'status' => $this->data['status'],
             'payment_status' => $this->data['payment_status'] ?? null,
             'remarks' => $this->data['remarks'] ?? '',
 

@@ -423,7 +423,7 @@
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
                                     @livewire('orderreceipt-request-modal')
-                                    {{--@livewire('order-table')--}}
+                                    @livewire('order-reciept-table')
                             </div>
                         </div>
                     </div>

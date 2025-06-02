@@ -37,7 +37,7 @@ class OrderTable extends Component implements HasTable
         'qty' => null,
         'price' => null,
         'amount' => null,
-        'downpayment' => null,
+        'payment' => null,
         'balance' => null,
         'deadline' => null,
         'status' => null,
@@ -57,7 +57,7 @@ class OrderTable extends Component implements HasTable
             'editOrders.qty' => 'required|numeric|min:1',
             'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
-            'editOrders.downpayment' => 'required|numeric|min:0',
+            'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
             'editOrders.status' => 'required|string|max:255',
@@ -84,10 +84,10 @@ class OrderTable extends Component implements HasTable
             }
         }
 
-        if (in_array($field, ['editOrders.amount', 'editOrders.downpayment'])) {
+        if (in_array($field, ['editOrders.amount', 'editOrders.payment'])) {
             $amount = (float)($this->editOrders['amount'] ?? 0);
-            $downpayment = (float)($this->editOrders['downpayment'] ?? 0);
-            $balance = max($amount - $downpayment, 0);
+            $payment = (float)($this->editOrders['payment'] ?? 0);
+            $balance = max($amount - $payment, 0);
 
             $this->editOrders['total'] = $amount;
             $this->editOrders['balance'] = $balance;
@@ -122,7 +122,7 @@ class OrderTable extends Component implements HasTable
             'editOrders.qty' => 'required|numeric|min:1',
             'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
-            'editOrders.downpayment' => 'required|numeric|min:0',
+            'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
             'editOrders.status' => 'required|string|max:255',
@@ -138,7 +138,7 @@ class OrderTable extends Component implements HasTable
                 'qty' => $this->editOrders['qty'],
                 'price' => $this->editOrders['price'],
                 'amount' => $this->editOrders['amount'],
-                'downpayment' => $this->editOrders['downpayment'],
+                'payment' => $this->editOrders['payment'],
                 'balance' => $this->editOrders['balance'],
                 'deadline' => $this->editOrders['deadline'],
                 'status' => $this->editOrders['status'],
@@ -168,7 +168,7 @@ class OrderTable extends Component implements HasTable
                 'qty' => $order->qty,
                 'price' => $order->price,
                 'amount' => $order->amount,
-                'downpayment' => $order->downpayment,
+                'payment' => $order->payment,
                 'balance' => $order->balance,
                 'deadline' => $order->deadline,
                 'status' => $order->status,

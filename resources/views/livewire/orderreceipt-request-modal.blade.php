@@ -179,6 +179,19 @@
                                 </div>
                             @endif
 
+                                  <div class="form-group">
+                                    <label style="color:black;">Status</label>
+                                    <select wire:model="data.status" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Printing">Printing</option>
+                                        <option value="For PickUp">For PickUp</option>
+
+                                    </select>
+                                </div>
+
                                 <div class="form-group">
                                     <label style="color:black;">Remarks</label>
                                     <input type="text" wire:model="data.remarks" class="form-control" required>
