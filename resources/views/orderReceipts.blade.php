@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Order Details</title>
+    <title>Order Reciepts</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -194,16 +194,15 @@
 
               <!-- Order Management: subOrder Management -->
               <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0" style="display: block;">
-                    <li class="side-nav-menu-item active">
+                    <li class="side-nav-menu-item ">
                         <a class="side-nav-menu-link" href="/orderDetails">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
                     </li>
 
-                      <li class="side-nav-menu-item">
+                      <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/orderreceipts">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Reciepts</a>
                     </li>
-                    
                     <li class="side-nav-menu-item">
                        <a class="side-nav-menu-link" href="/pricelist">
                         <i class="fas fa-solid fa-list"></i>Price List</a>
@@ -402,7 +401,7 @@
        <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Order Details</div>
+                <div class="h3 mb-0">Order Reciepts</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -423,8 +422,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                    @livewire('add-order')
-                                    @livewire('order-table')
+                                    @livewire('orderreceipt-request-modal')
+                                    {{--@livewire('order-table')--}}
                             </div>
                         </div>
                     </div>

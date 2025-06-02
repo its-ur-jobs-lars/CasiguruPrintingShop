@@ -65,6 +65,11 @@ class PrintingShopContoller extends Controller
     {
         return view('inventory');
     }
+
+    public function orderreceipts()
+    {
+        return view('orderReceipts');
+    }
     
 
    

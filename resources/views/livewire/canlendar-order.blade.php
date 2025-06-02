@@ -30,7 +30,7 @@
         calendar.render();
     });
 </script>
-
+{{--
 @push('styles')
 <style>
     :root {
@@ -50,4 +50,4 @@
         border-color: #0056b3;
     }
 </style>
-@endpush
+@endpush --}}

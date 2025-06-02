@@ -27,13 +27,13 @@
                                 <th class="px-4 py-2">Price</th>
                                  <th class="px-4 py-2">Amount</th>
                                   <th class="px-4 py-2">Total</th>
-                                <th class="px-4 py-2">Downpayment</th>
+                                <th class="px-4 py-2">Payment</th>
                                 <th class="px-4 py-2">Balance</th>
                                 <th class="px-4 py-2">JO Number</th>
                                 <th class="px-4 py-2">Deadline</th>
-                                <th class="px-4 py-2">Remarks</th>
                                 <th class="px-4 py-2">Added By</th>
                                 <th class="px-4 py-2">Status</th>
+                                <th class="px-4 py-2">Remarks</th>
                                 <th class="px-4 py-2">Activation</th>
                                 <th class="px-4 py-2"></th>
                             </tr>
@@ -55,12 +55,11 @@
                                     <td class="px-4 py-2">{{ $record->price }}</td>
                                     <td class="px-4 py-2">{{ $record->amount }}</td>
                                     <td class="px-4 py-2">{{ $record->total }}</td>
-                                    <td class="px-4 py-2">{{ $record->downpayment }}</td>
+                                    <td class="px-4 py-2">{{ $record->payment }}</td>
                                     <td class="px-4 py-2">{{ $record->balance }}</td>
                                     <td class="px-4 py-2">{{ $record->jo_number }}</td>
                                     <td class="px-4 py-2">{{ $record->deadline }}</td>
                                    
-                                    <td class="px-4 py-2">{{ $record->remarks }}</td>
                                     <td class="px-4 py-2">{{ $record->added_by }}</td>
 
                                      <td class="px-4 py-2">
@@ -78,6 +77,8 @@
                                             <span class="text-gray-600 font-semibold">Unknown</span>
                                         @endif
                                     </td>
+                                    
+                                    <td class="px-4 py-2">{{ $record->remarks}}</td>
                                 
                                 <td class="px-4 py-2">
                                     @if ($record->isActive)

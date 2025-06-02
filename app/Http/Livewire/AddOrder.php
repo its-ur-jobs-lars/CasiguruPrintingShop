@@ -39,7 +39,18 @@ class AddOrder extends Component
     {
         $this->isOpen = false;
         $this->step = 1;
+
+
     }
+
+    public $selectedpayment;
+    public function Selectedpayment(){
+        if ($this->Selectedpayment == 'Downpayment') {
+            $this->data['payment'] = '';
+        } elseif ($this->Selectedpayment == 'Full Payment') {
+            $this->data['payment'] = ''; // Clear the serial number for input
+        }
+}
 
     public function nextStep() { $this->step = 2; }
     public function previousStep() { $this->step = 1; }
@@ -85,10 +96,10 @@ class AddOrder extends Component
         }
     }
 
-    if (in_array($field, ['data.amount', 'data.downpayment'])) {
+    if (in_array($field, ['data.amount', 'data.payment'])) {
         $amount = (float)($this->data['amount'] ?? 0);
-        $downpayment = (float)($this->data['downpayment'] ?? 0);
-        $balance = max($amount - $downpayment, 0);
+        $payment = (float)($this->data['payment'] ?? 0);
+        $balance = max($amount - $payment, 0);
 
         $this->data['total'] = $amount;
         $this->data['balance'] = $balance;
@@ -108,7 +119,7 @@ class AddOrder extends Component
                 'data.price' => 'required|numeric',
                 'data.amount' => 'required|numeric',
                 'data.total' => 'required|numeric',
-                'data.downpayment' => 'required|numeric',
+                'data.payment' => 'required|numeric',
                 'data.balance' => 'required|numeric',
                 'data.jo_number' => 'nullable|string|max:255',
                 'data.deadline' => 'nullable|date',
@@ -133,7 +144,7 @@ class AddOrder extends Component
                 'qty' => $this->data['qty'],
                 'price' => $this->data['price'],
                 'amount' => $this->data['amount'],
-                'downpayment' => $this->data['downpayment'],
+                'payment' => $this->data['payment'],
                 'total' => $this->data['total'],
                 'balance' => $this->data['balance'],
                 'jo_number' => $this->data['jo_number'] ?? '',

@@ -31,7 +31,7 @@ class Orders extends Migration
 
             // Financial Summary
             $table->decimal('total', 10, 2)->default(0.00);
-            $table->decimal('downpayment', 10, 2)->default(0.00);
+            $table->decimal('payment', 10, 2)->default(0.00);
             $table->decimal('balance', 10, 2)->default(0.00);
             $table->string('jo_number')->unique(); // e.g., 0000236
             $table->date('deadline')->nullable();

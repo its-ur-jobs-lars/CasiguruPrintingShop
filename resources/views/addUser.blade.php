@@ -192,21 +192,26 @@
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-              <!-- Order Management: subOrder Management -->
+               <!-- Order Management: subOrder Management -->
               <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderDetails">
-                        <i class="fas fa-solid fa-laptop"></i>Order Details</a>
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
+                    </li>
+
+                      <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/orderreceipts">
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Reciepts</a>
                     </li>
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/pricelist">
+                       <a class="side-nav-menu-link" href="/pricelist">
                         <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
-                     <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
-                    <li class="side-nav-menu-item">
+                       <li class="side-nav-menu-item">
                      <a class="side-nav-menu-link" href="/inventory">
                         <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>

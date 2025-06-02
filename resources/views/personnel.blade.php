@@ -199,6 +199,12 @@
                          <a class="side-nav-menu-link" href="/orderDetails">
                         <i class="fas fa-solid fa-laptop"></i>Order Details</a>
                     </li>
+
+                      <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/orderreceipts">
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Reciepts</a>
+                    </li>
+                    
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/pricelist">
                         <i class="fas fa-solid fa-list"></i>Price List</a>

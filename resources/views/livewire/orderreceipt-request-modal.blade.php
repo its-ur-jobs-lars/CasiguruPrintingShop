@@ -6,7 +6,7 @@
     @endif
 
     {{-- Button to Open Modal --}}
-    <button wire:click="openModal" class="btn btn-primary">Add Order</button>
+    <button wire:click="openModal" class="btn btn-primary">Request Order Receipt</button>
 
     {{-- Product Form Modal --}}
     @if($isOpen)
@@ -15,13 +15,24 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="color:black;">Add Order</h5>
+                        <h5 class="modal-title" style="color:black;">Request Order Receipt</h5>
                         <button type="button" class="close" wire:click="closeModal">&times;</button>
                     </div>
                     <div class="modal-body">
                         <form wire:submit.prevent="save">
                             {{-- Step 1 --}}
                             @if ($step === 1)
+
+                                <div class="form-group">
+                                    <label style="color:black;">Order</label>
+                                    <select wire:model="order_id" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        @foreach($Order as $order)
+                                            <option value="{{ $order->order_id }}">{{ $order->order_id }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <div class="form-group">
                                     <label style="color:black;">Customer Name</label>
                                     <input type="text" wire:model="data.name" class="form-control" required>
@@ -85,32 +96,7 @@
                                     <input type="text" wire:model="data.total" class="form-control" readonly>
                                 </div>
 
-                                 {{-- Payment --}}
-                            <div class="form-group">
-                                <label style="color:black;">Payment</label>
-                                <select wire:model="selectedpayment" class="form-control" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="Downpayment">Downpayment</option>
-                                    <option value="Full Payment">Full Payment</option>
-                                </select>
-                            </div>
-
-                            
-                            @if($selectedpayment == 'Downpayment')
-                                <div class="form-group">
-                                    <label style="color:black;"></label>
-                                    <label style="color:black;">Enter Downpayment</label>
-                                    <input type="text" wire:model="data.payment" class="form-control" style="border-color:darkblue;" required>
-                                </div>
-                            @endif
-
-                            @if($selectedpayment == 'Full Payment')
-                            <div class="form-group">
-                                    <label style="color:black;"></label>
-                                    <label style="color:black;">Enter Full Payment</label>
-                                    <input type="text" wire:model="data.payment" class="form-control" style="border-color:#darkblue;" required>
-                                </div>
-                            @endif
+                               
 
                                 <div class="form-group text-center">
                                     <button type="button" class="btn btn-secondary" wire:click="previousStep()">Previous</button>
@@ -120,6 +106,13 @@
 
                             {{-- Step 3 --}}
                             @if ($step === 3)
+
+                            
+                                <div class="form-group">
+                                    <label style="color:black;">Payment</label>
+                                    <input type="text" wire:model="data.payment" class="form-control" readonly>
+                                </div>
+
                                 <div class="form-group">
                                     <label style="color:black;">Balance</label>
                                     <input type="text" wire:model="data.balance" class="form-control" required>
@@ -131,27 +124,66 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label style="color:black;">Deadline</label>
-                                    <input type="date" wire:model="data.deadline" class="form-control" required>
+                                    <label style="color:black;">Reference</label>
+                                    <input type="text" wire:model="data.reference_number" class="form-control" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label style="color:black;">Status</label>
-                                    <select wire:model="data.status" class="form-control" required>
+                                    <label style="color:black;">Payment Method</label>
+                                    <select wire:model="data.payment_method" class="form-control" required>
                                         <option value="">-- Select --</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Cancelled">Cancelled</option>
-                                        <option value="Printing">Printing</option>
-                                        <option value="For PickUp">For PickUp</option>
-
+                                        <option value="Cash">Cash</option>
+                                        <option value="GCash">GCash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Cheque">Cheque</option>
                                     </select>
                                 </div>
+
+
+                                  <div class="form-group text-center">
+                                    <button type="button" class="btn btn-secondary" wire:click="previousStep()">Previous</button>
+                                    <button type="button" class="btn btn-success" wire:click="nextStep2()">Next</button>
+                                </div>
+                            @endif
+                            
+                             {{-- Step 3 --}}
+                            @if ($step === 4)
+                                <div class="form-group">
+                                    <label style="color:black;">Payment Date</label>
+                                    <input type="date" wire:model="data.payment_date" class="form-control" required>
+                                </div>
+
+                                  {{-- Payment --}}
+                            <div class="form-group">
+                                <label style="color:black;">Payment Status</label>
+                                <select wire:model="selectedpayment" class="form-control" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Balance">Balance</option>
+                                </select>
+                            </div>
+
+                            
+                        
+                            @if($selectedpayment == 'Paid')
+                            <div class="form-group" hidden>
+                                <input type="text" wire:model="data.payment_status" class="form-control" required readonly>
+                            </div>
+                            @endif
+
+                            @if($selectedpayment == 'Balance')
+                            <div class="form-group">
+                                    <label style="color:black;"></label>
+                                    <label style="color:black;">Paid Remaining Balance</label>
+                                    <input type="text" wire:model="data.payment_status" class="form-control" style="border-color:#darkblue;" required>
+                                </div>
+                            @endif
 
                                 <div class="form-group">
                                     <label style="color:black;">Remarks</label>
                                     <input type="text" wire:model="data.remarks" class="form-control" required>
                                 </div>
+
 
                                 <div class="form-group text-center">
                                     <button type="button" class="btn btn-secondary" wire:click="previousStep()">Previous</button>
