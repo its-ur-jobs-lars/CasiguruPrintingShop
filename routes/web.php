@@ -31,6 +31,7 @@ Route::get('/profile', [App\Http\Controllers\PrintingShopContoller::class, 'prof
 
 Route::get('/orderDetails', [App\Http\Controllers\PrintingShopContoller::class, 'orderDetails'])->name('Order Details');
 Route::get('/orderreceipts', [App\Http\Controllers\PrintingShopContoller::class, 'orderreceipts'])->name('Order Receipts');
+Route::get('/orderdashboard', [App\Http\Controllers\PrintingShopContoller::class, 'orderDashboard'])->name('Order `Dashboard');
 Route::get('/pricelist', [App\Http\Controllers\PrintingShopContoller::class, 'Pricelist'])->name('Price List');
 Route::get('/category', [App\Http\Controllers\PrintingShopContoller::class, 'Category'])->name('Category');
 Route::get('/subcategory', [App\Http\Controllers\PrintingShopContoller::class, 'SubCategory'])->name('SubCategory');

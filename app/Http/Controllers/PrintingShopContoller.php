@@ -70,6 +70,11 @@ class PrintingShopContoller extends Controller
     {
         return view('orderReceipts');
     }
+
+    public function orderDashboard()
+    {
+        return view('orderDashboard');
+    }
     
 
    

@@ -14,6 +14,7 @@ use App\Models\SubCategory;
 use App\Models\Pricelist;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 
 
 class ServiceAdd extends Component
@@ -60,42 +61,47 @@ class ServiceAdd extends Component
 
     public bool $isOpen = false; // Controls modal visibility
 
-    public function save()
+  public function save()
 {
     try {
         $this->validate([
             'data.category_id' => 'required',
             'data.subcategory_name' => 'required',
             'data.description' => 'nullable',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:2048', // 2MB max
         ]);
 
-         if ($this->image) {
-            $imagePath = $this->image->store('images', 'public');
-            $this->data['image'] = $imagePath;
+       
+        if ($this->image) {
+            // Get the original extension (e.g., jpg, png)
+            $extension = $this->image->getClientOriginalExtension();
+
+            // Sanitize the filename
+            $fileName = Str::slug($this->data['subcategory_name']) . '.' . $extension;
+
+            // Store the image with custom filename
+            $imagePath = $this->image->storeAs('images/products', $fileName, 'public');
+
+            $this->data['image'] = $imagePath; // e.g., 'images/products/shampoo.jpg'
         }
 
-        // Generate subcategory_id using first letters of subcategory_name and category
+        // Generate subcategory_id using first letters
         $catCon = $this->getFirstLetters($this->data['subcategory_name']);
         $category = Category::where('category_id', $this->data['category_id'])->first();
         $subCon = $category ? $this->getFirstLetters($category->category_name) : 'XXX';
 
-        // Get the last subcategory globally
         $lastSubCategory = \App\Models\SubCategory::where('subcategory_id', 'like', "CTG-%-%-%")
             ->orderByDesc('subcategory_id')
             ->first();
 
+        $nextSequence = 1;
         if ($lastSubCategory && preg_match('/-(\d{4})$/', $lastSubCategory->subcategory_id, $matches)) {
             $nextSequence = intval($matches[1]) + 1;
-        } else {
-            $nextSequence = 1;
         }
         $sequence = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
         $subcategory_id = "CTG-{$catCon}-{$subCon}-{$sequence}";
 
-        $SubcategoryName = $this->data['subcategory_name']; 
-
-            SubCategory::create([
+        SubCategory::create([
             'subcategory_id'   => $subcategory_id,
             'category_id'      => $this->data['category_id'],
             'subcategory_name' => $this->data['subcategory_name'],
@@ -104,22 +110,16 @@ class ServiceAdd extends Component
             'added_by'         => Auth::user()->username,
         ]);
 
-
-
-        // Emit an event to refresh the table
         $this->emit('refreshComponent');
-
-        // Reset the form data and close the modal
-        $this->reset('data');
+        $this->reset('data', 'image');
         $this->isOpen = false;
 
-        // Show a success message
-        session()->flash('messageInsert', 'New services is updated successfully!');
+        session()->flash('messageInsert', 'New subcategory saved successfully!');
     } catch (\Exception $e) {
-        // Handle the exception and show an error message
         session()->flash('errorInsert', $e->getMessage());
     }
 }
+
 
  // Helper: Get first letter of each word, uppercase
     private function getFirstLetters($string)

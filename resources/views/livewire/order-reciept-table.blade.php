@@ -11,6 +11,8 @@
             <option value="1">Active</option>
             <option value="0">Inactive</option>   
         </select>
+
+       
                
             <div class="overflow-x-auto-1 bg-white shadow-md rounded-lg relative">
                 <div class="overflow-y-auto max-h-[500px]">
@@ -104,6 +106,11 @@
                                         <i class="fas fa-file-export"></i>
                                     </button>
 
+                                     <button wire:click="exportExcelMultiple('{{ $record->order_id }}')"
+                                        class="bg-green-600 text-white px-3 py-1 rounded-1">
+                                        <i class="fas fa-file-export"></i>
+                                    </button>
+
                                         <!-- Your new Export button
                                     <button wire:click="exportPDF('{{ $record->order_receipt_id }}')"
                                         class="bg-green-600 text-white px-3 py-1 rounded-1">
@@ -129,7 +136,14 @@
 <!-- Fixed Footer for Row Count -->
 <div class="fixed bottom-0 left-0 w-full p-2 z-20">
     <span class="text-sm text-gray-600">Total number of Active Receipts : {{ $this->rowCount }}</span>
+
+    
+     <input type="date" id="date_to" wire:model="date_to" class="border border-gray-300 rounded-12 px-3 py-2" placeholder="To" style="float: right;">
+    <label for="date_to" class="mb-0 mr-2" style="color: black; float: right;">To:</label>
+    <input type="date" id="date_from" wire:model="date_from" class="border border-gray-300 rounded-12 px-3 py-2 mr-3" placeholder="From" style="float: right;">
+    <label for="date_from" class="mb-0 mr-2" style="color: black; float: right;">From:</label>
 </div>
+
        
             {{-- Edit Function --}}
         @if($isEditModalOpen)

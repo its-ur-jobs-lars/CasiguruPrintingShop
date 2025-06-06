@@ -20,9 +20,12 @@
                                 <th class="px-4 py-2">Pricelist ID</th>
                                 <th class="px-4 py-2">Category Name</th>
                                 <th class="px-4 py-2">SubCategory Name</th>
-                                <th class="px-4 py-2">Price (10-50 pcs)</th>
-                                <th class="px-4 py-2">Price (51-100 pcs)</th>
-                                <th class="px-4 py-2">Price (101-500 pcs)</th>
+                                <th class="px-4 py-2">Price (1 pcs)</th>
+                                <th class="px-4 py-2">Price ( 2 to 50 pcs)</th>
+                                <th class="px-4 py-2">Price (51 to 100 pcs)</th>
+                                <th class="px-4 py-2">Price ( 101 to 500 pcs)</th>
+                                <th class="px-4 py-2">Price (501 to 999 pcs)</th>
+                                <th class="px-4 py-2">Price (1000+  pcs)</th>
                                 <th class="px-4 py-2">Remarks</th>
                                 <th class="px-4 py-2">Added_by</th>
                                  <th class="px-4 py-2">Updated By</th>
@@ -41,12 +44,19 @@
 
                                       <td class="px-4 py-2">{{ $SubCategory[$record->subcategory_id] ?? 'Not Available' }}</td>
 
-                                      <td class="px-4 py-2">{{ $record->price_10_50 }}</td>
+                                      <td class="px-4 py-2">{{ $record->price_1 }}</td>
                                     
+
+                                    <td class="px-4 py-2">{{ $record->price_2_50 }}</td>
 
                                     <td class="px-4 py-2">{{ $record->price_51_100 }}</td>
 
-                                    <td class="px-4 py-2">{{ $record->price_101_500 }}</td>
+                                      <td class="px-4 py-2">{{ $record->price_101_500 }}</td>
+                                    
+
+                                    <td class="px-4 py-2">{{ $record->price_501_999}}</td>
+
+                                    <td class="px-4 py-2">{{ $record->price_1000_up }}</td>
                                 
                                    <td class="px-4 py-2">{{ $record->remarks }}</td>
 
@@ -129,14 +139,20 @@
 
                             {{-- Middle Name --}}
                             <div class="form-group">
-                                <label style="color:black;">Price (10 to 50)</label>
-                                <input type="text" wire:model="editPricelist.price_10_50" class="form-control" required>
+                                <label style="color:black;">Price (1 pcs)</label>
+                                <input type="text" wire:model="editPricelist.price_1" class="form-control" required>
                             </div>
 
 
                             {{-- Price (51 to 100) --}}
                             <div class="form-group">
-                                <label style="color:black;">Price (51 to 100)</label>
+                                <label style="color:black;">Price (2 to 50 pcs)</label>
+                                <input type="text" wire:model="editPricelist.price_2_50" class="form-control" required>
+                            </div>
+
+                             {{-- Price (51 to 100) --}}
+                            <div class="form-group">
+                                <label style="color:black;">Price (51 to 100 pcs)</label>
                                 <input type="text" wire:model="editPricelist.price_51_100" class="form-control" required>
                             </div>
 
@@ -155,8 +171,18 @@
 
                             {{-- Price (101 to 500) --}}
                             <div class="form-group">
-                                <label style="color:black;">Price (101 to 500)</label>
+                                <label style="color:black;">Price (101 to 500 pcs)</label>
                                 <input type="text" wire:model="editPricelist.price_101_500" class="form-control" required>
+                            </div>
+
+                              <div class="form-group">
+                                <label style="color:black;">Price ( 501 to 999 pcs)</label>
+                                <input type="text" wire:model="editPricelist.price_501_999" class="form-control" required>
+                            </div>
+
+                              <div class="form-group">
+                                <label style="color:black;">Price (1000 + pcs )</label>
+                                <input type="text" wire:model="editPricelist.price_1000_up" class="form-control" required>
                             </div>
 
                               {{-- Remarks --}}

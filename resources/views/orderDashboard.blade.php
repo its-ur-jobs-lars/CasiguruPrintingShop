@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Add Employee</title>
+    <title>Order Dashboard</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -89,7 +89,7 @@
             </a>
             <!-- End Logo For Mobile View -->
 
-           <!-- Logo For Desktop View -->
+            <!-- Logo For Desktop View -->
             <a class="navbar-brand navbar-brand-desktop" href="" >
                 <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
                 <img class="side-nav-hide-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}" style="width: 200px; height: 75px; margin: auto; margin-top: 40px; align-items: center;">
@@ -138,20 +138,19 @@
                                 </span>
                             </a>
                         </li>
-                         <li class="unfold-item unfold-item-has-divider">
-                                <a class="unfold-link d-flex align-items-center text-nowrap" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                                <span class="unfold-item-icon d-flex align-items-center">
-                                    <i class="fas fa-solid fa-power-off mr-5"></i>
-                                    <span style="font-size: 15px;">Logout</span>
-                                </span>
-                                </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
-                   
+                        <li class="unfold-item unfold-item-has-divider">
+                        <a class="unfold-link d-flex align-items-center text-nowrap" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <span class="unfold-item-icon d-flex align-items-center">
+                                <i class="fas fa-solid fa-power-off mr-5"></i>
+                                <span style="font-size: 15px;">Logout</span>
+                            </span>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                                    
                     </ul>
                 </div>
                 <!-- End User Avatar -->
@@ -169,7 +168,7 @@
             <li class="sidebar-heading h6"></li>
 
         <!-- Dashboard -->
-        <li class="side-nav-menu-item active">
+        <li class="side-nav-menu-item">
             <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard') ? : '' }}" href="/dashboard">
                 <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-sharp fa-solid fa-square-poll-horizontal"></i>
@@ -184,7 +183,7 @@
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subOrderManagement">
                   <span class="side-nav-menu-icon d-flex mr-3">
-                    <i class=" fas fa-solid fa-sitemap"></i>
+                     <i class=" fas fa-solid fa-sitemap"></i>
                   </span>
                     <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
@@ -194,15 +193,16 @@
                 </a>
 
               <!-- Order Management: subOrder Management -->
-              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
-
-                   <li class="side-nav-menu-item">
+              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0" style="display: block;">
+                   
+                 <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/orderdashboard">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
                     </li>
-                    <li class="side-nav-menu-item">
-                         <a class="side-nav-menu-link" href="/orderDetails">
-                        <i class="fas fa-solid fa-laptop"></i>Order Details</a>
+              
+                    <li class="side-nav-menu-item ">
+                        <a class="side-nav-menu-link" href="/orderDetails">
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
                     </li>
 
                       <li class="side-nav-menu-item">
@@ -211,18 +211,18 @@
                     </li>
                     
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/pricelist">
+                       <a class="side-nav-menu-link" href="/pricelist">
                         <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
-
-                     <li class="side-nav-menu-item">
+                       <li class="side-nav-menu-item">
                      <a class="side-nav-menu-link" href="/inventory">
                         <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
+                 
                 </ul>
                 <!-- End Order Management: subOrder Management -->
             </li>
@@ -307,7 +307,7 @@
         </li>
         <!-- End History -->
 
-                 <!-- Manufacturer -->
+             <!-- Manufacturer -->
              <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subManufacturer">
@@ -321,18 +321,18 @@
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-                  <!-- Manufacturer: subManufacturer-->
-               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display: block;">
-                     <li class="side-nav-menu-item active">
+                   <!-- Manufacturer: subManufacturer-->
+               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
+                    
+                  <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
                   </li>
-                   <li class="side-nav-menu-item active">
+
+                  <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
-                    
-                
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
@@ -341,7 +341,6 @@
                         <a class="side-nav-menu-link" href="/modelDivisionManufacturer">
                         <i class="fas fa-cubes"></i> Model</a>
                     </li>
-                  
                  
 
                        <li class="side-nav-menu-item">
@@ -349,11 +348,12 @@
                         <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
                     </li>
 
+                    
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
             </li>
             <!-- End Manufacturer -->
-
+            
                @can('view-personnel-profile')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
@@ -392,7 +392,6 @@
             @endcan
         <!-- End History -->
           
-          
        <!-- Dark Mode Toggle -->
        <div class="ml-3">
             <button id="darkModeToggle" class="btn-1 btn-sm-1 btn-outline-secondary">
@@ -406,10 +405,10 @@
 <!-- End Sidebar Nav -->
  
     <div class="content">
-        <div class="py-4 px-3 px-md-4">
+       <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Add Personnel</div>
+                <div class="h3 mb-0">Order Dashboard</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -429,10 +428,8 @@
                         <div class="card-header">
                         </div>
                         <div class="card-body pt-0">
-                            <div class="table-responsive-xl">
-                                   {{-- @livewire('useradd-modal')
-                                    @livewire('user-table')--}}
-                            </div>
+                             @livewire('order-dashboard')
+                            
                         </div>
                     </div>
                 </div>
@@ -442,7 +439,7 @@
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
-                    &copy; 2025 Casiguro Printing Shop. All Rights Reserved.
+                    &copy; Casiguro Enterprises Inc. All Rights Reserved.
             </div>
         </div>
         </footer>

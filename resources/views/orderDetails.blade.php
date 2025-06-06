@@ -194,6 +194,11 @@
 
               <!-- Order Management: subOrder Management -->
               <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0" style="display: block;">
+                
+                   <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/orderdashboard">
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
+                    </li>
                     <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/orderDetails">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
@@ -423,7 +428,7 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                    @livewire('add-order')
+                                    {{--@livewire('add-order')--}}
                                     @livewire('order-table')
                             </div>
                         </div>

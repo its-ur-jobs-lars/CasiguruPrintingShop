@@ -7178,11 +7178,27 @@ h2 {
     font-size: 2rem
 }
 
+.h2-1,
+h2 {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+    
+}
+
 .h3,
 h3 {
-    font-size: 1.75rem;
+    font-size: 30px;
     margin-left: 10px;
 }
+
+.h3-1,
+h3 {
+    font-size: 30px;
+    margin-left: 10px;
+}
+
+
 
 .h4,
 h4 {
@@ -14765,8 +14781,9 @@ button.bg-lighter:hover {
     border-radius: 5px !important;
     border: 0px;
     margin-right: 10px;
-    text-align: center;
+    text-align: left;
     background-color: whitesmoke;
+    margin-bottom : 35px;
 }
 
 .rounded-9,
@@ -14921,7 +14938,7 @@ button.bg-lighter:hover {
 }
 
 .rounded-lg {
-    border-radius: .125rem !important;
+    border-radius: 10px !important;
     width: 100%
 }
 
@@ -16108,11 +16125,11 @@ button.bg-lighter:hover {
 }
 
 .w-60 {
-    width: 60% !important
+    width: 95% !important
 }
 
 .w-80 {
-    width: 80% !important
+    width: 100% !important
 }
 
 .h-25 {
@@ -16261,8 +16278,27 @@ button.bg-lighter:hover {
     margin: .5rem !important
 }
 
-.mt-2,
+.mt-2-1,
 .my-2 {
+    margin-top: 10px; 
+    margin-bottom: 10px;
+    font-size: 15px;
+    margin-left: 10px;
+    background-color: darkblue;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.mt-2-1:hover,
+.my-2:hover {
+    color: gray;
+    background-color: blue;
+    border: 2px outset darkblue;
+    box-shadow: rgba(0, 0, 0, 0.08) 0 1px 3px 0;
+}
+
+.mt-2,
+.my-2-1 {
     margin-top: 10px; 
     margin-bottom: 10px;
     font-size: 15px;
@@ -16271,6 +16307,7 @@ button.bg-lighter:hover {
     margin-right: 10px;
     padding: 5px;
 }
+
 
 .mr-2,
 .mx-2 {
@@ -16637,7 +16674,30 @@ button.bg-lighter:hover {
 }
 
 .p-4 {
-    padding: 1.5rem !important
+    padding: 1.5rem !important;
+    margin-bottom: 35px;
+    flex: 1 1 auto;
+    align-items : center;
+}
+
+.p-4-2 {
+    padding: 1.5rem !important;
+    margin-bottom: 35px;
+    flex: 1 1 auto;
+    align-items : center;
+    background: linear-gradient(180deg, #DDD 15.5%, #FFFDF0 35%, #88bec7 54.5%, #00A6F5 82%);
+}
+
+
+.p-4-1 {
+    padding: 1.5rem !important;
+    margin-bottom: 35px;
+    flex: 1 1 auto;
+    align-items : center;
+    background-color : whitesmoke;
+    margin-right : 15px;
+    border-radius: 50%;
+    margin-bottom : 15px;
 }
 
 .pt-4,
@@ -16651,6 +16711,20 @@ button.bg-lighter:hover {
     color: black;
     text-align: center;
     font-size: 13.5px;
+}
+
+.pr-4,
+.px-4-1 {
+    color: black;
+  text-align: center;
+  font-size: 13.5px;
+  background-color: whitesmoke;
+  display: flex;
+  margin-right: 50px;
+  background: linear-gradient(180deg, #DDD 15.5%, #FFFDF0 35%, #88bec7 54.5%, #00A6F5 82%);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
 
 .pb-4,
@@ -21085,7 +21159,7 @@ a.text-secondary:hover {
 }
 
 .text-success {
-    color: #FF9D23 !important
+    color: green !important;
 }
 
 a.text-success:focus,
@@ -24520,7 +24594,7 @@ body.side-nav-mini-mode.side-nav-closed .side-nav-header-logo-text {
 
 .side-nav-menu-item {
     position: relative;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .side-nav-menu-third-level .side-nav-menu-item {
@@ -26340,6 +26414,10 @@ tr:hover {
     .mb-2-1 {
         margin-bottom: 0.5rem; /* Spacing between messages */
     }
+    .mb-2-2{
+        text-align: center;
+    }
+    
 
     tr{
         border: 1px solid #e0e0e0; /* Add border to table rows */
@@ -26570,5 +26648,8 @@ tr:hover {
 element {
   border-color: darkblue;
 }
+
+
+
 
  

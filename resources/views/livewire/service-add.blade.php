@@ -46,27 +46,27 @@
                                 <input type="text" wire:model="data.description" class="form-control" required>
                             </div>
 
-                            {{-- Image Upload --}}
-                        <div class="form-group">
-                            <label style="color:black;">Upload Image</label>
-                            <input type="file" wire:model="image" class="form-control" accept="image/*">
-                            @error('image') <span class="text-danger">{{ $message }}</span> @enderror
+                            <div class="form-group">
+                                <label style="color:black;">Upload Image</label>
+                                <input type="file" wire:model="image" class="form-control" accept="image/*">
+                                @error('image') <span class="text-danger">{{ $message }}</span> @enderror
 
-                            @if ($image)
-                                <div class="mt-2 d-flex align-items-center">
-                                    <img src="{{ $image->temporaryUrl() }}" alt="Preview" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                                    <span class="ml-2 text-success-1" style="font-size: 17px;">
-                                        <i class="fa fa-check-circle"></i> Uploaded
-                                    </span>
-                                </div>
-                            @endif
-                        </div>
+                                @if ($image)
+                                    <div class="mt-2 d-flex align-items-center">
+                                        <img src="{{ $image->temporaryUrl() }}" alt="Preview"
+                                            style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
+                                        <span class="ml-2 text-success" style="font-size: 17px;">
+                                            <i class="fa fa-check-circle"></i> Uploaded
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
 
                         
                             {{-- Submit Button --}}
                             <div class="form-group text-center">
                                 <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>
-                                <button type="submit" class="btn btn-success">Save SubCategory</button>
+                                <button type="submit" class="btn btn-success">Save Services</button>
                             </div>
                         </form>
                     </div>

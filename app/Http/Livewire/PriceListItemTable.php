@@ -57,20 +57,28 @@ class PriceListItemTable extends Component implements HasTable
     'id' => null,
     'category_id' => null,
     'subcategory_id' => null,
-    'price_10_50' => null,
+    'price_1' => null,
+    'price_2_50' => null,
     'price_51_100' => null,
     'price_101_500' => null,
+    'price_501_999' => null,
+    'price_1000_up' => null,
     'remarks' => null,
     'isActive' => null,
+
+      
 ];
 
 //for editing
  protected $rules = [
         'editPricelist.category_id' => 'required|string|max:255',
         'editPricelist.subcategory_id' => 'required|string|max:255',
-        'editPricelist.price_10_50' => 'required|string|max:255',
-        'editPricelist.price_51_100' => 'required|string|max:50',
-        'editPricelist.price_101_500' => 'required|string|max:255',
+        'editPricelist.price_1' => 'nullable|numeric|min:0',
+        'editPricelist.price_2_50' => 'nullable|numeric|min:0',
+        'editPricelist.price_51_100' => 'nullable|numeric|min:0',
+        'editPricelist.price_101_500' => 'nullable|numeric|min:0',
+        'editPricelist.price_501_999' => 'nullable|numeric|min:0',
+        'editPricelist.price_1000_up' => 'nullable|numeric|min:0',
         'editPricelist.remarks' => 'required|string|max:255',
         'editPricelist.isActive' => 'required|string|max:255'
 
@@ -82,11 +90,14 @@ class PriceListItemTable extends Component implements HasTable
 public function update()
 {
     $this->validate([ // Apply validation rules
-       'editPricelist.category_id' => 'required|string|max:255',
+        'editPricelist.category_id' => 'required|string|max:255',
         'editPricelist.subcategory_id' => 'required|string|max:255',
-        'editPricelist.price_10_50' => 'required|string|max:255',
-        'editPricelist.price_51_100' => 'required|string|max:50',
-        'editPricelist.price_101_500' => 'required|string|max:255',
+        'editPricelist.price_1' => 'nullable|numeric|min:0',
+        'editPricelist.price_2_50' => 'nullable|numeric|min:0',
+        'editPricelist.price_51_100' => 'nullable|numeric|min:0',
+        'editPricelist.price_101_500' => 'nullable|numeric|min:0',
+        'editPricelist.price_501_999' => 'nullable|numeric|min:0',
+        'editPricelist.price_1000_up' => 'nullable|numeric|min:0',
         'editPricelist.remarks' => 'required|string|max:255',
         'editPricelist.isActive' => 'required|string|max:255'
     ]);
@@ -98,9 +109,12 @@ public function update()
         $employeeDetils->update([
             'category_id' => $this->editPricelist['category_id'],
             'subcategory_id' => $this->editPricelist['subcategory_id'],
-            'price_10_50' => $this->editPricelist['price_10_50'],
+            'price_1' => $this->editPricelist['price_1'],
+            'price_2_50' => $this->editPricelist['price_51_100'],
             'price_51_100' => $this->editPricelist['price_51_100'],
             'price_101_500' => $this->editPricelist['price_101_500'],
+            'price_501_999' => $this->editPricelist['price_501_999'],
+            'price_1000_up' => $this->editPricelist['price_1000_up'],
             'remarks' => $this->editPricelist['remarks'],
             'isActive' => $this->editPricelist['isActive'],
             'updated_by' => Auth::user()->username,// Store the ID of the user who updated the employee
@@ -132,9 +146,12 @@ public function edit($id)
             'id' => $employeeDetils->id,
             'category_id' => $employeeDetils->category_id,
             'subcategory_id' => $employeeDetils->subcategory_id,
-            'price_10_50' => $employeeDetils->price_10_50,
+            'price_1' => $employeeDetils->price_1,
+            'price_2_50' => $employeeDetils->price_2_50,
             'price_51_100' => $employeeDetils->price_51_100,
             'price_101_500' => $employeeDetils->price_101_500,
+            'price_501_999' => $employeeDetils->price_501_999,
+            'price_1000_up' => $employeeDetils->price_1000_up,
             'remarks' => $employeeDetils->remarks,
             'isActive' => $employeeDetils->isActive,
         ];

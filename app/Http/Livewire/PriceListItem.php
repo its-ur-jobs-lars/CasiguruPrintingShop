@@ -15,29 +15,39 @@ use App\Models\Pricelist;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class PriceListItem extends Component
 {
+    public $Category = [];
+    public $SubCategory = [];
+    public bool $isOpen = false; // Controls modal visibility
+
     public function render()
     {
         return view('livewire.price-list-item');
     }
 
-     public $Category = [];
-    public $SubCategory = [];
-      public function mount()
-    {
-        $this->Category = Category::where(function ($query) {
-            $query->where('isActive', 1);
-        })->get();
-
-        $this->SubCategory = SubCategory::where(function ($query) {
-            $query->where('isActive', 1);
-        })->get();
-
-    }
 
      public $data = [];
 
+    public function mount()
+    {
+        $this->Category = Category::where('isActive', 1)->get();
+        $this->SubCategory = collect(); // empty by default
+
+    }
+
+    public function updatedDataCategoryId($value)
+    {
+        $this->SubCategory = SubCategory::where('category_id', $value)
+            ->where('isActive', 1)
+            ->get();
+
+        // Reset subcategory_id if it’s not in filtered list
+        if (! $this->SubCategory->contains('subcategory_id', $this->data['subcategory_id'] ?? null)) {
+            $this->data['subcategory_id'] = null;
+        }
+    }
 
     public function openModal()
     {
@@ -50,71 +60,133 @@ class PriceListItem extends Component
         $this->isOpen = false;
     }
 
-    public bool $isOpen = false; // Controls modal visibility
+    public function rules()
+{
+    return [
+        'data.category_id' => 'required|exists:category,category_id',
+        'data.subcategory_id' => 'required|exists:sub-category,subcategory_id',
+        'data.remarks' => 'nullable|string|max:255',
+
+        // Universal price fields
+        'data.price_1' => 'nullable|numeric|min:0',
+        'data.price_2_50' => 'nullable|numeric|min:0',
+        'data.price_51_100' => 'nullable|numeric|min:0',
+        'data.price_101_500' => 'nullable|numeric|min:0',
+        'data.price_501_999' => 'nullable|numeric|min:0',
+        'data.price_1000_up' => 'nullable|numeric|min:0',
+    ];
+}
+
+
+    // public function rules()
+    // {
+    //     $categoryId = $this->data['category_id'] ?? null;
+    //     $category = $categoryId ? Category::find($categoryId) : null;
+    //     // Normalize category name for lookup
+    //     $categoryName = strtolower(trim($category->category_name ?? ''));
+
+    //     $priceFieldsByCategory = [
+    //         't-shirt with print' => [
+    //             'price_1',
+    //             'price_2_50',
+    //             'price_51_999',
+    //             'price_1000_up',
+    //         ],
+    //         'full sublimation printing' => [
+    //             'price_10_50',
+    //             'price_51_100',
+    //             'price_101_500',
+    //         ],
+    //     ];
+
+    //     $rules = [
+    //         'data.category_id' => ['required', 'exists:category,category_id'],
+    //         'data.subcategory_id' => ['required', 'exists:sub-category,subcategory_id'],
+    //         'data.remarks' => ['required', 'string'],
+    //     ];
+
+    //     // Only validate fields specific to the selected category
+    //     $fields = $priceFieldsByCategory[$categoryName] ?? [];
+    //     foreach ($fields as $field) {
+    //         $rules["data.$field"] = ['required', 'numeric'];
+    //     }
+
+    //     return $rules;
+    // }
+
+    public function nextStep() { $this->step = 2; }
+     public function previousStep() { $this->step = 1; }
 
     public function save()
-{
-    try {
+    {
+        try {
+           $this->validate($this->rules());
 
-   $this->validate([
-    'data.category_id' => 'required',
-    'data.subcategory_id' => 'required',
-    'data.price_10_50' => 'required',
-    'data.price_51_100' => 'required', 
-    'data.price_101_500' => 'required', 
-    'data.remarks' => 'required',
-]);
-
-        // Fetch the category name using the selected category_id
         $category = Category::find($this->data['category_id']);
-        $categoryName = $category ? $category->category_name : '';
+        $subcategory = Subcategory::find($this->data['subcategory_id']);
 
-        // Get the first 3 letters of the category name, uppercase
-        $prefix = strtoupper(substr(str_replace(' ', '', $categoryName), 0, 3));
+        // Get initials from category and subcategory names
+        $categoryInitials = collect(explode(' ', $category->category_name ?? ''))
+            ->filter()
+            ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+            ->implode('');
 
-        // Find the last price list item with this prefix
+        $subcategoryInitials = collect(explode(' ', $subcategory->subcategory_name ?? ''))
+            ->filter()
+            ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+            ->implode('');
+
+        $prefix = "{$categoryInitials}-{$subcategoryInitials}";
+
+        // Find last matching pricelist ID
         $lastItem = Pricelist::where('pricelist_id', 'like', "PLT-{$prefix}-%")
             ->orderByDesc('pricelist_id')
             ->first();
 
+        // Determine next sequence number
+        $nextSequence = 1;
         if ($lastItem && preg_match('/-(\d{4})$/', $lastItem->pricelist_id, $matches)) {
             $nextSequence = intval($matches[1]) + 1;
-        } else {
-            $nextSequence = 1;
         }
         $sequence = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
+
+        // Final ID
         $pricelist_id = "PLT-{$prefix}-{$sequence}";
 
-       
+        // Universal price fields
+        $universalPriceFields = [
+            'price_1',
+            'price_2_50',
+            'price_51_100',
+            'price_101_500',
+            'price_501_999',
+            'price_1000_up',
+        ];
 
-        // Create a new price list item
-        Pricelist::create([
+        // Collect price data
+        $priceData = [];
+        foreach ($universalPriceFields as $field) {
+            $priceData[$field] = $this->data[$field] ?? null;
+        }
+
+        // Save
+        Pricelist::create(array_merge([
             'pricelist_id' => $pricelist_id,
             'category_id' => $this->data['category_id'],
             'subcategory_id' => $this->data['subcategory_id'],
-            'price_10_50' => $this->data['price_10_50'],
-            'price_51_100' => $this->data['price_51_100'],
-            'price_101_500' => $this->data['price_101_500'],
             'remarks' => $this->data['remarks'],
             'added_by' => Auth::user()->username,
-        ]);
+        ], $priceData));
 
-
-
-        // Emit an event to refresh the table
-        $this->emit('refreshComponent');
-
-        // Reset the form data and close the modal
-        $this->reset('data');
-        $this->isOpen = false;
-
-        // Show a success message
-        session()->flash('messageInsert', 'Pricelist is added successfully!');
-    } catch (\Exception $e) {
-        // Handle the exception and show an error message
-        session()->flash('errorInsert', $e->getMessage());
+            $this->emit('refreshComponent');
+            $this->reset('data');
+            $this->isOpen = false;
+            session()->flash('messageInsert', 'Pricelist is added successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            session()->flash('errorInsert', json_encode($e->errors()));
+        } catch (\Exception $e) {
+            session()->flash('errorInsert', $e->getMessage());
+        }
     }
-}
-
 }
 

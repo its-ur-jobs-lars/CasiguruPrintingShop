@@ -116,14 +116,36 @@
                                 <input type="text" wire:model="editServices.description" class="form-control" required>
                             </div>
                             
-                            <!-- {{-- Image --}}     
-                            <div class="form-group">
-                                <label style="color:black;">Image</label>
-                                <input type="file" wire:model="editServices.image" class="form-control-file">
-                               @if ($editServices['image'])
-                                    <img src="{{ asset('storage/' . $editServices['image']) }}" alt="Image" width="50">
+                          <div class="form-group">
+                                <label style="color:black;">Upload Image</label>
+                                <input type="file" wire:model="editServices.image" class="form-control" accept="image/*">
+                                @error('editServices.image') 
+                                    <span class="text-danger">{{ $message }}</span> 
+                                @enderror
+
+                                {{-- Show new image preview if selected --}}
+                                @if (!empty($editServices['image']) && $editServices['image'] instanceof \Livewire\TemporaryUploadedFile)
+                                    <div class="mt-2 d-flex align-items-center">
+                                        <img src="{{ $editServices['image']->temporaryUrl() }}" alt="Preview"
+                                            style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
+                                        <span class="ml-2 text-success" style="font-size: 17px;">
+                                            <i class="fa fa-check-circle"></i> New Image Selected
+                                        </span>
+                                    </div>
+
+                               {{-- Else show the existing image if available --}}
+                                @elseif (!empty($editServices['existing_image']))
+                                    <div class="mt-2 d-flex align-items-center">
+                                        <img src="{{ asset('storage/' . $editServices['existing_image']) }}" alt="Current Image"
+                                            style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
+                                        <span class="ml-2 text-muted" style="font-size: 17px;">
+                                            <i class="fa fa-image"></i> Current Image
+                                        </span>
+                                    </div>
                                 @endif
-                            </div> -->
+
+
+
 
                             <div class="form-group">
                                 <label style="color:black;">Status</label>
@@ -136,7 +158,7 @@
 
                             {{-- Submit Button --}}
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-secondary" wire:click="previousStep()">Previous</button>
+                                <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>
                                {{-- <button wire:click="update()" class="bg-green-500 text-white px-3 py-1 rounded-3 mt-2">Apply changes</button> --}}
                                <button type="button"  class="btn btn-success"  wire:click="update()">Apply changes</button>
                             </div>
@@ -147,18 +169,18 @@
         </div>
     @endif
 
-@if (session()->has('message') || session()->has('error'))
+@if (session()->has('messageInsert') || session()->has('errorInsert'))
     <div class="fixed-3 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
         <div class="bg-white p-6 rounded shadow-lg w-1/3 text-center m-4">
-            @if (session()->has('message'))
+            @if (session()->has('messageInsert'))
                 <div class="text-green-600 font-semibold text-lg">
-                    {{ session('message') }}
+                    {{ session('messageInsert') }}
                 </div>
             @endif
 
-            @if (session()->has('error'))
+            @if (session()->has('errorInsert'))
                 <div class="text-red-600 font-semibold text-lg">
-                    {{ session('error') }}
+                    {{ session('errorInsert') }}
                 </div>
             @endif
 

@@ -17,7 +17,7 @@ class Orders extends Migration
             $table->id();
 
             // Customer Info
-            $table->string('order_id')->unique(); // e.g., 0000236
+            $table->string('order_id'); // e.g., 0000236
             $table->string('name');
             $table->string('contact_no')->nullable();
             $table->string('address')->nullable();
@@ -33,7 +33,7 @@ class Orders extends Migration
             $table->decimal('total', 10, 2)->default(0.00);
             $table->decimal('payment', 10, 2)->default(0.00);
             $table->decimal('balance', 10, 2)->default(0.00);
-            $table->string('jo_number')->unique(); // e.g., 0000236
+            $table->string('jo_number')->nullable(); // Job Order Number
             $table->date('deadline')->nullable();
             $table->string('status')->nullable();
             // Status of the order

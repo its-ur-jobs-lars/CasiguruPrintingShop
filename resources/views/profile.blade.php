@@ -198,6 +198,12 @@
 
               <!-- Order Management: subOrder Management -->
               <ul id="SubOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
+
+                 <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/orderdashboard">
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
+                    </li>
+                    
                     <li class="side-nav-menu-item">
                           <a class="side-nav-menu-link" href="/orderDetails">
                         <i class="fas fa-solid fa-laptop"></i>Order Details</a>

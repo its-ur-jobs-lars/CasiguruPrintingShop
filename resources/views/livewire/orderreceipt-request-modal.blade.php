@@ -200,7 +200,7 @@
 
                                 <div class="form-group text-center">
                                     <button type="button" class="btn btn-secondary" wire:click="previousStep()">Previous</button>
-                                    <button type="submit" class="btn btn-success">Save Order</button>
+                                    <button type="submit" class="btn btn-success">Save Receipt</button>
                                 </div>
                             @endif
                         </form>

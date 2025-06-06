@@ -17,6 +17,9 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Pricelist;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 
 
@@ -51,6 +54,7 @@ class ServiceTable extends Component  implements HasTable
     'subcategory_name' => null,
     'description' => null,
     'image' => null,
+    'existing_image' => '', // will store the path of the image in storage
     'isActive' => null,
 ];
 
@@ -61,53 +65,81 @@ class ServiceTable extends Component  implements HasTable
         'editServices.subcategory_name' => 'required|string|max:255',
         'editServices.description' => 'required|string|max:50',
         'editServices.image' => 'required|string|max:255',
-        'editServices.isActive' => 'required|string|max:255'
+        'editServices.isActive' => 'required|boolean'
 
     ];
 
 
-
-//for update
 public function update()
-{
-    $this->validate([ // Apply validation rules
-         'editServices.category_id' => 'required|string|max:255',
+{   
+    try{
+    $this->validate([
+        'editServices.category_id' => 'required|string|max:255',
         'editServices.subcategory_id' => 'required|string|max:255',
         'editServices.subcategory_name' => 'required|string|max:255',
         'editServices.description' => 'required|string|max:50',
-        'editServices.image' => 'required|string|max:255',
-        'editServices.isActive' => 'required|string|max:255'
+        'editServices.image' => 'nullable|image|max:2048',
+        'editServices.isActive' => 'required|boolean'
     ]);
 
-    // Find the product by ID
-    $employeeDetils = SubCategory::find($this->editServices['id']);
+    $subCategory = SubCategory::find($this->editServices['id']);
 
-    if ($employeeDetils) {
-        $employeeDetils->update([
-            'category_id' => $this->editServices['category_id'],
-            'subcategory_id' => $this->editServices['subcategory_id'],
-            'subcategory_name' => $this->editServices['subcategory_name'],
-            'description' => $this->editServices['description'],
-            'image' => $this->editServices['image'],
-            'isActive' => $this->editServices['isActive'],
-            'updated_by' => Auth::user()->username,// Store the ID of the user who updated the employee
-        ]);
-
-        // Emit an event to refresh the table
-        $this->emit('refreshTable');
-
-        // Close the modal
-        $this->isEditModalOpen = false;
-
-
-        // Show a success message
-        session()->flash('messageUpdate', 'SubCategory information is updated successfully.');
-
-        // Dispatch a browser event to close the modal
-        $this->dispatchBrowserEvent('closeEditModal');
-    } else {
-        session()->flash('error', 'Product not found.');
+    if (!$subCategory) {
+        session()->flash('error', 'SubCategory not found.');
+        return;
     }
+
+    // Handle image upload
+    $imagePath = $subCategory->image; // default to existing image
+
+   if ($this->editServices['image'] instanceof \Livewire\TemporaryUploadedFile) {
+    // Delete old image
+    if ($subCategory->image && Storage::exists('public/' . $subCategory->image)) {
+        Storage::delete('public/' . $subCategory->image);
+    }
+
+    // Get the original extension (e.g., jpg, png)
+    $extension = $this->editServices['image']->getClientOriginalExtension();
+
+    // Sanitize the filename
+    $fileName = Str::slug($this->editServices['subcategory_name']) . '.' . $extension;
+
+    // Store the file with a custom name
+    $imagePath = $this->editServices['image']->storeAs('images/products', $fileName, 'public');
+}
+
+    
+
+    // Update SubCategory
+    $subCategory->update([
+        'category_id' => $this->editServices['category_id'],
+        'subcategory_id' => $this->editServices['subcategory_id'],
+        'subcategory_name' => $this->editServices['subcategory_name'],
+        'description' => $this->editServices['description'],
+        'image' => $imagePath,
+        'isActive' => $this->editServices['isActive'],
+        'updated_by' => Auth::user()->username,
+    ]);
+
+    // Optional: update the related service if needed
+    if (isset($this->editServices['name'])) {
+        $service = Service::find($this->editServices['id']);
+        if ($service) {
+            $service->name = $this->editServices['name'];
+            $service->image = $imagePath;
+            $service->save();
+        }
+    }
+
+    $this->emit('refreshTable');
+    $this->isEditModalOpen = false;
+    session()->flash('messageUpdate', 'SubCategory information updated successfully.');
+    $this->dispatchBrowserEvent('closeEditModal');
+   } catch (\Illuminate\Validation\ValidationException $e) {
+    session()->flash('errorInsert', json_encode($e->errors()));
+} catch (\Exception $e) {
+    session()->flash('errorInsert', $e->getMessage());
+}
 }
 
 public function edit($id)
@@ -121,7 +153,8 @@ public function edit($id)
             'subcategory_id' => $employeeDetils->subcategory_id,
             'subcategory_name' => $employeeDetils->subcategory_name,
             'description' => $employeeDetils->description,
-            'image' => $employeeDetils->image,
+              'image' => null, // Clear image input
+            'existing_image' => $employeeDetils->image, // This is the important line
             'isActive' => $employeeDetils->isActive,
         ];
 
@@ -134,11 +167,32 @@ public function edit($id)
    public $Category = [];
    public $SubCategory = [];
 
-    public function mount()
-    {
-       $this->Category = Category::pluck('category_name', 'category_id')->toArray();
-        $this->SubCategory = SubCategory::pluck('subcategory_name', 'subcategory_id')->toArray();
+    public function mount($serviceId = null)
+{
+    // Load dropdowns
+    $this->Category = Category::pluck('category_name', 'category_id')->toArray();
+    $this->SubCategory = SubCategory::pluck('subcategory_name', 'subcategory_id')->toArray();
+
+    // If editing existing service
+    if ($serviceId) {
+        $service = Service::findOrFail($serviceId);
+        $this->editServices = [
+            'id' => $service->id,
+            'name' => $service->name,
+            'image' => null,
+            'existing_image' => $service->image,
+        ];
+    } else {
+        // If creating new service
+        $this->editServices = [
+            'id' => null,
+            'name' => '',
+            'image' => null,
+            'existing_image' => null,
+        ];
     }
+}
+
 
     public $step = 1;
 

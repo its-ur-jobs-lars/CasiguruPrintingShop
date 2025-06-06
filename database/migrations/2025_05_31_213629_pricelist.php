@@ -18,9 +18,12 @@ class Pricelist extends Migration
             $table->string('pricelist_id')->unique(); 
             $table->string('category_id')->nullable(); 
             $table->string('subcategory_id')->nullable(); 
-            $table->decimal('price_10_50', 8, 2);    // For 10 to 50 pcs
-            $table->decimal('price_51_100', 8, 2);   // For 51 to 100 pcs
-            $table->decimal('price_101_500', 8, 2);  // For 101 to 500 pcs
+            $table->decimal('price_1', 8, 2);    
+            $table->decimal('price_2_50', 8, 2);    
+            $table->decimal('price_51_100', 8, 2);   
+            $table->decimal('price_101_500', 8, 2);  
+            $table->decimal('price_501_999', 8, 2);  
+            $table->decimal('price_1000_up', 8, 2);  
             $table->string('remarks')->nullable();  
             $table->boolean('isActive')->default(1); // Active status
             $table->string('added_by')->nullable();  // Column to store the user who added the pricelist item

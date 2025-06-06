@@ -156,6 +156,14 @@ class OrderTable extends Component implements HasTable
         }
     }
 
+    
+//for the date filter
+    public $filterDate;
+    public $dateRange;
+    public $date_from;
+    public $date_to;
+    
+
     public function edit($id)
     {
         $order = Order::find($id);
@@ -219,6 +227,17 @@ class OrderTable extends Component implements HasTable
         } else {
             $query->where('isActive', 1);
         }
+
+         if ($this->date_from) {
+        $query->where(function ($q) {
+            $q->whereDate('deadline', '>=', $this->date_from);
+        });
+    }
+    if ($this->date_to) {
+        $query->where(function ($q) {
+            $q->whereDate('deadline', '<=', $this->date_to);
+        });
+    }
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
