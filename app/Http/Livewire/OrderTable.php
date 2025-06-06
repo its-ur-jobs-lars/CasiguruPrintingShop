@@ -157,6 +157,16 @@ class OrderTable extends Component implements HasTable
     }
 
     
+    public function closeModal()
+    {
+        $this->isOpen = false;
+        $this->step = 1;
+
+
+    }
+
+
+    
 //for the date filter
     public $filterDate;
     public $dateRange;

@@ -105,11 +105,11 @@
                                         class="bg-green-600 text-white px-3 py-1 rounded-1">
                                         <i class="fas fa-file-export"></i>
                                     </button>
-
+<!-- 
                                      <button wire:click="exportExcelMultiple('{{ $record->order_id }}')"
                                         class="bg-green-600 text-white px-3 py-1 rounded-1">
                                         <i class="fas fa-file-export"></i>
-                                    </button>
+                                    </button> -->
 
                                         <!-- Your new Export button
                                     <button wire:click="exportPDF('{{ $record->order_receipt_id }}')"

@@ -188,7 +188,7 @@
 
                             {{-- Next Button--}}
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-secondary" wire:click="closeModal1()">Cancel</button>
+                                <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>
                                 <button type="button" class="btn btn-success" wire:click="nextStep()">Next</button>
                             </div>
                             
