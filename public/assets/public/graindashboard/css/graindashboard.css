@@ -14792,7 +14792,8 @@ button.bg-lighter:hover {
     border: 0px;
     margin-right: 10px;
     text-align: left;
-    background-color: whitesmoke;
+    background-color: lightblue;
+    color: darkblue;
 }
 
 .rounded-10,
@@ -16355,6 +16356,13 @@ button.bg-lighter:hover {
 .mt-4,
 .my-4 {
     margin-top: 1.5rem !important
+}
+
+.mt-4-1,
+.my-4-1 {
+    margin-top: 1.5rem !important;
+    font-size: 35px;
+    color: red;
 }
 
 .mr-4,
@@ -26495,6 +26503,12 @@ tr:hover {
         text-align: center;
 
     }
+
+    .mb-2-3{
+
+        text-align: left;
+
+    }
     .card-graph {
         transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
         display: flex;
@@ -26647,6 +26661,10 @@ tr:hover {
 
 element {
   border-color: darkblue;
+}
+
+.text-lightblue-600{
+    color:lightblue;
 }
 
 

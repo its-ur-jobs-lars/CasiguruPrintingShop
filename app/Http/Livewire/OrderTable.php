@@ -42,6 +42,7 @@ class OrderTable extends Component implements HasTable
         'deadline' => null,
         'status' => null,
         'remarks' => null,
+        'total' => null,
         'isActive' => null,
     ];
 
@@ -59,6 +60,7 @@ class OrderTable extends Component implements HasTable
             'editOrders.amount' => 'required|numeric',
             'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
+             'editOrders.total' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
             'editOrders.status' => 'required|string|max:255',
             'editOrders.remarks' => 'required|string|max:255',
@@ -100,19 +102,17 @@ class OrderTable extends Component implements HasTable
             ->where('subcategory_id', $subcategory_id)
             ->first();
 
-        if (!$pricelist) {
-            return 0;
-        }
+        if (!$pricelist) return 0;
 
-        if ($qty >= 10 && $qty <= 50) {
-            return $pricelist->price_10_50;
-        } elseif ($qty >= 51 && $qty <= 100) {
-            return $pricelist->price_51_100;
-        } elseif ($qty >= 101 && $qty <= 500) {
-            return $pricelist->price_101_500;
-        } else {
-            return $pricelist->price_10_50;
-        }
+        return match (true) {
+            $qty == 1 => $pricelist->price_1,
+            $qty <= 50 => $pricelist->price_2_50,
+            $qty <= 100 => $pricelist->price_51_100,
+            $qty <= 500 => $pricelist->price_101_500,
+            $qty <= 999 => $pricelist->price_501_999,
+            $qty >= 1000 => $pricelist->price_1000_up,
+            default => $pricelist->price_1
+        };
     }
 
     public function update()
@@ -124,6 +124,7 @@ class OrderTable extends Component implements HasTable
             'editOrders.amount' => 'required|numeric',
             'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
+            'editOrders.total' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
             'editOrders.status' => 'required|string|max:255',
             'editOrders.remarks' => 'required|string|max:255',
@@ -139,6 +140,7 @@ class OrderTable extends Component implements HasTable
                 'price' => $this->editOrders['price'],
                 'amount' => $this->editOrders['amount'],
                 'payment' => $this->editOrders['payment'],
+                'total' => $this->editOrders['total'],
                 'balance' => $this->editOrders['balance'],
                 'deadline' => $this->editOrders['deadline'],
                 'status' => $this->editOrders['status'],
@@ -188,6 +190,7 @@ class OrderTable extends Component implements HasTable
                 'amount' => $order->amount,
                 'payment' => $order->payment,
                 'balance' => $order->balance,
+                'total' => $order->total,
                 'deadline' => $order->deadline,
                 'status' => $order->status,
                 'remarks' => $order->remarks,

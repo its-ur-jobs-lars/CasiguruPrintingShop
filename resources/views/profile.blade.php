@@ -209,10 +209,6 @@
                         <i class="fas fa-solid fa-laptop"></i>Order Details</a>
                     </li>
 
-                      <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/orderreceipts">
-                        <i class="fas fa-solid fa-file-invoice"></i>Order Reciepts</a>
-                    </li>
                     
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/pricelist">
@@ -232,47 +228,41 @@
             </li>
             <!-- End Order Management -->
             
-            <!-- Department -->
+            <!-- Sales Managemnt -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
-                   data-target="#subDepartment">
+                   data-target="#subSalesManagemnt">
               <span class="side-nav-menu-icon d-flex mr-3">
                 <i class="fas fa-building"></i>
               </span>
-                    <span class="side-nav-fadeout-on-closed media-body">Department</span>
+                    <span class="side-nav-fadeout-on-closed media-body">Sales Management</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
               </span>
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-            <!-- Pages: subDepartment -->
-             <ul id="subDepartment" class="side-nav-menu side-nav-menu-second-level mb-0">
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/auditDepartment">
-                    <i class="fas fa-solid fa-magnifying-glass-dollar"></i>Audit</a>
+            <!-- Pages: subSales Managemnt -->
+             <ul id="subSalesManagemnt" class="side-nav-menu side-nav-menu-second-level mb-0">
+                 <li class="side-nav-menu-item">
+                    <a class="side-nav-menu-link" href="/payment">
+                    <i class="fas fa-solid fa-cash-register"></i>Payment of Orders</a>
                 </li>
                 <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/EHSDepartment">
-                    <i class="fas fa-solid fa-shield"></i>Environmental Health <br> & Safety</a>
+                    <a class="side-nav-menu-link" href="/sales">
+                    <i class="fas fa-solid fa-money-bill"></i>Sales</a>
                 </li>
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/financeDepartment">
-                    <i class="fas fa-solid fa-coins"></i>Finance</a>
-                </li>
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/hr&gsDepartment">
-                    <i class="fas fa-solid fa-users"></i>Human Resource & <br> General Services</a>
-                </li>
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/infotechDepartment">
-                    <i class="fas fa-solid fa-microchip"></i>Information Technnology</a>
-                </li>
+                  <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/orderreceipts">
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Reciepts</a>
+                    </li>
+
+                
                
             </ul>
-            <!-- End Department: subDepartment -->
+            <!-- End Sales Managemnt: subSales Managemnt -->
         </li>
-        <!-- End Department -->
+        <!-- End Sales Managemnt -->
              
             <!-- History -->
             <li class="side-nav-menu-item side-nav-has-menu">

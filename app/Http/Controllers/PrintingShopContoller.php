@@ -75,6 +75,19 @@ class PrintingShopContoller extends Controller
     {
         return view('orderDashboard');
     }
+
+    public function Payment()
+    {
+        return view('payment');
+    }
+
+    public function Sales()
+    {
+        return view('sales');
+    }
+
+
+
     
 
    

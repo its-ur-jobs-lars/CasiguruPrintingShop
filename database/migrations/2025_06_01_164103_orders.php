@@ -31,8 +31,6 @@ class Orders extends Migration
 
             // Financial Summary
             $table->decimal('total', 10, 2)->default(0.00);
-            $table->decimal('payment', 10, 2)->default(0.00);
-            $table->decimal('balance', 10, 2)->default(0.00);
             $table->string('jo_number')->nullable(); // Job Order Number
             $table->date('deadline')->nullable();
             $table->string('status')->nullable();

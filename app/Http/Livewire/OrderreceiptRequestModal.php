@@ -20,6 +20,7 @@ class OrderreceiptRequestModal extends Component
 
      public $Category = [];
     public $SubCategory = [];
+    public $SubCategoryOrderid = [];
     public $Order = [];
 
     public function mount()
@@ -48,9 +49,28 @@ class OrderreceiptRequestModal extends Component
 
     public $order_id;
 
-public function updatedOrderId($value)
+    public $availableSubcategories = []; 
+    public $selected_subcategory_id;
+
+  
+
+    public $filteredSubCategories = [];
+
+    public function updatedOrderId($value)
+    {
+        $subcatIds = Order::where('order_id', $value)->pluck('subcategory_id')->unique();
+        $this->filteredSubCategories = SubCategory::whereIn('subcategory_id', $subcatIds)->get();
+        $this->selected_subcategory_id = null;
+    }
+
+
+public function updatedSelectedSubcategoryId($value)
 {
-    $order = Order::where('order_id', $value)->first();
+    // Fetch the order row for the selected order_id and subcategory_id
+    $order = Order::where('order_id', $this->order_id)
+        ->where('subcategory_id', $value)
+        ->first();
+
     if ($order) {
         $this->data['date'] = $order->date;
         $this->data['name'] = $order->name;
@@ -65,7 +85,7 @@ public function updatedOrderId($value)
         $this->data['balance'] = $order->balance;
         $this->data['amount'] = $order->amount;
         $this->data['price'] = $order->price;
-         $this->data['status'] = $order->status;
+        $this->data['status'] = $order->status;
     }
 }
 
@@ -104,12 +124,20 @@ public $selectedpayment;
 
 public function updatedSelectedpayment($value)
 {
-    if ($value == 'Paid') {
+    if ($value === 'Partial') {
+        // Fetch the order using the selected order_id
+        $order = \App\Models\Order::where('order_id', $this->order_id)->first();
+        $this->data['balance'] = $order ? $order->balance : 0;
+        $this->data['payment_status'] = 'Partial';
+    } elseif ($value === 'Paid') {
         $this->data['payment_status'] = 'Paid';
-    } elseif ($value == 'Balance') {
-        $this->data['payment_status'] = 'Balance';
+        $this->data['balance'] = 0;
+    } elseif ($value === 'Unpaid') {
+        $this->data['payment_status'] = 'Unpaid';
+        $this->data['balance'] = 0;
     } else {
         $this->data['payment_status'] = null;
+        $this->data['balance'] = 0;
     }
 }
 

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Employee Activity Logs</title>
+    <title>Payment Inventory</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -89,7 +89,7 @@
             </a>
             <!-- End Logo For Mobile View -->
 
-           <!-- Logo For Desktop View -->
+            <!-- Logo For Desktop View -->
             <a class="navbar-brand navbar-brand-desktop" href="" >
                 <img class="side-nav-show-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}"  alt="Graindashboard" style="width: auto; height: 27px;">
                 <img class="side-nav-hide-on-closed" src="{{asset('assets/public/img/CasiguroInc.png')}}" style="width: 200px; height: 75px; margin: auto; margin-top: 40px; align-items: center;">
@@ -183,7 +183,7 @@
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subOrderManagement">
                   <span class="side-nav-menu-icon d-flex mr-3">
-                     <i class=" fas fa-solid fa-sitemap"></i>
+                    <i class=" fas fa-solid fa-sitemap"></i>
                   </span>
                     <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
@@ -194,26 +194,29 @@
 
               <!-- Order Management: subOrder Management -->
               <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
+
                        <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderdashboard">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
                     </li>
+                    
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderDetails">
-                        <i class="fas fa-solid fa-laptop"></i>Order Details</a>
+                        <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
                     </li>
 
                     
+
                     
                     <li class="side-nav-menu-item">
                        <a class="side-nav-menu-link" href="/pricelist">
                         <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
-                    <li class="side-nav-menu-item">
+                      <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
-                      <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item">
                      <a class="side-nav-menu-link" href="/inventory">
                         <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
@@ -223,7 +226,7 @@
             </li>
             <!-- End Order Management -->
             
-             <!-- Sales Managemnt -->
+            <!-- Sales Managemnt -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subSalesManagemnt">
@@ -238,14 +241,14 @@
                 </a>
 
             <!-- Pages: subSales Managemnt -->
-             <ul id="subSalesManagemnt" class="side-nav-menu side-nav-menu-second-level mb-0">
-                 <li class="side-nav-menu-item">
+             <ul id="subSalesManagemnt" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display : block;">
+                <li class="side-nav-menu-item active">
                     <a class="side-nav-menu-link" href="/payment">
-                    <i class="fas fa-solid fa-cash-register"></i>Payment of Orders</a>
+                    <i class="fas fa-solid fa-magnifying-glass-dollar"></i>Payment of Orders</a>
                 </li>
                 <li class="side-nav-menu-item">
                     <a class="side-nav-menu-link" href="/sales">
-                    <i class="fas fa-solid fa-money-bill"></i>Sales</a>
+                    <i class="fas fa-solid fa-shield"></i>Sales</a>
                 </li>
                   <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderreceipts">
@@ -311,18 +314,17 @@
                 </a>
 
                   <!-- Manufacturer: subManufacturer-->
-               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0"  style="display: block;">
-                    
-                  <li class="side-nav-menu-item">
+               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
+                     <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
                   </li>
-
-                  <li class="side-nav-menu-item active">
+                  <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
-                  
+                    
+                
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
@@ -331,6 +333,7 @@
                         <a class="side-nav-menu-link" href="/modelDivisionManufacturer">
                         <i class="fas fa-cubes"></i> Model</a>
                     </li>
+                  
                  
 
                        <li class="side-nav-menu-item">
@@ -338,15 +341,12 @@
                         <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
                     </li>
 
-                    
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
             </li>
             <!-- End Manufacturer -->
             
-             
-
-             @can('view-personnel-profile')
+               @can('view-personnel-profile')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subPersonnel">
@@ -362,7 +362,7 @@
 
             
             <!-- History: subHistory -->
-            <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display: block;">
+            <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0">
                  <li class="side-nav-menu-item">
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
@@ -372,7 +372,7 @@
                         <i class="fas fa-solid fa-user-plus"></i>Employee Information</a>
                     </li>
 
-                      <li class="side-nav-menu-item active">
+                      <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/employeeActivityLogs">
                          <i class="fas fa-solid fa-chart-line"></i>Employee Activity Logs</a>
                     </li>
@@ -400,7 +400,7 @@
        <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Employee Activity Logs</div>
+                <div class="h3 mb-0">Payment Inventory</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -421,7 +421,7 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   @livewire('employee-logs-table')
+                                   @livewire('payment-add')
                             </div>
                         </div>
                     </div>

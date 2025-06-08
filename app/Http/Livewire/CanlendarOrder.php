@@ -14,20 +14,25 @@ class CanlendarOrder extends Component
 
   public function mount()
     {
-       $this->orders = Order::where('isActive', 1) // 1. Only active orders
-    ->get()
-    ->unique('order_id') // 2. Remove duplicates by order_id
-    ->map(function ($order) {
-        return [
-            'id' => $order->id,
-            'title' => $order->order_id . '<br>' . $order->name,
-            'start' => $order->deadline,
-            'color' => now()->addDay()->toDateString() === \Carbon\Carbon::parse($order->deadline)->toDateString()
-                ? '#ff4d4d'
-                : '#3788d8',
-        ];
-    });
-    }
+            $orderIds = Order::selectRaw('MAX(id) as id')
+            ->where('isActive', 1)
+            ->groupBy('order_id')
+            ->pluck('id');
+
+        $this->orders = Order::whereIn('id', $orderIds)
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'title' => $order->order_id . '<br>' . $order->name,
+                    'start' => $order->deadline,
+                    'color' => now()->addDay()->toDateString() === \Carbon\Carbon::parse($order->deadline)->toDateString()
+                        ? '#ff4d4d'
+                        : '#3788d8',
+                ];
+            });
+        }
+
 
     public function render()
     {

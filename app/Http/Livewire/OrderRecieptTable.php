@@ -43,18 +43,7 @@ class OrderRecieptTable extends Component implements HasTable
     public $Category = [];
     public $SubCategory = [];
 
-    public $selectedpayment;
 
-public function updatedSelectedpayment($value)
-{
-    if ($value == 'Paid') {
-        $this->editOrders['payment_status'] = 'Paid';
-    } elseif ($value == 'Balance') {
-        $this->editOrders['payment_status'] = 'Balance';
-    } else {
-        $this->editOrders['payment_status'] = null;
-    }
-}
 
 
     public $editOrders = [
@@ -68,12 +57,28 @@ public function updatedSelectedpayment($value)
         'remarks' => null,
         'isActive' => null,
     ];
+public $order_id;
+    
+public $selectedpayment;
 
-    // public function mount()
-    // {
-    //     $this->Category = Category::pluck('category_name', 'category_id')->toArray();
-    //     $this->SubCategory = SubCategory::pluck('subcategory_name', 'subcategory_id')->toArray();
-    // }
+public function updatedSelectedpayment($value)
+{
+    if ($value === 'Partial') {
+        // Fetch the order using the selected order_id
+        $order = \App\Models\Order::where('order_id', $this->order_id)->first();
+        $this->editOrders['balance'] = $order ? $order->balance : 0;
+        $this->editOrders['payment_status'] = 'Partial';
+    } elseif ($value === 'Paid') {
+        $this->editOrders['payment_status'] = 'Paid';
+        $this->editOrders['balance'] = 0;
+    } elseif ($value === 'Unpaid') {
+        $this->editOrders['payment_status'] = 'Unpaid';
+        $this->editOrders['balance'] = 0;
+    } else {
+        $this->editOrders['payment_status'] = null;
+        $this->editOrders['balance'] = 0;
+    }
+}
 
     public function rules()
     {
@@ -138,6 +143,13 @@ public function updatedSelectedpayment($value)
     //     }
     // }
 
+     public function closeModal()
+    {
+        $this->isOpen = false;
+        $this->step = 1;
+
+    }
+
     public function update()
     {
         $this->validate(
@@ -168,6 +180,15 @@ public function updatedSelectedpayment($value)
                 'isActive' => $this->editOrders['isActive'],
                 'updated_by' => Auth::user()->username,
             ]);
+
+            // Also update the related order (if exists)
+        $order = Order::where('order_id', $order->order_id)->first();
+        if ($order) {
+            $order->update([
+                'status' => $this->editOrders['status'],
+                'remarks' => $this->editOrders['remarks'],
+            ]);
+        }
 
             $this->emit('refreshTable');
             $this->isEditModalOpen = false;
@@ -390,6 +411,7 @@ private function fillSpreadsheet($sheet, $receipt)
 }
 
 
+
 // Helper: generate filename
 private function generateFilename($receipt, $ext = 'xlsx')
 {
@@ -482,8 +504,9 @@ private function generateFilename($receipt, $ext = 'xlsx')
             ->when($this->filterActivation !== '', fn($query) => $query->where('isActive', $this->filterActivation))
             ->when($this->search !== '', function ($query) {
                 return $query->where(function ($q) {
-                    $q->where('order_id', 'like', "%{$this->search}%")
-                      ->orwhere('name', 'like', "%{$this->search}%");
+                    $q->where('order_receipt_id', 'like', "%{$this->search}%")
+                      ->orwhere('name', 'like', "%{$this->search}%")
+                      ->orwhere('order_id', 'like', "%{$this->search}%");
                 });
             })->get();
     }
@@ -517,7 +540,8 @@ private function generateFilename($receipt, $ext = 'xlsx')
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
-                 $q->where('order_id', 'like', "%{$this->search}%")
+                 $q->where('order_receipt_id', 'like', "%{$this->search}%")
+                    ->orwhere('order_id', 'like', "%{$this->search}%")
                       ->orwhere('name', 'like', "%{$this->search}%");
             });
         }

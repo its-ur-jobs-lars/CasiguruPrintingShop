@@ -11,30 +11,27 @@ use App\Models\Order;
 class OrderDashboard extends Component
 {
     public $showModal = false;
+    public $showCart = false;
+    public $search = '';
+    public $items = [];
+    public $orderItems = [];
+    public $cart = [];
+
     public $data = [
         'name' => '',
         'contact_no' => '',
         'address' => '',
-        'payment' => 0,
         'total' => 0,
-        'balance' => 0,
         'jo_number' => '',
         'deadline' => '',
         'status' => '',
         'remarks' => '',
     ];
 
-    public $items = [];
-    public $orderItems = [];
-    public $cart = [];
-
     public function mount()
     {
         $this->items = Pricelist::with(['category', 'subcategory'])->get();
     }
-
-    public $showCart = false;
-
 
     public function closeModal()
     {
@@ -44,26 +41,22 @@ class OrderDashboard extends Component
 
     public function addToCart($id)
     {
-
-         $this->showCart = true;
+        $this->showCart = true;
 
         $item = Pricelist::with(['category', 'subcategory'])->find($id);
-
         if (!$item) return;
 
         if (isset($this->cart[$id])) {
             $this->cart[$id]['qty']++;
-            $qty = $this->cart[$id]['qty'];
-            $this->cart[$id]['price'] = $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $qty);
+            $this->cart[$id]['price'] = $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $this->cart[$id]['qty']);
         } else {
-            $qty = 1;
             $this->cart[$id] = [
                 'category_id' => $item->category_id,
                 'subcategory_id' => $item->subcategory_id,
                 'category_name' => $item->category->category_name ?? 'N/A',
                 'subcategory_name' => $item->subcategory->subcategory_name ?? 'N/A',
-                'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $qty),
-                'qty' => $qty
+                'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, 1),
+                'qty' => 1
             ];
         }
     }
@@ -108,8 +101,7 @@ class OrderDashboard extends Component
         if (!isset($this->cart[$id])) return;
 
         $item = $this->cart[$id];
-        $price = $this->getPriceFromPricelist($item['category_id'], $item['subcategory_id'], $item['qty']);
-        $this->cart[$id]['price'] = $price;
+        $this->cart[$id]['price'] = $this->getPriceFromPricelist($item['category_id'], $item['subcategory_id'], $item['qty']);
     }
 
     private function getPriceFromPricelist($category_id, $subcategory_id, $qty)
@@ -120,89 +112,49 @@ class OrderDashboard extends Component
 
         if (!$pricelist) return 0;
 
-       if ($qty == 1) {
-            return $pricelist->price_1;
-        } elseif ($qty >= 2 && $qty <= 50) {
-            return $pricelist->price_2_50;
-        } elseif ($qty >= 51 && $qty <= 100) {
-            return $pricelist->price_51_100;
-        } elseif ($qty >= 101 && $qty <= 500) {
-            return $pricelist->price_101_500;
-        } elseif ($qty >= 501 && $qty <= 999) {
-            return $pricelist->price_501_999;
-        } elseif ($qty >= 1000) {
-            return $pricelist->price_1000_up;
-        } else {
-            return $pricelist->price_1; // fallback for invalid or zero qty
-        }
-
+        return match (true) {
+            $qty == 1 => $pricelist->price_1,
+            $qty <= 50 => $pricelist->price_2_50,
+            $qty <= 100 => $pricelist->price_51_100,
+            $qty <= 500 => $pricelist->price_101_500,
+            $qty <= 999 => $pricelist->price_501_999,
+            $qty >= 1000 => $pricelist->price_1000_up,
+            default => $pricelist->price_1
+        };
     }
 
     private function recalculateTotal()
     {
         $this->data['total'] = collect($this->cart)->sum(fn($item) => $item['price'] * $item['qty']);
-        $this->data['balance'] = $this->data['total'] - $this->data['payment'];
     }
-
-    public function confirmOrder()
-    {
-        session()->flash('message', 'Order confirmed!');
-        $this->orderItems = [];
-        $this->cart = [];
-    }
-
-    public function updatedData($value, $key)
-{
-    if ($key === 'payment') {
-        $this->recalculateTotal();
-    }
-}
-
-
-  public $selectedpayment;
-    public function Selectedpayment(){
-        if ($this->Selectedpayment == 'Downpayment') {
-            $this->data['payment'] = '';
-        } elseif ($this->Selectedpayment == 'Full Payment') {
-            $this->data['payment'] = ''; // Clear the serial number for input
-        }
-}
-
-
-
 
     public function openModal()
     {
-        $this->isOpen = true;
         $this->showModal = true;
         $this->showCart = false;
         $this->recalculateTotal();
     }
 
-
-
     public function save()
     {
         DB::beginTransaction();
-
 
         try {
             $deadline = isset($this->data['deadline']) ? date('Ymd', strtotime($this->data['deadline'])) : date('Ymd');
             $lastOrder = Order::where('order_id', 'like', 'ORD-%')->orderByDesc('order_id')->first();
             $nextSequence = ($lastOrder && preg_match('/ORD-(\d{4})-/', $lastOrder->order_id, $matches)) ? intval($matches[1]) + 1 : 1;
-            $sequence = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
-            $order_id = "ORD-{$sequence}-{$deadline}";
+            $order_id = 'ORD-' . str_pad($nextSequence, 4, '0', STR_PAD_LEFT) . "-$deadline";
 
             $latestJo = DB::table('orders')
-                ->whereRaw("jo_number REGEXP '^[0-9]+$'") // only numeric strings
+                ->whereRaw("jo_number REGEXP '^[0-9]+$'")
                 ->orderByRaw("CAST(jo_number AS UNSIGNED) DESC")
                 ->value('jo_number');
 
             $nextJoNumber = str_pad(((int)$latestJo) + 1, 5, '0', STR_PAD_LEFT);
-            
+
             $this->recalculateTotal();
 
-           foreach ($this->cart as $item) {
+            foreach ($this->cart as $item) {
                 Order::create([
                     'order_id' => $order_id,
                     'name' => $this->data['name'],
@@ -213,9 +165,7 @@ class OrderDashboard extends Component
                     'qty' => $item['qty'],
                     'price' => $item['price'],
                     'amount' => $item['qty'] * $item['price'],
-                    'payment' => $this->data['payment'],
-                    'total' => $this->data['total'],
-                    'balance' => $this->data['balance'],
+                    'total' => $this->data['total'], // Only saving total
                     'jo_number' => $nextJoNumber,
                     'deadline' => $this->data['deadline'] ?? null,
                     'status' => $this->data['status'],
@@ -225,7 +175,6 @@ class OrderDashboard extends Component
             }
 
             DB::commit();
-
             $this->reset(['cart', 'data']);
             $this->showModal = false;
             session()->flash('messageInsert', 'Order successfully created!');
@@ -235,15 +184,23 @@ class OrderDashboard extends Component
         }
     }
 
-//     public $activeCategory = null;
-
-// public function showCategoryModal($categoryName)
-// {
-//     $this->activeCategory = $categoryName;
-// }
-
     public function render()
     {
-        return view('livewire.order-dashboard');
+        $items = Pricelist::with(['category', 'subcategory'])->get();
+
+        if (!empty($this->search)) {
+            $search = strtolower($this->search);
+            $items = $items->filter(function ($item) use ($search) {
+                $category = strtolower($item->category->category_name ?? '');
+                $subcategory = strtolower($item->subcategory->subcategory_name ?? '');
+                return str_contains($category, $search) || str_contains($subcategory, $search);
+            });
+        }
+
+        $groupedItems = $items->groupBy(fn($item) => $item->category->category_name ?? 'No Category');
+
+        return view('livewire.order-dashboard', [
+            'groupedItems' => $groupedItems,
+        ]);
     }
 }

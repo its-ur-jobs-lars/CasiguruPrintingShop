@@ -52,8 +52,11 @@
                                    
                                     <td class="px-4 py-2">{{ $record->service_by }}</td>
 
+
                                      <td class="px-4 py-2">
-                                        @if ($record->status === 'Pending')
+                                        @if ($record->status === 'Partial')
+                                            <span class="text-lightblue-600 font-semibold" style = "color: cyan">Partial</span>
+                                        @elseif ($record->status === 'Pending')
                                             <span class="text-yellow-600 font-semibold">Pending</span>
                                         @elseif ($record->status === 'Completed')
                                             <span class="text-green-600 font-semibold">Completed</span>
@@ -74,7 +77,7 @@
                                         @elseif ($record->payment_status === 'Unpaid')
                                             <span class="text-red-600 font-semibold"  style="color:red">Unpaid</span>
                                         @elseif ($record->payment_status === 'Partial')
-                                            <span class="text-yellow-600 font-semibold"  style="color:yellow">Partial</span>
+                                            <span class="text-yellow-600 font-semibold"  style="color:blue">Partial</span>
                                         @else   
                                             <span class="text-gray-600 font-semibold"  style="color:gray">Unknown</span>
                                         @endif
@@ -192,7 +195,7 @@
 
                             {{-- Next Button--}}
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-secondary" wire:click="closeModal1()">Cancel</button>
+                                <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>
                                 <button type="button" class="btn btn-success" wire:click="nextStep()">Next</button>
                             </div>
                             
@@ -203,30 +206,28 @@
 
                           
                             {{-- Payment --}}
-                            <div class="form-group">
-                                <label style="color:black;">Payment Status</label>
-                                <select wire:model="selectedpayment" class="form-control" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="Paid">Paid</option>
-                                    <option value="Balance">Balance</option>
-                                </select>
-                            </div>
-
                             
-                            @if($selectedpayment == 'Paid')
-                            <div class="form-group" hidden>
-                                <input type="text" wire:model="editOrders.payment_status" class="form-control" required readonly>
-                            </div>
-                            @endif
 
-                            @if($selectedpayment == 'Balance')
-                            <div class="form-group">
-                                    <label style="color:black;"></label>
-                                    <label style="color:black;">Paid Remaining Balance</label>
-                                    <input type="text" wire:model="editOrders.payment_status" class="form-control" style="border-color:#darkblue;" required>
-                                </div>
-                            @endif
+                                <div class="form-group">
+                            <label style="color:black;">Payment Status</label>
+                            <select wire:model="selectedpayment" class="form-control" required>
+                                <option value="">-- Select --</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Partial">Partial</option>
+                            </select>
 
+                        </div>
+
+                         {{-- Set payment_status automatically --}}
+                <input type="hidden" wire:model="editOrders.payment_status">
+
+                @if($selectedpayment == 'Partial')
+                    <div class="form-group">
+                        <label style="color:black;">Paid Remaining Balance</label>
+                        <input type="text" wire:model="editOrders.balance" class="form-control" readonly>
+                    </div>
+                @endif
                            
 
                              {{-- Remarks --}}
@@ -234,6 +235,7 @@
                                 <label style="color:black;"><Ri:a>Status</Ri:a></label>
                                 <select wire:model="editOrders.status" class="form-control" required>
                                         <option value="">-- Select --</option>
+                                        <option value="Partial">Partial</option>
                                         <option value="Pending">Pending</option>
                                         <option value="Completed">Completed</option>
                                         <option value="Cancelled">Cancelled</option>

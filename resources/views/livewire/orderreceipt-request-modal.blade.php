@@ -23,15 +23,24 @@
                             {{-- Step 1 --}}
                             @if ($step === 1)
 
-                                <div class="form-group">
-                                    <label style="color:black;">Order</label>
-                                    <select wire:model="order_id" class="form-control" required>
-                                        <option value="">-- Select --</option>
-                                        @foreach($Order as $order)
-                                            <option value="{{ $order->order_id }}">{{ $order->order_id }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                              <select wire:model="order_id" class="form-control">
+                                <option value="">-- Select Order --</option>
+                                @foreach($Order->unique('order_id') as $order)
+                                    <option value="{{ $order->order_id }}">{{ $order->order_id }}</option>
+                                @endforeach
+                            </select>
+
+                              
+                            @if($order_id)
+                                <select wire:model="selected_subcategory_id" class="form-control" required>
+                                    <option value="">-- Select Product/Subcategory --</option>
+                                    @forelse($filteredSubCategories as $subcategory)
+                                        <option value="{{ $subcategory->subcategory_id }}">{{ $subcategory->subcategory_name }}</option>
+                                    @empty
+                                        <option value="">No subcategories found for this order</option>
+                                    @endforelse
+                                </select>
+                            @endif
 
                                 <div class="form-group">
                                     <label style="color:black;">Customer Name</label>
@@ -153,37 +162,33 @@
                                     <input type="date" wire:model="data.payment_date" class="form-control" required>
                                 </div>
 
-                                  {{-- Payment --}}
-                            <div class="form-group">
-                                <label style="color:black;">Payment Status</label>
-                                <select wire:model="selectedpayment" class="form-control" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="Paid">Paid</option>
-                                    <option value="Balance">Balance</option>
-                                </select>
-                            </div>
+                                {{-- Payment --}}
+                <div class="form-group">
+                    <label style="color:black;">Payment Status</label>
+                    <select wire:model="selectedpayment" class="form-control" required>
+                        <option value="">-- Select --</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Unpaid">Unpaid</option>
+                        <option value="Partial">Partial</option>
+                    </select>
+                </div>
 
-                            
-                        
-                            @if($selectedpayment == 'Paid')
-                            <div class="form-group" hidden>
-                                <input type="text" wire:model="data.payment_status" class="form-control" required readonly>
-                            </div>
-                            @endif
+                {{-- Set payment_status automatically --}}
+                <input type="hidden" wire:model="data.payment_status">
 
-                            @if($selectedpayment == 'Balance')
-                            <div class="form-group">
-                                    <label style="color:black;"></label>
-                                    <label style="color:black;">Paid Remaining Balance</label>
-                                    <input type="text" wire:model="data.payment_status" class="form-control" style="border-color:#darkblue;" required>
-                                </div>
-                            @endif
+                @if($selectedpayment == 'Partial')
+                    <div class="form-group">
+                        <label style="color:black;">Paid Remaining Balance</label>
+                        <input type="text" wire:model="data.balance" class="form-control" readonly>
+                    </div>
+                @endif
 
                                   <div class="form-group">
                                     <label style="color:black;">Status</label>
                                     <select wire:model="data.status" class="form-control" required>
                                         <option value="">-- Select --</option>
                                         <option value="Pending">Pending</option>
+                                        <option value="Partial">Partial</option>
                                         <option value="Completed">Completed</option>
                                         <option value="Cancelled">Cancelled</option>
                                         <option value="Printing">Printing</option>

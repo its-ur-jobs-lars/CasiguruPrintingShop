@@ -186,6 +186,12 @@
                                 <input type="text" wire:model="editOrders.payment" class="form-control" required>
                             </div>
 
+                              {{-- Price (51 to 100) --}}
+                            <div class="form-group">
+                                <label style="color:black;">Total Amount</A></label>
+                                <input type="text" wire:model="editOrders.total" class="form-control" required>
+                            </div>
+
                             {{-- Next Button--}}
                             <div class="form-group text-center">
                                 <button type="button" class="btn btn-secondary" wire:click="closeModal()">Cancel</button>

@@ -23,8 +23,6 @@ class Order extends Model
         'price',
         'amount',
         'total',
-        'payment',
-        'balance',
         'jo_number',
         'deadline',
         'status',

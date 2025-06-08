@@ -1,11 +1,28 @@
 <div>
     
     {{-- Product List --}}
-    <div class="bg-white rounded shadow p-6 w-1/2">
-        @php
-            $groupedItems = $items->groupBy('category.category_name');
-        @endphp
 
+  
+
+    <div class="bg-white rounded shadow p-6 w-1/2">
+
+<!-- Search Filter -->
+<div class="relative w-full">
+    <input type="text" wire:model.debounce.500ms="search" placeholder="Search..."
+        class="border border-gray-300 rounded-9 px-3 py-2 w-full pr-10" />
+    <span class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+        <i class="fas fa-magnifying-glass text-gray-400"></i>
+    </span>
+</div>
+          
+        
+        @if($groupedItems->isEmpty())
+        <div class="flex px-4 py-4 gap-6 overflow-x-auto">
+            <div class="text-center text-gray-500 mt-4-1">
+                No items found for "{{ $search }}"
+            </div>
+       </div>
+        @else
         @foreach ($groupedItems as $categoryName => $categoryItems)
              <div class="flex px-4 py-4 gap-6 overflow-x-auto">
                 <!-- Category Header -->
@@ -17,9 +34,9 @@
                         <div class="w-60 bg-white rounded-lg shadow p-4-1 flex-shrink-0">
                            <img src="{{ asset('storage/' . $item->subcategory->image) }}"
                                 alt="{{ $item->subcategory->subcategory_name }}"
-                                class="h-24 w-full object-contain mb-2"
+                                class="h-24 w-full object-contain mb-2-3"
                                 style="max-height: 150px; max-width: 150px;">
-                            <!-- <h3 class="font-semibold font-bold px-4 mb-2">{{ $item->subcategory->subcategory_name ?? 'No Subcategory' }}</h3> -->
+                            <h3 class="font-semibold font-bold px-4 mb-2-3">{{ $item->subcategory->subcategory_name ?? 'No Subcategory' }}</h3>
                             <div class="text-sm space-y-1 mb-2">
                                 <!-- <p class="text-green-600 font-bold">₱{{ number_format($item->price_10_50, 2) }} <span class="text-gray-500 text-xs">(10–50 pcs)</span></p>
                                 <p class="text-green-600 font-bold">₱{{ number_format($item->price_51_100, 2) }} <span class="text-gray-500 text-xs">(51–100 pcs)</span></p>
@@ -34,7 +51,9 @@
                 </div>
             </div>
         @endforeach
+            @endif
     </div>
+    
 
     {{-- Cart Overlay --}}
     @if($showCart)
@@ -113,36 +132,6 @@
                     </div>
                     </div>
                     
-                 <div class="form-row mb-3" style="display: flex; gap: 10px;">
-                    <div class="col">
-                   {{-- Payment --}}
-                            <div class="form-group">
-                                <label style="color:black;">Payment</label>
-                                <select wire:model="selectedpayment" class="form-control" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="Downpayment">Downpayment</option>
-                                    <option value="Full Payment">Full Payment</option>
-                                </select>
-                            </div>
-
-                            
-                            @if($selectedpayment == 'Downpayment')
-                                <div class="form-group">
-                                    <label style="color:black;"></label>
-                                    <label style="color:black;">Enter Downpayment</label>
-                                    <input type="text" wire:model.defer="data.payment"" class="form-control" style="border-color:darkblue;" required>
-                                </div>
-                            @endif
-
-                            @if($selectedpayment == 'Full Payment')
-                            <div class="form-group">
-                                    <label style="color:black;"></label>
-                                    <label style="color:black;">Enter Full Payment</label>
-                                    <input type="text" wire:model.defer="data.payment" class="form-control" style="border-color:#darkblue;" required>
-                                </div>
-                            @endif
-                </div>
-                </div>
 
                  <div class="form-row mb-3" style="display: flex; gap: 10px;">
                     <div class="col">
@@ -151,7 +140,6 @@
                         @error('deadline') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="col">
                         <div class="form-group">
                                     <label style="color:black;">Status</label>
                                     <select wire:model.defer="data.status" class="form-control" required>
@@ -164,14 +152,11 @@
 
                                     </select>
                                 </div>
-                    </div>
-
-                  
-                    <div class="col">
+                        <div class="form-group">
                         <label for="remarks" style="float: left;">Remarks</label>
                         <input type="text" wire:model.defer="data.remarks" class="form-control" required>
                         @error('remarks') <span class="text-danger">{{ $message }}</span> @enderror
-                 </div>
+                    </div>
                  </div>
                 
                <button wire:click="save"
