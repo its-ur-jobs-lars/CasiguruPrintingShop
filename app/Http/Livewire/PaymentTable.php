@@ -13,8 +13,9 @@ use App\Models\Order;
 use App\Models\payment;
 use Illuminate\Support\Facades\Auth;
 
-class OrderTable extends Component implements HasTable
+class PaymentTable extends Component implements HasTable
 {
+    
     use WithPagination, InteractsWithTable {
         WithPagination::resetPage insteadof InteractsWithTable;
     }
@@ -66,11 +67,10 @@ class OrderTable extends Component implements HasTable
      public function mount()
     {
         // Load categories and subcategories
-        $this->Category = Category::pluck('category_name', 'category_id')->toArray();
+        // $this->Category = Category::pluck('category_name', 'category_id')->toArray();
         $this->SubCategory = SubCategory::pluck('subcategory_name', 'subcategory_id')->toArray();
 
-        // Load all orders with payment relation
-        $this->orders = Order::with('payment')->get();
+        
     }
 
 
@@ -80,7 +80,7 @@ class OrderTable extends Component implements HasTable
             'editOrders.qty' => 'required|numeric|min:1',
             'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
-            // 'editOrders.payment' => 'required|numeric|min:0',
+            'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
              'editOrders.total' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
@@ -139,13 +139,12 @@ class OrderTable extends Component implements HasTable
 
     public function update()
     {
-        try{
         $this->validate(
             [
             'editOrders.qty' => 'required|numeric|min:1',
             'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
-            // 'editOrders.payment' => 'required|numeric|min:0',
+            'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
             'editOrders.total' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
@@ -155,14 +154,14 @@ class OrderTable extends Component implements HasTable
             ]
         );
 
-        $order = Order::find($this->editOrders['id']);
+        $order = payment::find($this->editOrders['id']);
 
         if ($order) {
             $order->update([
                 'qty' => $this->editOrders['qty'],
                 'price' => $this->editOrders['price'],
                 'amount' => $this->editOrders['amount'],
-                // 'payment' => $this->editOrders['payment'],
+                'payment' => $this->editOrders['payment'],
                 'total' => $this->editOrders['total'],
                 'balance' => $this->editOrders['balance'],
                 'deadline' => $this->editOrders['deadline'],
@@ -172,27 +171,12 @@ class OrderTable extends Component implements HasTable
                 'updated_by' => Auth::user()->username,
             ]);
 
-            // 🔄 Update the related payment record (if any)
-            $payment = \App\Models\payment::where('order_id', $order->order_id)
-                ->where('subcategory_id', $order->subcategory_id)
-                ->latest()
-                ->first();
-
-            if ($payment) {
-                $payment->update([
-                    'total' => $this->editOrders['total'],
-                    'balance' => $this->editOrders['balance'],
-                    'amount' => $this->editOrders['amount'],
-                ]);
-            }
-
             $this->emit('refreshTable');
             $this->isEditModalOpen = false;
             $this->dispatchBrowserEvent('closeEditModal');
             session()->flash('messageUpdate', 'Order updated successfully.');
-        } 
-    }catch (\Exception $e) {
-            session()->flash('errorUpdate', 'Failed to save order: ' . $e->getMessage());
+        } else {
+            session()->flash('error', 'Order not found.');
         }
     }
 
@@ -216,7 +200,7 @@ class OrderTable extends Component implements HasTable
 
     public function edit($id)
     {
-        $order = Order::find($id);
+        $order = payment::find($id);
 
         if ($order) {
             $this->editOrders = [
@@ -249,17 +233,18 @@ class OrderTable extends Component implements HasTable
 
     public function getTableQuery()
     {
-        return Order::where('isActive', 1);
+        return payment::where('isActive', 1);
     }
 
     public function getFilteredRecords()
     {
-        return Order::query()
+        return payment::query()
             ->when($this->filterActivation !== '', fn($query) => $query->where('isActive', $this->filterActivation))
             ->when($this->search !== '', function ($query) {
                 return $query->where(function ($q) {
                     $q->where('order_id', 'like', "%{$this->search}%")
-                      ->orwhere('name', 'like', "%{$this->search}%");
+                      ->orwhere('name', 'like', "%{$this->search}%")
+                       ->orwhere('payment_id', 'like', "%{$this->search}%");
                 });
             })->get();
     }
@@ -271,7 +256,7 @@ class OrderTable extends Component implements HasTable
 
     public function render()
     {
-        $query = Order::query();
+        $query = payment::query();
 
         if ($this->filterActivation !== '') {
             $query->where('isActive', $this->filterActivation);
@@ -281,25 +266,27 @@ class OrderTable extends Component implements HasTable
 
          if ($this->date_from) {
         $query->where(function ($q) {
-            $q->whereDate('deadline', '>=', $this->date_from);
+            $q->whereDate('payment_date', '>=', $this->date_from);
         });
     }
     if ($this->date_to) {
         $query->where(function ($q) {
-            $q->whereDate('deadline', '<=', $this->date_to);
+            $q->whereDate('payment_date', '<=', $this->date_to);
         });
     }
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
                  $q->where('order_id', 'like', "%{$this->search}%")
-                      ->orwhere('name', 'like', "%{$this->search}%");
+                      ->orwhere('payment_id', 'like', "%{$this->search}%")
+                       ->orwhere('name', 'like', "%{$this->search}%");
             });
         }
 
-        return view('livewire.order-table', [
+        return view('livewire.payment-table', [
             'records' => $query->get(),
             'rowCount' => $query->count(),
         ]);
     }
 }
+

@@ -17,23 +17,23 @@
                     <table class="min-w-full border-collapse">
                         <thead class="sticky top-0 bg-gray-100 z-10">
                             <tr class="bg-gray-100">
+                                <th class="px-4 py-2">Payment ID</th>
                                 <th class="px-4 py-2">Order ID</th>
-                                <th class="px-4 py-2"> Name</th>
-                                <th class="px-4 py-2">Contact Number</th>
-                                <th class="px-4 py-2">Address</th>
-                                <th class="px-4 py-2">Category</th>
-                                <th class="px-4 py-2">SubCategory</th>
-                                <th class="px-4 py-2">Quantity</th>
-                                <th class="px-4 py-2">Price</th>
-                                 <th class="px-4 py-2">Amount</th>
-                                  <th class="px-4 py-2">Total</th>
-                                <th class="px-4 py-2">Payment</th>
-                                <th class="px-4 py-2">Payment Method</th>
-                                <th class="px-4 py-2">Balance</th>
+                                <th class="px-4 py-2"> SubCategory Name</th>
                                 <th class="px-4 py-2">JO Number</th>
-                                <th class="px-4 py-2">Deadline</th>
-                                <th class="px-4 py-2">Added By</th>
-                                <th class="px-4 py-2">Status</th>
+                                <th class="px-4 py-2">Name</th>
+                                <th class="px-4 py-2">Address</th>
+                                <th class="px-4 py-2">Amount</th>
+                                <th class="px-4 py-2">Payment</th>
+                                <th class="px-4 py-2">Balance</th>
+                                 <th class="px-4 py-2">Total</th>
+                                  
+                                <th class="px-4 py-2">Reference Number</th>
+                                <th class="px-4 py-2">Payment Method</th>
+                                <th class="px-4 py-2">Payment Date</th>
+                                <th class="px-4 py-2">Payment Status</th>
+                                <th class="px-4 py-2">Remarks</th>
+                                <th class="px-4 py-2">Service By</th>
                                 <th class="px-4 py-2">Remarks</th>
                                 <th class="px-4 py-2">Activation</th>
                                 <th class="px-4 py-2"></th>
@@ -42,51 +42,27 @@
                         <tbody>
                             @forelse($records as $index => $record)
                                 <tr class="border-b">
+                                      <td class="px-4 py-2">{{ $record->payment_id }}</td>
                                     <td class="px-4 py-2">{{ $record->order_id }}</td>
-
+                                     <td class="px-4 py-2">{{ $SubCategory[$record->subcategory_id] ?? 'Not Available' }}</td>
+                                     <td class="px-4 py-2">{{ $record->jo_number }}</td>
                                     <td class="px-4 py-2">{{ $record->name }}</td>
-                                    <td class="px-4 py-2">{{ $record->contact_no}}</td>
                                     <td class="px-4 py-2">{{ $record->address }}</td>
-
-                                      <td class="px-4 py-2">{{ $Category[$record->category_id] ?? 'Not Available' }}</td>
-
-                                      <td class="px-4 py-2">{{ $SubCategory[$record->subcategory_id] ?? 'Not Available' }}</td>
-
-                                    <td class="px-4 py-2">{{ $record->qty }}</td>
-                                    <td class="px-4 py-2">{{ $record->price }}</td>
                                     <td class="px-4 py-2">{{ $record->amount }}</td>
+                                    <td class="px-4 py-2">{{ $record->payment }}</td>
+                                    <td class="px-4 py-2">{{ $record->balance }}</td>
                                     <td class="px-4 py-2">{{ $record->total }}</td>
-                                    @if ($record->Payment)
-                                        <td class="px-4 py-2">{{ $record->Payment->payment }}</td>
-                                        <td class="px-4 py-2">{{ $record->Payment->payment_method }}</td>
-                                        <td class="px-4 py-2">{{ $record->Payment->balance }}</td>
-                                    @else
-                                        <td class="px-4 py-2 text-gray-400">No payment</td>
-                                        <td class="px-4 py-2 text-gray-400">N/A</td>
-                                        <td class="px-4 py-2 text-gray-400">N/A</td>
-                                    @endif
-                                    <td class="px-4 py-2">{{ $record->jo_number }}</td>
-                                    <td class="px-4 py-2">{{ $record->deadline }}</td>
-                                   
-                                    <td class="px-4 py-2">{{ $record->added_by }}</td>
-
-                                     <td class="px-4 py-2">
-                                        @if ($record->status === 'Pending')
-                                            <span class="text-yellow-600 font-semibold">Pending</span>
-                                        @elseif ($record->status === 'Completed')
-                                            <span class="text-green-600 font-semibold">Completed</span>
-                                        @elseif ($record->status === 'Cancelled')
-                                            <span class="text-red-600 font-semibold">Cancelled</span>
-                                        @elseif ($record->status === 'Printing')
-                                            <span class="text-blue-600 font-semibold">Printing</span>
-                                        @elseif ($record->status === 'For PickUp')
-                                            <span class="text-purple-600 font-semibold">For PickUp</span>
-                                        @else
-                                            <span class="text-gray-600 font-semibold">Unknown</span>
-                                        @endif
-                                    </td>
                                     
-                                    <td class="px-4 py-2">{{ $record->remarks}}</td>
+                                    <td class="px-4 py-2">{{ $record->reference_number }}</td>
+                                     <td class="px-4 py-2">{{ $record->payment_method }}</td>
+                                
+                                    <td class="px-4 py-2">{{ $record->payment_date }}</td>
+                                    <td class="px-4 py-2">{{ $record->payment_status }}</td>
+                                    
+                                    <td class="px-4 py-2">{{ $record->remarks }}</td>
+                                    <td class="px-4 py-2">{{ $record->service_by }}</td>
+                                   
+            
                                 
                                 <td class="px-4 py-2">
                                     @if ($record->isActive)
@@ -188,11 +164,11 @@
                             </div>
 
 
-                            <!-- {{-- Price (51 to 100) --}}
+                            {{-- Price (51 to 100) --}}
                             <div class="form-group">
                                 <label style="color:black;">Downpayment</label>
                                 <input type="text" wire:model="editOrders.payment" class="form-control" required>
-                            </div> -->
+                            </div>
 
                               {{-- Price (51 to 100) --}}
                             <div class="form-group">

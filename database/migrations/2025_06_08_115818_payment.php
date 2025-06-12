@@ -19,8 +19,8 @@ class Payment extends Migration
             $table->string('payment_id')->nullable();
             // Link to order receipt or order
          
-           
             $table->string('order_id')->nullable(); // e.g., JO-0000236
+            $table->string('subcategory_id')->nullable(); // e.g., JO-0000236
             $table->string('jo_number')->nullable();
              $table->string('name')->nullable(); // e.g., JO-0000236
             $table->string('address')->nullable();

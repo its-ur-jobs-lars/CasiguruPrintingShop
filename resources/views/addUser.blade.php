@@ -429,7 +429,7 @@
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
-                    &copy; 2025 Sunwest Inc. All Rights Reserved.
+                    &copy; 2025 Casiguro Enterprises In. All Rights Reserved.
             </div>
         </div>
         </footer>

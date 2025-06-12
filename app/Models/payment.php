@@ -14,6 +14,7 @@ class payment extends Model
 
     protected $fillable = [
         'payment_id',
+        'subcategory_id',
         'order_id',
         'jo_number',
         'name',
@@ -39,5 +40,10 @@ class payment extends Model
         'total' => 'decimal:2',
         'isActive' => 'boolean',
     ];
+
+    // public function order()
+    // {
+    //     return $this->belongsTo(Order::class, 'order_id', 'order_id');
+    // }
 }
 

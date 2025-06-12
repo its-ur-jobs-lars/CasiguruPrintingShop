@@ -31,4 +31,11 @@ class Order extends Model
         'added_by',
         'updated_by',
     ];
+
+  public function Payment()
+{
+    return $this->hasOne(payment::class, 'order_id', 'order_id');
+}
+
+
 }

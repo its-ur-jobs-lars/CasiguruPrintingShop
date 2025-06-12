@@ -42,6 +42,8 @@
                                 </select>
                             @endif
 
+                            
+
                                 <div class="form-group">
                                     <label style="color:black;">Name</label>
                                     <input type="text" wire:model="data.name" class="form-control" required>
@@ -158,30 +160,44 @@
                                     <input type="date" wire:model="data.payment_date" class="form-control" required>
                                 </div>
 
-                                                    {{-- Payment --}}
+                                   {{-- Payment Type --}}
                                     <div class="form-group">
                                         <label style="color:black;">Payment Status</label>
                                         <select wire:model="selectedpayment" class="form-control" required>
                                             <option value="">-- Select --</option>
-                                            <option value="Paid">Paid</option>
+                                            <option value="Full Payment">Full Payment</option>
                                             <option value="Unpaid">Unpaid</option>
-                                            <option value="Partial">Partial</option>
+                                            <option value="Downpayment">Downpayment</option>
                                         </select>
                                     </div>
 
                                     {{-- Set payment_status automatically --}}
                                     <input type="hidden" wire:model="data.payment_status">
 
-                                    @if($selectedpayment == 'Partial')
+                                    {{-- Payment Amount Input --}}
+                                    @if($selectedpayment === 'Downpayment')
                                         <div class="form-group">
-                                            <label style="color:black;">Paid Remaining Balance</label>
-                                            <input type="text" wire:model="data.balance" class="form-control" readonly>
+                                            <label style="color:black;">Enter Payment Amount</label>
+                                            <input type="number" wire:model.lazy="data.payment" class="form-control" step="0.01" min="0">
+                                        </div>
+                                    @else
+                                        <div class="form-group">
+                                            <label style="color:black;">Payment</label>
+                                            <input type="text" wire:model="data.payment" class="form-control" readonly>
                                         </div>
                                     @endif
 
-                                 <div class="form-group">
+                                  <div class="form-group">
                                     <label style="color:black;">Status</label>
-                                    <input type="text" wire:model="data.status" class="form-control" required>
+                                    <select wire:model.defer="data.status" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Printing">Printing</option>
+                                        <option value="For PickUp">For PickUp</option>
+
+                                    </select>
                                 </div>
                                   
 
