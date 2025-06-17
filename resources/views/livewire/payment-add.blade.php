@@ -157,7 +157,7 @@
 
                                 <div class="form-group">
                                     <label style="color:black;">Payment Date</label>
-                                    <input type="date" wire:model="data.payment_date" class="form-control" required>
+                                    <input type="datetime-local" wire:model="data.payment_date" class="form-control" required>
                                 </div>
 
                                    {{-- Payment Type --}}

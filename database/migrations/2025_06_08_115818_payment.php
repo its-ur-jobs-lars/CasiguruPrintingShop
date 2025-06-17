@@ -34,7 +34,7 @@ class Payment extends Migration
             // Payment details
             $table->string('payment_method')->nullable();    // e.g., Cash, Bank Transfer
             $table->string('reference_number')->nullable();  // Transaction or check #
-            $table->date('payment_date')->nullable();
+            $table->dateTime('payment_date')->nullable();
             $table->string('payment_status')->nullable();    // e.g., Paid, Partial, Unpaid
 
             $table->text('remarks')->nullable();

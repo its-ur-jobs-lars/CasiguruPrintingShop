@@ -43,7 +43,8 @@
 }
 
     .card-background-1 {
-        /* background: url("{{asset('assets/public/img/c1.jpg')}}") no-repeat center center/cover; */
+        background: url("{{asset('assets/public/img/order.png')}}") no-repeat center center/cover;
+        height: 170px;
         border-radius: 10px;
         color: var(--gray);
         margin-top: 15px;
@@ -53,8 +54,9 @@
     }
 
     .card-background-2 {
-        /* background: url("{{asset('assets/public/img/c2.jpg')}}") no-repeat center center/cover; */
+        background: url("{{asset('assets/public/img/services.png')}}") no-repeat center center/cover;
         border-radius: 10px;
+         height: 170px;
         color: var(--gray);
         margin-top: 15px;
         border: 1px solid rgb(243, 243, 243);
@@ -62,8 +64,9 @@
     }
 
     .card-background-3 {
-        /* background: url("{{asset('assets/public/img/c3.jpg')}}") no-repeat center center/cover; */
+        background: url("{{asset('assets/public/img/category.png')}}") no-repeat center center/cover;
         border-radius: 10px;
+        height: 170px;
         color: var(--gray);
         margin-top: 15px;
         border: 1px solid rgb(243, 243, 243);
@@ -71,8 +74,9 @@
     }
 
     .card-background-4 {
-        /* background: url("{{asset('assets/public/img/c4.jpg')}}") no-repeat center center/cover; */
+        background: url("{{asset('assets/public/img/pricelist.png')}}") no-repeat center center/cover;
         border-radius: 10px;
+        height: 170px;
         color: var(--gray);
         margin-top: 15px;
         border: 1px solid rgb(243, 243, 243);
@@ -424,25 +428,25 @@
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <div class="card-body-counting card-background-1">
-                        {{--@livewire('total-devices-card')--}}
+                        @livewire('total-orders')
                     </div>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <div class="card-body-counting card-background-2">
-                        {{--@livewire('recently-added-card')--}}
+                        @livewire('total-services')
                     </div>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <div class="card-body-counting card-background-3">
-                        {{--@livewire('number-of-users-card')--}}
+                        @livewire('total-category')
                     </div>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <div class="card-body-counting card-background-4">
-                        {{--@livewire('total-items-card')--}}
+                        @livewire('total-price-list')
                     </div>
                 </div>
             </div>
@@ -452,6 +456,15 @@
                      @livewire('canlendar-order')
                 </div>
             </div>
+
+             <div class="row">
+                <div class="col-12">
+                     @livewire('order-graphs')
+                </div>
+            </div>
+
+
+            
 
 
             <!-- <div class="row">

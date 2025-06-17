@@ -172,7 +172,7 @@
             <li class="sidebar-heading h6"></li>
 
         <!-- Dashboard -->
-        <li class="side-nav-menu-item active">
+        <li class="side-nav-menu-item">
             <a class="side-nav-menu-link media align-items-center {{ Request::is('dashboard') ? : '' }}" href="/dashboard">
                 <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-sharp fa-solid fa-square-poll-horizontal"></i>
@@ -317,12 +317,12 @@
 
                   <!-- Manufacturer: subManufacturer-->
                <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display: block;">
-                     <li class="side-nav-menu-item active">
+                     <li class="side-nav-menu-item ">
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
                   </li>
                   
-                   <li class="side-nav-menu-item active">
+                   <li class="side-nav-menu-item ">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>

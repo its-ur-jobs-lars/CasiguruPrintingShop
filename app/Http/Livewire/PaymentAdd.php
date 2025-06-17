@@ -9,6 +9,7 @@ use App\Models\Pricelist;
 use App\Models\Order;
 use App\Models\payment;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PaymentAdd extends Component
 {
@@ -27,12 +28,24 @@ class PaymentAdd extends Component
 
     public function mount()
     {
-        $this->Order = Order::where('isActive', 1)->get();
+      $this->Order = Order::where('isActive', 1)
+        ->whereIn('order_id', function ($query) {
+            $query->select('order_id')
+                ->from('orders')
+                ->groupBy('order_id')
+                ->havingRaw('COUNT(*) > (
+                    SELECT COUNT(*) FROM payments 
+                    WHERE payments.order_id = orders.order_id
+                )');
+        })
+        ->get();
     }
 
     public function render()
     {
         return view('livewire.payment-add');
+
+        
     }
 
     public function openModal()
@@ -143,7 +156,7 @@ class PaymentAdd extends Component
                 'data.payment' => 'required|numeric|min:0',
                 'data.payment_method' => 'nullable|string|max:255',
                 'data.reference_number' => 'nullable|string|max:255',
-                'data.payment_date' => 'nullable|date_format:Y-m-d',
+                'data.payment_date' => 'nullable|date_format:Y-m-d\TH:i',
                 'data.status' => 'nullable|string|max:50',
                 'data.payment_status' => 'nullable|string|max:50',
                 'data.remarks' => 'nullable|string|max:500',
@@ -151,7 +164,9 @@ class PaymentAdd extends Component
 
             $count = payment::where('order_id', $this->order_id)->count() + 1;
             $payment_id = 'PYMT-' . $this->order_id . '-' . str_pad($count, 2, '0', STR_PAD_LEFT);
-            $paymentDate = $this->data['payment_date'] ?? now()->toDateString();
+            $paymentDate = isset($this->data['payment_date'])
+            ? Carbon::parse($this->data['payment_date'])->format('Y-m-d H:i:s')
+            : now()->format('Y-m-d H:i:s');
 
             payment::create([
                 'payment_id' => $payment_id,

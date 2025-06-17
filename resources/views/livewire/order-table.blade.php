@@ -172,19 +172,19 @@
                             {{-- Last Name --}}
                             <div class="form-group">
                                 <label style="color:black;">Quantity</label>
-                                <input type="text" wire:model="editOrders.qty" class="form-control" required>
+                                <input type="text" wire:model="editOrders.qty" class="form-control" readonly disabled>
                             </div>
 
                             {{-- First Name --}}
                             <div class="form-group">
                                 <label style="color:black;">Price</label>
-                                <input type="text" wire:model="editOrders.price" class="form-control" required> 
+                                <input type="text" wire:model="editOrders.price" class="form-control" readonly disabled> 
                             </div>
 
                             {{-- Middle Name --}}
                             <div class="form-group">
                                 <label style="color:black;">Amount</label>
-                                <input type="text" wire:model="editOrders.amount" class="form-control" required>
+                                <input type="text" wire:model="editOrders.amount" class="form-control" readonly disabled>
                             </div>
 
 
@@ -197,7 +197,7 @@
                               {{-- Price (51 to 100) --}}
                             <div class="form-group">
                                 <label style="color:black;">Total Amount</A></label>
-                                <input type="text" wire:model="editOrders.total" class="form-control" required>
+                                <input type="text" wire:model="editOrders.total" class="form-control" readonly disabled>
                             </div>
 
                             {{-- Next Button--}}
@@ -214,10 +214,10 @@
                           
 
                             {{-- Price (101 to 500) --}}
-                            <div class="form-group">
+                            {{--<div class="form-group">
                                 <label style="color:black;">Balance</label>
                                 <input type="text" wire:model="editOrders.balance" class="form-control" required>
-                            </div>
+                            </div>--}}
 
                               {{-- Remarks --}}
                             <div class="form-group">

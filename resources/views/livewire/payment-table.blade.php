@@ -55,8 +55,9 @@
                                     
                                     <td class="px-4 py-2">{{ $record->reference_number }}</td>
                                      <td class="px-4 py-2">{{ $record->payment_method }}</td>
-                                
-                                    <td class="px-4 py-2">{{ $record->payment_date }}</td>
+                                    <td class="px-4 py-2">
+                                        {{ \Carbon\Carbon::parse($record->payment_date)->format('Y-m-d') }}
+                                    </td>
                                     <td class="px-4 py-2">{{ $record->payment_status }}</td>
                                     
                                     <td class="px-4 py-2">{{ $record->remarks }}</td>

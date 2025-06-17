@@ -12,6 +12,7 @@ use App\Models\Pricelist;
 use App\Models\Order;
 use App\Models\payment;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class OrderTable extends Component implements HasTable
 {
@@ -38,8 +39,6 @@ class OrderTable extends Component implements HasTable
         'qty' => null,
         'price' => null,
         'amount' => null,
-        'payment' => null,
-        'balance' => null,
         'deadline' => null,
         'status' => null,
         'remarks' => null,
@@ -80,8 +79,6 @@ class OrderTable extends Component implements HasTable
             'editOrders.qty' => 'required|numeric|min:1',
             'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
-            // 'editOrders.payment' => 'required|numeric|min:0',
-            'editOrders.balance' => 'required|numeric',
              'editOrders.total' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
             'editOrders.status' => 'required|string|max:255',
@@ -145,8 +142,6 @@ class OrderTable extends Component implements HasTable
             'editOrders.qty' => 'required|numeric|min:1',
             'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
-            // 'editOrders.payment' => 'required|numeric|min:0',
-            'editOrders.balance' => 'required|numeric',
             'editOrders.total' => 'required|numeric',
             'editOrders.deadline' => 'required|date',
             'editOrders.status' => 'required|string|max:255',
@@ -162,9 +157,7 @@ class OrderTable extends Component implements HasTable
                 'qty' => $this->editOrders['qty'],
                 'price' => $this->editOrders['price'],
                 'amount' => $this->editOrders['amount'],
-                // 'payment' => $this->editOrders['payment'],
                 'total' => $this->editOrders['total'],
-                'balance' => $this->editOrders['balance'],
                 'deadline' => $this->editOrders['deadline'],
                 'status' => $this->editOrders['status'],
                 'remarks' => $this->editOrders['remarks'],
@@ -172,19 +165,23 @@ class OrderTable extends Component implements HasTable
                 'updated_by' => Auth::user()->username,
             ]);
 
-            // 🔄 Update the related payment record (if any)
-            $payment = \App\Models\payment::where('order_id', $order->order_id)
-                ->where('subcategory_id', $order->subcategory_id)
-                ->latest()
-                ->first();
+            // // 🔄 Update the related payment record (if any)
+            // $payment = \App\Models\payment::where('order_id', $order->order_id)
+            //     ->where('subcategory_id', $order->subcategory_id)
+            //     ->latest()
+            //     ->first();
 
-            if ($payment) {
-                $payment->update([
-                    'total' => $this->editOrders['total'],
-                    'balance' => $this->editOrders['balance'],
-                    'amount' => $this->editOrders['amount'],
-                ]);
-            }
+            // if ($payment) {
+            //     $payment->update([
+            //         'total' => $this->editOrders['total'],
+            //         'balance' => $this->editOrders['balance'],
+            //         'amount' => $this->editOrders['amount'],
+            //         'status' => $this->editOrders['status'] ?? $order->status,
+            //         'remarks' => $this->editOrders['remarks'] ?? $order->remarks,
+            //     ]);
+            // }
+
+           
 
             $this->emit('refreshTable');
             $this->isEditModalOpen = false;
