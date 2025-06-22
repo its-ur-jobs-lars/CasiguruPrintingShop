@@ -218,6 +218,18 @@
                      <a class="side-nav-menu-link" href="/inventory">
                         <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
+
+                     <li class="side-nav-menu-item">
+                      <a class="side-nav-menu-link" href="/category">
+                       <i class="fas fa-industry"></i>Category</a>
+                  </li>
+
+
+                   <li class="side-nav-menu-item">
+                      <a class="side-nav-menu-link" href="/reports">
+                       <i class="fas fa-solid fa-square-poll-horizontal"></i>Reports</a>
+                  </li>
+
                  
                 </ul>
                 <!-- End Order Management: subOrder Management -->
@@ -314,10 +326,10 @@
                    <!-- Manufacturer: subManufacturer-->
                <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
                     
-                  <li class="side-nav-menu-item">
+                  <!-- <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
-                  </li>
+                  </li> -->
 
                   <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">

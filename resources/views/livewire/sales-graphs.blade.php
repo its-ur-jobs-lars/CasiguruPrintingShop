@@ -10,7 +10,7 @@
 </div>
 
 <div class="mb-4 space-x-2">
-    <h3 class="text-lg font-semibold">Orders Chart</h3>
+    <h3 class="text-lg font-semibold">Sales Chart</h3>
 </div>
 
     </div>
@@ -18,41 +18,43 @@
     <canvas id="ordersChart" width="600" height="300"></canvas>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
+   <script>
     document.addEventListener('livewire:load', () => {
         let chartInstance = null;
 
         function renderChart(chartData) {
             const ctx = document.getElementById('ordersChart').getContext('2d');
 
+            // Destroy old chart if it exists
             if (chartInstance) {
                 chartInstance.destroy();
             }
 
+            // Create new chart
             chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: chartData.labels,
-                    datasets: [{
-                        label: 'Orders',
-                        data: chartData.data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                        fill: true, // ✅ no area shading, just the line
-                        tension: 0.3,
-                        pointRadius: 3,
-                        pointHoverRadius: 5,
-                        borderWidth: 2
-                    }]
+                    datasets: chartData.datasets // ✅ correctly render multiple lines
                 },
                 options: {
                     responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                callback: function(value) {
+                                callback: function (value) {
                                     return Number.isInteger(value) ? value : null;
                                 }
                             }
@@ -62,8 +64,10 @@
             });
         }
 
+        // Initial chart load from backend
         renderChart(@js($chartData));
 
+        // Re-render chart when Livewire dispatches an update
         window.addEventListener('update-chart', event => {
             renderChart(event.detail);
         });

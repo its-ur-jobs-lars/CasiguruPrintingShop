@@ -234,6 +234,15 @@
                       <a class="side-nav-menu-link" href="/category">
                        <i class="fas fa-industry"></i>Category</a>
                   </li>
+
+
+                   <li class="side-nav-menu-item">
+                      <a class="side-nav-menu-link" href="/reports">
+                       <i class="fas fa-solid fa-square-poll-horizontal"></i>Reports</a>
+                  </li>
+
+
+
                  
                 </ul>
                 <!-- End Order Monitoring: subOrder Monitoring -->
@@ -457,11 +466,11 @@
                 </div>
             </div>
 
-             <div class="row">
+             <!-- <div class="row">
                 <div class="col-12">
-                     @livewire('order-graphs')
+                     {{--@livewire('order-graphs')--}}
                 </div>
-            </div>
+            </div> -->
 
 
             

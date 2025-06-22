@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Order Dashboard</title>
+    <title>Reports</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -194,18 +193,17 @@
 
               <!-- Order Management: subOrder Management -->
               <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0" style="display: block;">
-                   
-                 <li class="side-nav-menu-item active">
+                
+                   <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderdashboard">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
                     </li>
-              
                     <li class="side-nav-menu-item ">
                         <a class="side-nav-menu-link" href="/orderDetails">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
                     </li>
 
-                     
+                    
                     
                     <li class="side-nav-menu-item">
                        <a class="side-nav-menu-link" href="/pricelist">
@@ -226,7 +224,7 @@
                   </li>
 
 
-                   <li class="side-nav-menu-item">
+                   <li class="side-nav-menu-item active">
                       <a class="side-nav-menu-link" href="/reports">
                        <i class="fas fa-solid fa-square-poll-horizontal"></i>Reports</a>
                   </li>
@@ -411,7 +409,7 @@
        <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Order Dashboard</div>
+                <div class="h3 mb-0">Reports</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -425,19 +423,55 @@
                 setInterval(updateDateTime, 1000);
             </script>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card mb-3 mb-md-4">
-                        <div class="card-header">
-                        </div>
-                        <div class="card-body pt-0">
-                             @livewire('order-dashboard')
-                            
+                
+            <div class="form-group">
+            <select class="form-control-1" id="electronicsDropdown" onchange="handleDropdownChange(this.value)">
+                <option value="orders">Orders</option>
+                <option value="sales">Sales</option>
+                <option value="collection">Collection</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-3 mb-md-4">
+                    <div class="card-body-livewire pt-0">
+                        <div class="table-responsive-xl">
+                            <div class="tables-container">
+                                <div id="orders" style="display: none;">
+                                    @livewire('order-graphs')
+                                </div>
+                                <div id="sales" style="display: none;">
+                                    {{-- @livewire('sales-graph') --}}
+                                    @livewire('sales-graphs')
+                                </div>
+                                <div id="collection" style="display: none;">
+                                    {{-- @livewire('collection-graph') --}}
+                                </div>                                                  
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+            </div> 
+
+
+        <script>
+            function handleDropdownChange(selectedId) {
+                const sections = ['orders', 'sales', 'collection'];
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = (id === selectedId) ? 'block' : 'none';
+                });
+            }
+
+            // Optional: Show default section on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                handleDropdownChange(document.getElementById('electronicsDropdown').value);
+            });
+        </script>
+
 
         <!-- Footer -->
         <footer>
@@ -453,7 +487,7 @@
         <script src="{{asset('assets/public/graindashboard/js/graindashboard.js')}}"></script>
         <script src="{{asset('assets/public/graindashboard/js/graindashboard.vendor.js')}}"></script>
 
-        <!-- DEMO CHARTS -->
+        <!-- DEMO CHARTS
         <script src="{{asset('assets/public/demo/resizeSensor.js')}}"></script>
         <script src="{{asset('assets/public/demo/chartist.js')}}"></script>
         <script src="{{asset('assets/public/demo/chartist-plugin-tooltip.js')}}"></script>
@@ -464,7 +498,7 @@
             $.GDCore.components.GDChartistArea.init('.js-area-chart');
             $.GDCore.components.GDChartistBar.init('.js-bar-chart');
             $.GDCore.components.GDChartistDonut.init('.js-donut-chart');
-        </script>
+        </script> -->
 
         <!-- Dark Mode Script Function -->
 

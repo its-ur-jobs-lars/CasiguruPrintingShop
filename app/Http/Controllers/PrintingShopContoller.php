@@ -86,6 +86,13 @@ class PrintingShopContoller extends Controller
         return view('sales');
     }
 
+    public function Report()
+    {
+        return view('reports_Orders');
+    }
+
+    
+
 
 
     
