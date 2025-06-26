@@ -31,7 +31,7 @@
                             </select>
 
                               
-                            @if($order_id)
+                            <!-- @if($order_id)
                                 <select wire:model="selected_subcategory_id" class="form-control" required>
                                     <option value="">-- Select Product/Subcategory --</option>
                                     @forelse($filteredSubCategories as $subcategory)
@@ -40,7 +40,7 @@
                                         <option value="">No subcategories found for this order</option>
                                     @endforelse
                                 </select>
-                            @endif
+                            @endif -->
 
                             
 

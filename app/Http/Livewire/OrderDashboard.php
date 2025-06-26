@@ -12,6 +12,7 @@ class OrderDashboard extends Component
 {
     public $showModal = false;
     public $showCart = false;
+    public $showOrder = true;
     public $search = '';
     public $items = [];
     public $orderItems = [];
@@ -39,35 +40,28 @@ class OrderDashboard extends Component
         $this->showCart = true;
     }
 
-    public function addToCart($id)
-    {
-        $this->showCart = true;
+public function addToCart($id)
+{
+    $item = Pricelist::with(['category', 'subcategory'])->find($id);
+    if (!$item) return;
 
-        $item = Pricelist::with(['category', 'subcategory'])->find($id);
-        if (!$item) return;
+    if (isset($this->cart[$id])) {
+        $this->cart[$id]['qty']++;
+        $this->cart[$id]['price'] = $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $this->cart[$id]['qty']);
+    } else {
+        $this->cart[$id] = [
+            'category_id' => $item->category_id,
+            'subcategory_id' => $item->subcategory_id,
+            'category_name' => $item->category->category_name ?? 'N/A',
+            'subcategory_name' => $item->subcategory->subcategory_name ?? 'N/A',
+            'image' => $item->subcategory->image ?? null,
+            'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, 1),
+            'qty' => 1,
+        ];
+          }
+    $this->showCart = true;
+    }           
 
-        if (isset($this->cart[$id])) {
-            $this->cart[$id]['qty']++;
-            $this->cart[$id]['price'] = $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $this->cart[$id]['qty']);
-        } else {
-            $this->cart[$id] = [
-                'category_id' => $item->category_id,
-                'subcategory_id' => $item->subcategory_id,
-                'category_name' => $item->category->category_name ?? 'N/A',
-                'subcategory_name' => $item->subcategory->subcategory_name ?? 'N/A',
-                'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, 1),
-                'qty' => 1
-            ];
-        }
-    }
-
-    public function incrementQty($id)
-    {
-        if (isset($this->cart[$id])) {
-            $this->cart[$id]['qty']++;
-            $this->updatePriceBasedOnQty($id);
-        }
-    }
 
     public function decrementQty($id)
     {

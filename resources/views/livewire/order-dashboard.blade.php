@@ -3,7 +3,7 @@
     {{-- Product List --}}
 
   
-
+    @if($showOrder)
     <div class="bg-white rounded shadow p-6 w-1/2">
 
 <!-- Search Filter -->
@@ -52,53 +52,70 @@
             </div>
         @endforeach
             @endif
-    </div>
-    
-
+            
+     </div>
+    @endif
+   
     {{-- Cart Overlay --}}
-    @if($showCart)
-    <div class="fixed inset-0 bg-gray-700 bg-opacity-75 flex items-center justify-center z-50">
-        <div class="bg-white rounded shadow p-6 w-1/2">
-            <div class="w-1/3 border p-4-2">
-                <h2>Cart</h2>
-                @forelse($cart as $id => $c)
-                    <div class="flex justify-between items-center my-2-1">
+@if($showCart)
+<div class="cart-overlay">
+    <div class="cart-container">
+
+        {{-- Header with Close Button --}}
+        <div class="cart-header">
+            <h1>ORDER</h1>
+            <button wire:click="$set('showCart', false)" class="cart-close">✕</button>
+        </div>
+
+        {{-- Scrollable Item List --}}
+        <div class="cart-items-scroll">
+            @forelse($cart as $id => $c)
+                <div class="cart-item">
+                    <div class="cart-left">
+                        <img src="{{ asset('storage/' . ($c['image'] ?? 'default.png')) }}"
+                             alt="{{ $c['subcategory_name'] ?? 'No Subcategory' }}"
+                             class="cart-image">
                         <div>
-                            <strong>{{ $c['category_name'] ?? 'No Category' }}</strong><br>
-                            <small>{{ $c['subcategory_name'] ?? 'No Subcategory' }}</small>
-                        </div>
-                        <div class="text-right">
-                            ₱{{ number_format($c['price'])}}<br>
-                            ₱{{ number_format($c['price'] * $c['qty'], 2) }}
-                            <div class="flex items-center space-x-2">
-                                <button wire:click="decrementQty({{ $id }})"
-                                        class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                                <input type="number"
-                                    wire:model.lazy="cart.{{ $id }}.qty"
-                                    class="w-16 text-center border rounded px-2 py-1"
-                                    min="1" />
-                                <button wire:click="incrementQty({{ $id }})"
-                                        class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
-                            </div>
+                            <div class="item-title">{{ $c['subcategory_name'] ?? 'No Subcategory' }}</div>
                         </div>
                     </div>
-                @empty
-                    <p>Your cart is empty.</p>
-                @endforelse
 
-                <hr>
-                <div class="text-right mt-2">
-                    <strong>Total: ₱{{ number_format(collect($cart)->sum(fn($c) => $c['price'] * $c['qty']), 2) }}</strong>
+                    <div class="cart-right">
+                        <div class="item-price">₱{{ number_format($c['price'], 2) }}</div>
+                        <div class="item-subtotal">₱{{ number_format($c['price'] * $c['qty'], 2) }}</div>
+                        <div class="qty-control">
+                            <button wire:click="decrementQty({{ $id }})">-</button>
+                            <input type="number"
+                                   wire:model.lazy="cart.{{ $id }}.qty"
+                                   min="1" />
+                            <button wire:click="incrementQty({{ $id }})">+</button>
+                        </div>
+                    </div>
                 </div>
+            @empty
+                <p class="cart-empty">Your cart is empty.</p>
+            @endforelse
+        </div>
 
-                <button wire:click="openModal"
-                        class="mt-2-1 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
-                    Proceed to Order
-                </button>
+        {{-- Summary --}}
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₱{{ number_format(collect($cart)->sum(fn($c) => $c['price'] * $c['qty']), 2) }}</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span>₱{{ number_format(collect($cart)->sum(fn($c) => $c['price'] * $c['qty']), 2) }}</span>
             </div>
         </div>
+
+        <button wire:click="openModal" class="checkout-button">
+            PROCEED TO CHECKOUT
+        </button>
     </div>
-    @endif
+</div>
+@endif
+
 
     {{-- Order Modal --}}
     @if($showModal)
