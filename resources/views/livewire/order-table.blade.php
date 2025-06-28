@@ -26,7 +26,8 @@
                                 <th class="px-4 py-2">Quantity</th>
                                 <th class="px-4 py-2">Price</th>
                                  <th class="px-4 py-2">Amount</th>
-                                  <th class="px-4 py-2">Total</th>
+                                <th class="px-4 py-2">Layout Fee</th>
+                                <th class="px-4 py-2">Total</th>
                                 <th class="px-4 py-2">Payment</th>
                                 <th class="px-4 py-2">Payment Method</th>
                                 <th class="px-4 py-2">Balance</th>
@@ -55,7 +56,9 @@
                                     <td class="px-4 py-2">{{ $record->qty }}</td>
                                     <td class="px-4 py-2">{{ $record->price }}</td>
                                     <td class="px-4 py-2">{{ $record->amount }}</td>
+                                    <td class="px-4 py-2">{{ $record->layout_fee }}</td>
                                     <td class="px-4 py-2">{{ $record->total }}</td>
+                                    
                                     @if ($record->Payment)
                                         <td class="px-4 py-2">{{ $record->Payment->payment }}</td>
                                         <td class="px-4 py-2">{{ $record->Payment->payment_method }}</td>

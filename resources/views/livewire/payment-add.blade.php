@@ -31,7 +31,7 @@
                             </select>
 
                               
-                            <!-- @if($order_id)
+                            {{-- @if($order_id)
                                 <select wire:model="selected_subcategory_id" class="form-control" required>
                                     <option value="">-- Select Product/Subcategory --</option>
                                     @forelse($filteredSubCategories as $subcategory)
@@ -40,7 +40,7 @@
                                         <option value="">No subcategories found for this order</option>
                                     @endforelse
                                 </select>
-                            @endif -->
+                            @endif --}}
 
                             
 
@@ -52,6 +52,11 @@
                                 <div class="form-group">
                                     <label style="color:black;">Address</label>
                                     <input type="text" wire:model="data.address" class="form-control" required>
+                                </div>
+
+                                  <div class="form-group">
+                                    <label style="color:black;">JO Number</label>
+                                    <input type="text" wire:model="data.jo_number" class="form-control" required>
                                 </div>
 
                             {{-- Payment Type Selector --}}
@@ -103,35 +108,80 @@
                                     <input type="text" wire:model="data.qty" class="form-control" required>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label style="color:black;">Price</label>
                                     <input type="text" wire:model="data.price" class="form-control" required>
-                                </div>
+                                </div> -->
                         
+                                
+
+                            
                                 <div class="form-group">
-                                    <label style="color:black;">Remaining Balance</label>
-                                    <input type="text" wire:model="data.balance" class="form-control" required>
-                                </div>
+                                        <label style="color:black;">Payment Method</label>
+                                        <select wire:model="data.payment_method" class="form-control" required>
+                                            <option value="">-- Select --</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="GCash">GCash</option>
+                                            <option value="Bank Transfer">Bank Transfer</option>
+                                            <option value="Cheque">Cheque</option>
+                                        </select>
+                                    </div>
 
-                                  <div class="form-group">
-                                    <label style="color:black;">Amount of Item</label>
-                                    <input type="text" wire:model="data.amount" class="form-control" required>
-                                </div>
+                                    {{-- Cash Details --}}
+                                            @if(($data['payment_method'] ?? '') === 'Cash')
+                                                <!-- <div class="form-group">
+                                                    <label style="color:black;">Cash Received By</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.cash_received_by" placeholder="Name of Receiver">
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <label style="color:black;">OR / Receipt Number (optional)</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.reference_number" placeholder="Receipt No.">
+                                                </div>
+                                            @endif
 
+                                            {{-- GCash Details --}}
+                                            @if(($data['payment_method'] ?? '') === 'GCash')
+                                                <div class="form-group">
+                                                    <label style="color:black;">GCash Number</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.gcash_number" placeholder="09XXXXXXXXX">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label style="color:black;">GCash Account Name</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.gcash_account_name" placeholder="Account Holder Name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label style="color:black;">GCash Reference Number</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.reference_number" placeholder="Ex. GCASH1234567890">
+                                                </div>
+                                            @endif
 
-                              
+                                            {{-- Bank Transfer Details --}}
+                                            @if(($data['payment_method'] ?? '') === 'Bank Transfer')
+                                                <div class="form-group">
+                                                    <label style="color:black;">Bank Name</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.bank_name" placeholder="BDO, BPI, etc.">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label style="color:black;">Reference Number</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.reference_number" placeholder="Bank Transaction Ref#">
+                                                </div>
+                                            @endif
 
-                                <div class="form-group">
-                                    <label style="color:black;">JO Number</label>
-                                    <input type="text" wire:model="data.jo_number" class="form-control" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label style="color:black;">Reference</label>
-                                    <input type="text" wire:model="data.reference_number" class="form-control" required>
-                                </div>
-
-                               
+                                            {{-- Cheque Details --}}
+                                            @if(($data['payment_method'] ?? '') === 'Cheque')
+                                                <div class="form-group">
+                                                    <label style="color:black;">Cheque Number</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.cheque_number" placeholder="Ex. 001234">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label style="color:black;">Cheque Date</label>
+                                                    <input type="date" class="form-control" wire:model.lazy="data.cheque_date">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label style="color:black;">Bank Name</label>
+                                                    <input type="text" class="form-control" wire:model.lazy="data.bank_name" placeholder="BDO, Metrobank, etc.">
+                                                </div>
+                                            @endif
 
 
                                   <div class="form-group text-center">
@@ -142,19 +192,14 @@
                             
                              {{-- Step 3 --}}
                             @if ($step === 3)
-                                
 
-                             <div class="form-group">
-                                    <label style="color:black;">Payment Method</label>
-                                    <select wire:model="data.payment_method" class="form-control" required>
-                                        <option value="">-- Select --</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="GCash">GCash</option>
-                                        <option value="Bank Transfer">Bank Transfer</option>
-                                        <option value="Cheque">Cheque</option>
-                                    </select>
+                                <div class="form-group">
+                                    <label style="color:black;">Remaining Balance</label>
+                                    <input type="text" wire:model="data.balance" class="form-control" required>
                                 </div>
 
+                              
+                                
                                 <div class="form-group">
                                     <label style="color:black;">Payment Date</label>
                                     <input type="datetime-local" wire:model="data.payment_date" class="form-control" required>
@@ -192,6 +237,7 @@
                                     <select wire:model.defer="data.status" class="form-control" required>
                                         <option value="">-- Select --</option>
                                         <option value="Pending">Pending</option>
+                                         <option value="Pending">Layouting</option>
                                         <option value="Completed">Completed</option>
                                         <option value="Cancelled">Cancelled</option>
                                         <option value="Printing">Printing</option>

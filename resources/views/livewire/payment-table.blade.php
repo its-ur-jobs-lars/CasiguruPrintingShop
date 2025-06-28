@@ -12,70 +12,98 @@
             <option value="0">Inactive</option>   
         </select>
                
-            <div class="overflow-x-auto-1 bg-white shadow-md rounded-lg relative">
-                <div class="overflow-y-auto max-h-[500px]">
-                    <table class="min-w-full border-collapse">
-                        <thead class="sticky top-0 bg-gray-100 z-10">
-                            <tr class="bg-gray-100">
-                                <th class="px-4 py-2">Payment ID</th>
-                                <th class="px-4 py-2">Order ID</th>
-                                <th class="px-4 py-2"> SubCategory Name</th>
-                                <th class="px-4 py-2">JO Number</th>
-                                <th class="px-4 py-2">Name</th>
-                                <th class="px-4 py-2">Address</th>
-                                <th class="px-4 py-2">Amount</th>
-                                <th class="px-4 py-2">Payment</th>
-                                <th class="px-4 py-2">Balance</th>
-                                 <th class="px-4 py-2">Total</th>
-                                  
-                                <th class="px-4 py-2">Reference Number</th>
-                                <th class="px-4 py-2">Payment Method</th>
-                                <th class="px-4 py-2">Payment Date</th>
-                                <th class="px-4 py-2">Payment Status</th>
-                                <th class="px-4 py-2">Remarks</th>
-                                <th class="px-4 py-2">Service By</th>
-                                <th class="px-4 py-2">Remarks</th>
-                                <th class="px-4 py-2">Activation</th>
-                                <th class="px-4 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($records as $index => $record)
-                                <tr class="border-b">
-                                      <td class="px-4 py-2">{{ $record->payment_id }}</td>
-                                    <td class="px-4 py-2">{{ $record->order_id }}</td>
-                                     <td class="px-4 py-2">{{ $SubCategory[$record->subcategory_id] ?? 'Not Available' }}</td>
-                                     <td class="px-4 py-2">{{ $record->jo_number }}</td>
-                                    <td class="px-4 py-2">{{ $record->name }}</td>
-                                    <td class="px-4 py-2">{{ $record->address }}</td>
-                                    <td class="px-4 py-2">{{ $record->amount }}</td>
-                                    <td class="px-4 py-2">{{ $record->payment }}</td>
-                                    <td class="px-4 py-2">{{ $record->balance }}</td>
-                                    <td class="px-4 py-2">{{ $record->total }}</td>
-                                    
-                                    <td class="px-4 py-2">{{ $record->reference_number }}</td>
-                                     <td class="px-4 py-2">{{ $record->payment_method }}</td>
-                                    <td class="px-4 py-2">
-                                        {{ \Carbon\Carbon::parse($record->payment_date)->format('Y-m-d') }}
-                                    </td>
-                                    <td class="px-4 py-2">{{ $record->payment_status }}</td>
-                                    
-                                    <td class="px-4 py-2">{{ $record->remarks }}</td>
-                                    <td class="px-4 py-2">{{ $record->service_by }}</td>
-                                   
-            
-                                
-                                <td class="px-4 py-2">
-                                    @if ($record->isActive)
-                                        <span class="text-green-600 font-semibold">
-                                            <i class="fas fa-check-circle"></i>
-                                        </span>
-                                    @else
-                                        <span class="text-red-600 font-semibold">
-                                            <i class="fas fa-times-circle"></i>
-                                        </span>
-                                    @endif
-                                </td>  
+            <select wire:model="paymentMethodFilter" class="border border-gray-300 rounded px-3 py-2 w-full mb-4">
+        <option value="">-- Filter by Payment Method --</option>
+        <option value="Cash">Cash</option>
+        <option value="GCash">GCash</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+        <option value="Cheque">Cheque</option>
+    </select>
+
+    <div class="overflow-x-auto-1 bg-white shadow-md rounded-lg relative">
+        <div class="overflow-y-auto max-h-[500px]">
+            <table class="min-w-full border-collapse">
+                <thead class="sticky top-0 bg-gray-100 z-10">
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2">Payment ID</th>
+                        <th class="px-4 py-2">Order ID</th>
+                        <th class="px-4 py-2">SubCategory Name</th>
+                        <th class="px-4 py-2">JO Number</th>
+                        <th class="px-4 py-2">Name</th>
+                        <th class="px-4 py-2">Address</th>
+                        <th class="px-4 py-2">Amount</th>
+                        <th class="px-4 py-2">Payment</th>
+                        <th class="px-4 py-2">Balance</th>
+                        <th class="px-4 py-2">Total</th>
+                        <th class="px-4 py-2">Payment Method</th>
+                        @if ($paymentMethodFilter === 'Cash')
+                            <th class="px-4 py-2">Receipt No.</th>
+                            <th class="px-4 py-2">Received By</th>
+                        @elseif ($paymentMethodFilter === 'GCash')
+                            <th class="px-4 py-2">GCash No.</th>
+                            <th class="px-4 py-2">GCash Account</th>
+                        @elseif ($paymentMethodFilter === 'Bank Transfer')
+                            <th class="px-4 py-2">Bank Name</th>
+                        @elseif ($paymentMethodFilter === 'Cheque')
+                            <th class="px-4 py-2">Cheque No.</th>
+                            <th class="px-4 py-2">Cheque Date</th>
+                            <th class="px-4 py-2">Bank Name</th>
+                        @endif
+                        <th class="px-4 py-2">Reference No.</th>
+                        <th class="px-4 py-2">Payment Date</th>
+                        <th class="px-4 py-2">Payment Status</th>
+                        <th class="px-4 py-2">Remarks</th>
+                        <th class="px-4 py-2">Service By</th>
+                        <th class="px-4 py-2">Activation</th>
+                        <th class="px-4 py-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($records as $record)
+                        @if ($paymentMethodFilter === '' || $record->payment_method === $paymentMethodFilter)
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ $record->payment_id }}</td>
+                            <td class="px-4 py-2">{{ $record->order_id }}</td>
+                            <td class="px-4 py-2">{{ $SubCategory[$record->subcategory_id] ?? 'Not Available' }}</td>
+                            <td class="px-4 py-2">{{ $record->jo_number }}</td>
+                            <td class="px-4 py-2">{{ $record->name }}</td>
+                            <td class="px-4 py-2">{{ $record->address }}</td>
+                            <td class="px-4 py-2">{{ $record->amount }}</td>
+                            <td class="px-4 py-2">{{ $record->payment }}</td>
+                            <td class="px-4 py-2">{{ $record->balance }}</td>
+                            <td class="px-4 py-2">{{ $record->total }}</td>
+                            <td class="px-4 py-2">{{ $record->payment_method }}</td>
+
+                            @if ($paymentMethodFilter === 'Cash')
+                                <td class="px-4 py-2">{{ $record->reference_number }}</td>
+                                <td class="px-4 py-2">{{ $record->cash_received_by }}</td>
+                            @elseif ($paymentMethodFilter === 'GCash')
+                                <td class="px-4 py-2">{{ $record->gcash_number }}</td>
+                                <td class="px-4 py-2">{{ $record->gcash_account_name }}</td>
+                            @elseif ($paymentMethodFilter === 'Bank Transfer')
+                                <td class="px-4 py-2">{{ $record->bank_name }}</td>
+                            @elseif ($paymentMethodFilter === 'Cheque')
+                                <td class="px-4 py-2">{{ $record->cheque_number }}</td>
+                                <td class="px-4 py-2">{{ $record->cheque_date }}</td>
+                                <td class="px-4 py-2">{{ $record->bank_name }}</td>
+                            @endif
+
+                            <td class="px-4 py-2">{{ $record->reference_number }}</td>
+                            <td class="px-4 py-2">{{ \Carbon\Carbon::parse($record->payment_date)->format('Y-m-d') }}</td>
+                            <td class="px-4 py-2">{{ $record->payment_status }}</td>
+                            <td class="px-4 py-2">{{ $record->remarks }}</td>
+                            <td class="px-4 py-2">{{ $record->service_by }}</td>
+                            <td class="px-4 py-2">
+                                @if ($record->isActive)
+                                    <span class="text-green-600 font-semibold">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                @else
+                                    <span class="text-red-600 font-semibold">
+                                        <i class="fas fa-times-circle"></i>
+                                    </span>
+                                @endif
+                            </td>
                         <td class="px-4 py-2">
                             <div class="button-column">
                                 <!-- Edit Button -->
@@ -83,6 +111,9 @@
                                     class="bg-blue-500 text-white px-3 py-1 rounded-1">
                                     <i class="fas fa-solid fa-pen-to-square"></i></button>
 
+                                <button wire:click="showThread({{ $record->id }})"
+                                    class="bg-blue-500-1 text-white px-3 py-1 rounded-6">
+                                    <i class="fa-solid fa-receipt"></i></button>
                                         <!-- Delete Button
                                         <button wire:click="openChangePasswordModal({{ $record->id }})"
                                             class="bg-red-500 text-white px-3 py-1 rounded-2">
@@ -90,6 +121,7 @@
                                     </div>
                                 </td>    
                             </tr>
+                            @endif
                         @empty
                             <tr>
                                 <td colspan="20" class="text-center">No records found.</td>
@@ -146,7 +178,7 @@
                                 </div> --}}
 
 
-                            {{-- Last Name --}}
+                             <!-- Last Name
                             <div class="form-group">
                                 <label style="color:black;">Quantity</label>
                                 <input type="text" wire:model="editOrders.qty" class="form-control" required>
@@ -156,7 +188,7 @@
                             <div class="form-group">
                                 <label style="color:black;">Price</label>
                                 <input type="text" wire:model="editOrders.price" class="form-control" required> 
-                            </div>
+                            </div> -->
 
                             {{-- Middle Name --}}
                             <div class="form-group">
@@ -244,6 +276,70 @@
             </div>
         </div>
     @endif
+
+    @if($showPaymentThread)
+<div class="cart-overlay">
+    <div class="cart-container-1" @click.stop>
+        {{-- Header --}}
+        <div class="cart-items-scroll-2">
+            <div class="cart-header">
+                <h1>PAYMENT THREAD</h1>
+            </div>
+
+            {{-- Scrollable Payment Records --}}
+            <div class="cart-items-scroll-1">
+                @forelse($showThreadPayment as $index => $group)
+                    {{-- Header for this group --}}
+                    <div class="color px-4 py-2 border-b border-gray-300 bg-gray-100 font-semibold">
+                        {{ $group['items'][0]['label'] ?? '' }} - {{ \Carbon\Carbon::parse($group['date'])->format('M d, Y') }}
+                    </div>
+
+                    @foreach ($group['items'] as $payment)
+                        <div class="cart-item">
+                            <button wire:click="$set('showPaymentThread', false)" class="cart-close">×</button>
+
+                            <div class="cart-left">
+                                <div>
+                                    <div class="item-title font-semibold">
+                                        {{ $payment['label'] }} — {{ $payment['name'] }}
+                                    </div>
+
+                                    <div class="text-xs text-gray-500 italic">{{ $payment['subcategory_name'] }}</div>
+                                     <div class="text-xs text-gray-500 italic">{{ $payment['payment_method'] ?? '' }}</div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ \Carbon\Carbon::parse($payment['payment_date'])->format('M d, Y') }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cart-right text-right text-sm">
+                                <div class="blue">Total: ₱{{ number_format($payment['total'], 2) }}</div>
+                                <div class="green">Paid: ₱{{ number_format($payment['payment'], 2) }}</div>
+                                <div class="red">Balance: ₱{{ number_format($payment['balance'], 2) }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+                @empty
+                    <p class="cart-empty">No payment records yet.</p>
+                @endforelse
+            </div>
+
+            {{-- Order ID Summary --}}
+            <div class="color cart-summary mt-4 px-4 py-2 border-t border-gray-300 bg-gray-100 text-sm font-semibold">
+                <div class="flex justify-between">
+                    <span>Order ID:</span>
+                    <span>{{ $threadOrderId ?? 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+
+
+
+
 
         
 

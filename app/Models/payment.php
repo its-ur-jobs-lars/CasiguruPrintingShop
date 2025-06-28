@@ -31,6 +31,12 @@ class payment extends Model
         'isActive',
         'service_by',
         'updated_by',
+         'cash_received_by',
+        'gcash_number',
+        'gcash_account_name',
+        'bank_name',
+        'cheque_number',
+        'cheque_date',
     ];
 
     protected $casts = [

@@ -3,9 +3,6 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Category;
-use App\Models\SubCategory;
-use App\Models\Pricelist;
 use App\Models\Order;
 use App\Models\payment;
 use Illuminate\Support\Facades\Auth;
@@ -13,39 +10,52 @@ use Carbon\Carbon;
 
 class PaymentAdd extends Component
 {
-    public $SubCategoryOrderid = [];
     public $Order = [];
     public $isOpen = false;
     public $data = [];
     public $step = 1;
     public $order_id;
-    public $availableSubcategories = [];
-    public $selected_subcategory_id;
-    public $filteredSubCategories = [];
     public $selectedpayment;
-    public $order;
-    public $payment;
 
     public function mount()
     {
-      $this->Order = Order::where('isActive', 1)
-        ->whereIn('order_id', function ($query) {
-            $query->select('order_id')
-                ->from('orders')
-                ->groupBy('order_id')
-                ->havingRaw('COUNT(*) > (
-                    SELECT COUNT(*) FROM payments 
-                    WHERE payments.order_id = orders.order_id
-                )');
-        })
-        ->get();
+
+        $this->data = [
+            'order_id' => '',
+            'name' => '',
+            'contact_no' => '',
+            'address' => '',
+            'jo_number' => '',
+            'total' => 0,
+            'balance' => 0,
+            'amount' => 0,
+            'status' => '',
+            'qty' => 0,
+            'payment' => 0,
+            'payment_method' => '',
+            'reference_number' => '',
+            'payment_date' => now()->format('Y-m-d\TH:i'),
+            'payment_status' => '',
+            'remarks' => '',
+        ];
+        $orders = Order::where('isActive', 1)->get();
+
+        $ordersWithRemainingBalance = $orders->filter(function ($order) {
+            $totalPaid = payment::where('order_id', $order->order_id)
+                ->where('subcategory_id', $order->subcategory_id)
+                ->sum('payment');
+
+            return $order->total > $totalPaid;
+        });
+
+        $this->Order = $ordersWithRemainingBalance->values();
     }
+
+    
 
     public function render()
     {
         return view('livewire.payment-add');
-
-        
     }
 
     public function openModal()
@@ -60,61 +70,61 @@ class PaymentAdd extends Component
         $this->step = 1;
     }
 
-    // public function updatedOrderId($value)
-    // {
-    //     // Get subcategories from the order
-    //     $subcatIds = Order::where('order_id', $value)->pluck('subcategory_id')->unique();
+private function getLatestBalance($order_id, $subcategory_id, $order_total)
+{
+    $lastPayment = payment::where('order_id', $order_id)
+        ->where('subcategory_id', $subcategory_id)
+        ->orderByDesc('payment_date')
+        ->orderByDesc('id')
+        ->first();
 
-    //     // Get already paid subcategory_ids for this order
-    //     $paidSubcategoryIds = payment::where('order_id', $value)->pluck('subcategory_id')->toArray();
+    if ($lastPayment) {
+        return $lastPayment->balance;
+    }
+    return $order_total;
+}
 
-    //     // Filter subcategories that haven't been paid yet
-    //     $this->filteredSubCategories = SubCategory::whereIn('subcategory_id', $subcatIds)
-    //         ->whereNotIn('subcategory_id', $paidSubcategoryIds)
-    //         ->get();
+    public function updatedSelectedpayment($value)
+{
+    // If Downpayment is selected, clear the default payment so the user can enter it
+    if ($value === 'Downpayment') {
+        $this->data['payment'] = '';
+    }
 
-    //     $this->selected_subcategory_id = null;
-    // }
+    // If Full Payment is selected, autofill the total as payment
+    if ($value === 'Full Payment') {
+        $this->data['payment'] = $this->data['total'] ?? 0;
+    }
 
-    // public function updatedSelectedSubcategoryId($value)
-    // {
-    //     $order = Order::where('order_id', $this->order_id)
-    //         ->where('subcategory_id', $value)
-    //         ->first();
+    // Recalculate balance immediately
+    $this->recalculateBalance();
+}
 
-    //     if ($order) {
-    //         $this->order = $order; // Assign for later use
-    //         $this->data = [
-    //             'subcategory_id' => $value,
-    //             'date' => $order->deadline,
-    //             'name' => $order->name,
-    //             'contact_no' => $order->contact_no,
-    //             'address' => $order->address,
-    //             'jo_number' => $order->jo_number,
-    //             'total' => $order->total,
-    //             'balance' => $order->balance,
-    //             'amount' => $order->amount,
-    //             'status' => $order->status,
-    //             'qty' => $order->qty,
-    //             'price' => $order->price,
-    //         ];
-    //     }
-    // }
 
 public function updatedOrderId($value)
 {
-    // Get all orders with this order_id
     $orders = Order::where('order_id', $value)->get();
 
     if ($orders->isNotEmpty()) {
-        // Sum totals and balances
-        $total = $orders->sum('total');
-        $balance = $orders->sum('balance');
-        $amount = $orders->sum('amount');
-        $qty = $orders->sum('qty');
-
-        // Use the first order for customer info
         $firstOrder = $orders->first();
+
+        $hasPreviousPayment = payment::where('order_id', $value)->exists();
+        $grandTotal = $firstOrder->total;
+        $payment = $grandTotal;
+
+        if ($hasPreviousPayment) {
+            $latestPayment = payment::where('order_id', $value)
+                ->latest('payment_date')
+                ->latest('id')
+                ->first();
+
+            $grandTotal = $latestPayment->balance ?? $grandTotal;
+            $payment = 0; // temporarily 0, will be replaced if user selects "Full Payment"
+        }
+
+        $totalPaid = payment::where('order_id', $value)->sum('payment');
+        $remainingBalance = max($grandTotal - $totalPaid, 0);
+        $amount = $orders->sum('amount');
 
         $this->data = [
             'order_id' => $value,
@@ -123,43 +133,25 @@ public function updatedOrderId($value)
             'contact_no' => $firstOrder->contact_no,
             'address' => $firstOrder->address,
             'jo_number' => $firstOrder->jo_number,
-            'total' => $total,
-            'balance' => $balance,
+            'total' => $grandTotal,
+            'balance' => $remainingBalance,
             'amount' => $amount,
             'status' => $firstOrder->status,
-            'qty' => $qty,
-            'price' => null, // Not meaningful for multiple
+            'qty' => $orders->sum('qty'),
+            'payment' => $payment,
+            'payment_status' => $remainingBalance == 0 ? 'Paid' : 'Partial',
         ];
     }
 }
 
+
+
     public function updated($property)
     {
-        if (in_array($property, ['selectedpayment', 'data.total', 'data.payment'])) {
+        if (in_array($property, ['data.total', 'data.payment'])) {
             $this->recalculateBalance();
         }
     }
-
-   private function recalculateBalance()
-{
-    $total = floatval($this->data['total'] ?? 0);
-    $payment = floatval($this->data['payment'] ?? 0);
-
-    if ($this->selectedpayment === 'Full Payment') {
-        $this->data['payment'] = $total;
-        $this->data['balance'] = 0;
-        $this->data['payment_status'] = 'Paid';
-    } elseif ($this->selectedpayment === 'Downpayment') {
-        // Respect the payment entered
-        $this->data['balance'] = $total - $payment;
-        $this->data['payment_status'] = 'Partial';
-    } elseif ($this->selectedpayment === 'Unpaid') {
-        $this->data['payment'] = 0;
-        $this->data['balance'] = $total;
-        $this->data['payment_status'] = 'Unpaid';
-    }
-}
-
 
     public function updatedData($value, $key)
     {
@@ -168,126 +160,90 @@ public function updatedOrderId($value)
         }
     }
 
+    private function recalculateBalance()
+    {
+        $total = floatval($this->data['total'] ?? 0);
+        $payment = floatval($this->data['payment'] ?? 0);
+        $this->data['balance'] = max(round($total - $payment, 2), 0);
+
+        $this->data['payment_status'] = $this->data['balance'] == 0 ? 'Paid' : 'Partial';
+    }
+
     public function nextStep() { $this->step = 2; }
     public function previousStep() { $this->step = 1; }
     public function nextStep1() { $this->step = 3; }
     public function nextStep2() { $this->step = 3; }
     public function previousStep1() { $this->step = 2; }
 
-    // public function save()
-    // {
-    //     try {
-    //         $this->validate([
-    //             'data.subcategory_id' => 'required',
-    //             'data.name' => 'required',
-    //             'data.address' => 'nullable|string|max:255',
-    //             'data.amount' => 'required|numeric',
-    //             'data.total' => 'required|numeric',
-    //             'data.balance' => 'required|numeric',
-    //             'data.jo_number' => 'nullable|string|max:255',
-    //             'data.payment' => 'required|numeric|min:0',
-    //             'data.payment_method' => 'nullable|string|max:255',
-    //             'data.reference_number' => 'nullable|string|max:255',
-    //             'data.payment_date' => 'nullable|date_format:Y-m-d\TH:i',
-    //             'data.status' => 'nullable|string|max:50',
-    //             'data.payment_status' => 'nullable|string|max:50',
-    //             'data.remarks' => 'nullable|string|max:500',
-    //         ]);
-
-    //         $count = payment::where('order_id', $this->order_id)->count() + 1;
-    //         $payment_id = 'PYMT-' . $this->order_id . '-' . str_pad($count, 2, '0', STR_PAD_LEFT);
-    //         $paymentDate = isset($this->data['payment_date'])
-    //         ? Carbon::parse($this->data['payment_date'])->format('Y-m-d H:i:s')
-    //         : now()->format('Y-m-d H:i:s');
-
-    //         payment::create([
-    //             'payment_id' => $payment_id,
-    //             'order_id' => $this->order_id,
-    //             'subcategory_id' => $this->data['subcategory_id'],
-    //             'jo_number' => $this->data['jo_number'] ?? null,
-    //             'name' => $this->data['name'],
-    //             'address' => $this->data['address'] ?? null,
-    //             'amount' => $this->data['amount'],
-    //             'total' => $this->data['total'],
-    //             'balance' => $this->data['balance'],
-    //             'payment' => $this->data['payment'],
-    //             'payment_method' => $this->data['payment_method'] ?? null,
-    //             'reference_number' => $this->data['reference_number'] ?? null,
-    //             'payment_date' => $paymentDate,
-    //             'payment_status' => $this->data['payment_status'] ?? null,
-    //             'remarks' => $this->data['remarks'] ?? '',
-    //             'status' => $this->data['status'] ?? '',
-    //             'isActive' => true,
-    //             'service_by' => Auth::user()->username,
-    //         ]);
-
-    //         $order = Order::where('order_id', $this->order_id)
-    //             ->where('subcategory_id', $this->data['subcategory_id'])
-    //             ->first();
-
-    //         if ($order) {
-    //             $order->update([
-    //                 'status' => $this->data['status'] ?? $order->status,
-    //                 'remarks' => $this->data['remarks'] ?? $order->remarks,
-    //             ]);
-    //         }
-
-    //         $this->emit('refreshComponent');
-    //         $this->reset(['data', 'order_id', 'selected_subcategory_id']);
-    //         $this->isOpen = false;
-    //         $this->step = 1;
-
-    //         session()->flash('messageInsert', 'Order is successfully paid!');
-    //     } catch (\Exception $e) {
-    //         session()->flash('errorInsert', 'Failed to save order: ' . $e->getMessage());
-    //     }
-    // }
-
-public function save()
+ public function save()
 {
     try {
-        $this->validate([
+        $rules = [
             'data.order_id' => 'required',
             'data.name' => 'required',
             'data.address' => 'nullable|string|max:255',
             'data.amount' => 'required|numeric',
             'data.total' => 'required|numeric',
-            'data.balance' => 'required|numeric',
-            'data.jo_number' => 'nullable|string|max:255',
             'data.payment' => 'required|numeric|min:0',
-            'data.payment_method' => 'nullable|string|max:255',
-            'data.reference_number' => 'nullable|string|max:255',
-            'data.payment_date' => 'nullable|date_format:Y-m-d\TH:i',
+            'data.payment_method' => 'required|string|max:255',
+            'data.payment_date' => 'nullable|date_format:Y-m-d\\TH:i',
             'data.status' => 'nullable|string|max:50',
             'data.payment_status' => 'nullable|string|max:50',
             'data.remarks' => 'nullable|string|max:500',
-        ]);
+        ];
 
-        $orders = Order::where('order_id', $this->order_id)->get();
+        // Extra fields based on payment method
+        if ($this->data['payment_method'] === 'GCash') {
+            $rules['data.gcash_number'] = 'required|string|max:20';
+            $rules['data.gcash_account_name'] = 'required|string|max:100';
+            $rules['data.reference_number'] = 'required|string|max:100';
+        } elseif ($this->data['payment_method'] === 'Cash') {
+            $rules['data.reference_number'] = 'required|string|max:100'; // optional or required based on your logic
+        } elseif ($this->data['payment_method'] === 'Bank Transfer') {
+            $rules['data.bank_name'] = 'required|string|max:100';
+            $rules['data.reference_number'] = 'required|string|max:100';
+        } elseif ($this->data['payment_method'] === 'Cheque') {
+            $rules['data.cheque_number'] = 'required|string|max:50';
+            $rules['data.cheque_date'] = 'required|date';
+            $rules['data.bank_name'] = 'required|string|max:100';
+        }
+
+        $this->validate($rules);
 
         $paymentDate = isset($this->data['payment_date'])
             ? Carbon::parse($this->data['payment_date'])->format('Y-m-d H:i:s')
             : now()->format('Y-m-d H:i:s');
 
+        $payment = floatval($this->data['payment'] ?? 0);
+
+        $orders = Order::where('order_id', $this->order_id)->get();
+
         foreach ($orders as $order) {
+            $subcategoryId = $order->subcategory_id;
+
+            $currentTotal = $this->getLatestBalance($this->order_id, $subcategoryId, $order->total);
+            $paymentAmount = min($currentTotal, $payment);
+            $newBalance = max($currentTotal - $paymentAmount, 0);
+
             $count = payment::where('order_id', $this->order_id)
-                ->where('subcategory_id', $order->subcategory_id)
+                ->where('subcategory_id', $subcategoryId)
                 ->count() + 1;
 
-            $payment_id = 'PYMT-' . $this->order_id . '-' . $order->subcategory_id . '-' . str_pad($count, 2, '0', STR_PAD_LEFT);
+            $payment_id = 'PYMT-' . $this->order_id . '-' . $subcategoryId . '-' . str_pad($count, 2, '0', STR_PAD_LEFT);
 
-            payment::create([
+            // Base fields
+            $paymentData = [
                 'payment_id' => $payment_id,
                 'order_id' => $this->order_id,
-                'subcategory_id' => $order->subcategory_id,
+                'subcategory_id' => $subcategoryId,
                 'jo_number' => $order->jo_number,
                 'name' => $order->name,
                 'address' => $order->address,
                 'amount' => $order->amount,
-                'total' => $order->total,
-                'balance' => $order->balance ?? 0,
-                'payment' => $this->data['payment'], // You may want to split payment per product if needed
-                'payment_method' => $this->data['payment_method'] ?? null,
+                'total' => $currentTotal,
+                'balance' => $newBalance,
+                'payment' => $paymentAmount,
+                'payment_method' => $this->data['payment_method'],
                 'reference_number' => $this->data['reference_number'] ?? null,
                 'payment_date' => $paymentDate,
                 'payment_status' => $this->data['payment_status'] ?? null,
@@ -295,10 +251,34 @@ public function save()
                 'status' => $this->data['status'] ?? '',
                 'isActive' => true,
                 'service_by' => Auth::user()->username,
-            ]);
+            ];
+
+            // Method-specific fields
+            switch ($this->data['payment_method']) {
+                case 'GCash':
+                    $paymentData['gcash_number'] = $this->data['gcash_number'] ?? null;
+                    $paymentData['gcash_account_name'] = $this->data['gcash_account_name'] ?? null;
+                    break;
+
+                case 'Bank Transfer':
+                    $paymentData['bank_name'] = $this->data['bank_name'] ?? null;
+                    break;
+
+                case 'Cheque':
+                    $paymentData['cheque_number'] = $this->data['cheque_number'] ?? null;
+                    $paymentData['cheque_date'] = $this->data['cheque_date'] ?? null;
+                    $paymentData['bank_name'] = $this->data['bank_name'] ?? null;
+                    break;
+
+                case 'Cash':
+                    // Optional: Include `cash_received_by` if you want
+                    $paymentData['cash_received_by'] = Auth::user()->username;
+                    break;
+            }
+
+            payment::create($paymentData);
         }
 
-        // Update all orders with this order_id
         Order::where('order_id', $this->order_id)->update([
             'status' => $this->data['status'] ?? 'Paid',
             'remarks' => $this->data['remarks'] ?? '',

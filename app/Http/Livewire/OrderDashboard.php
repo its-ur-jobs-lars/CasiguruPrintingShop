@@ -126,6 +126,7 @@ public function addToCart($id)
     {
         $this->showModal = true;
         $this->showCart = false;
+        $this->showOrder = false;
         $this->recalculateTotal();
     }
 
@@ -148,6 +149,13 @@ public function addToCart($id)
 
             $this->recalculateTotal();
 
+                        $grandTotal = collect($this->cart)->sum(function ($item) {
+                return ($item['qty'] * $item['price']) + (
+                    ($item['layout_option'] ?? '') === 'with_fee' ? ($item['layout_fee'] ?? 0) : 0
+                );
+            });
+
+
             foreach ($this->cart as $item) {
                 Order::create([
                     'order_id' => $order_id,
@@ -159,7 +167,8 @@ public function addToCart($id)
                     'qty' => $item['qty'],
                     'price' => $item['price'],
                     'amount' => $item['qty'] * $item['price'],
-                    'total' => $this->data['total'], // Only saving total
+                    'layout_fee' => $item['layout_fee'] ?? 0,
+                     'total' => $grandTotal, //  Save the same grand total on all rows
                     'jo_number' => $nextJoNumber,
                     'deadline' => $this->data['deadline'] ?? null,
                     'status' => $this->data['status'],
@@ -171,6 +180,7 @@ public function addToCart($id)
             DB::commit();
             $this->reset(['cart', 'data']);
             $this->showModal = false;
+            $this->showOrder = true;
             session()->flash('messageInsert', 'Order successfully created!');
         } catch (\Exception $e) {
             DB::rollBack();

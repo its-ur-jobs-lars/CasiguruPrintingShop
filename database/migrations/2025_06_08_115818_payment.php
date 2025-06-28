@@ -30,12 +30,26 @@ class Payment extends Migration
             $table->decimal('payment', 10, 2)->default(0.00); // Actual payment amount
             $table->decimal('balance', 10, 2)->default(0.00); // To be recalculated after payment
             $table->decimal('total', 10, 2)->default(0.00); // Set based on the order or receipt
+            // Payment info
+            $table->string('payment_method')->nullable();    // Cash, GCash, Bank Transfer, Cheque
+            $table->string('reference_number')->nullable();  // GCash ref, Bank ref, OR no.
 
-            // Payment details
-            $table->string('payment_method')->nullable();    // e.g., Cash, Bank Transfer
-            $table->string('reference_number')->nullable();  // Transaction or check #
             $table->dateTime('payment_date')->nullable();
-            $table->string('payment_status')->nullable();    // e.g., Paid, Partial, Unpaid
+            $table->string('payment_status')->nullable();
+
+            // Cash-specific
+            $table->string('cash_received_by')->nullable();
+
+            // GCash-specific
+            $table->string('gcash_number')->nullable();
+            $table->string('gcash_account_name')->nullable();
+
+            // Bank Transfer-specific
+            $table->string('bank_name')->nullable();
+
+            // Cheque-specific
+            $table->string('cheque_number')->nullable();
+            $table->date('cheque_date')->nullable();
 
             $table->text('remarks')->nullable();
 

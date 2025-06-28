@@ -22,6 +22,7 @@ class Order extends Model
         'qty',
         'price',
         'amount',
+        'layout_fee', // Added layout fee
         'total',
         'jo_number',
         'deadline',
@@ -35,6 +36,11 @@ class Order extends Model
   public function Payment()
 {
     return $this->hasOne(payment::class, 'order_id', 'order_id');
+}
+
+public function subcategory()
+{
+    return $this->belongsTo(SubCategory::class, 'subcategory_id', 'subcategory_id');
 }
 
 

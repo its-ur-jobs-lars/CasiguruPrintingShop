@@ -433,8 +433,8 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   @livewire('payment-add')
-                                   @livewire('payment-table')
+                                <livewire:payment-add />
+                                <livewire:payment-table />
                             </div>
                         </div>
                     </div>

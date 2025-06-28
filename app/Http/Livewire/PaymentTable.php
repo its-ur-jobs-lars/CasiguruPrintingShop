@@ -12,6 +12,7 @@ use App\Models\Pricelist;
 use App\Models\Order;
 use App\Models\payment;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PaymentTable extends Component implements HasTable
 {
@@ -33,6 +34,7 @@ class PaymentTable extends Component implements HasTable
     public $filterActivation = '';
     public $Category = [];
     public $SubCategory = [];
+    public $paymentMethodFilter = '';
 
     public $editOrders = [
         'id' => null,
@@ -141,8 +143,6 @@ class PaymentTable extends Component implements HasTable
     {
         $this->validate(
             [
-            'editOrders.qty' => 'required|numeric|min:1',
-            'editOrders.price' => 'required|numeric',
             'editOrders.amount' => 'required|numeric',
             'editOrders.payment' => 'required|numeric|min:0',
             'editOrders.balance' => 'required|numeric',
@@ -158,8 +158,6 @@ class PaymentTable extends Component implements HasTable
 
         if ($order) {
             $order->update([
-                'qty' => $this->editOrders['qty'],
-                'price' => $this->editOrders['price'],
                 'amount' => $this->editOrders['amount'],
                 'payment' => $this->editOrders['payment'],
                 'total' => $this->editOrders['total'],
@@ -197,6 +195,9 @@ class PaymentTable extends Component implements HasTable
     public $date_from;
     public $date_to;
     
+    public $showThreadPayment = [];
+    public $showPaymentThread = false;
+    public $threadOrderId;
 
     public function edit($id)
     {
@@ -236,18 +237,115 @@ class PaymentTable extends Component implements HasTable
         return payment::where('isActive', 1);
     }
 
-    public function getFilteredRecords()
-    {
-        return payment::query()
-            ->when($this->filterActivation !== '', fn($query) => $query->where('isActive', $this->filterActivation))
-            ->when($this->search !== '', function ($query) {
-                return $query->where(function ($q) {
-                    $q->where('order_id', 'like', "%{$this->search}%")
-                      ->orwhere('name', 'like', "%{$this->search}%")
-                       ->orwhere('payment_id', 'like', "%{$this->search}%");
-                });
-            })->get();
+
+public function showThread($id)
+{
+    $payment = payment::find($id);
+
+    if (!$payment) {
+        $this->showThreadPayment = [];
+        $this->showPaymentThread = false;
+        $this->threadOrderId = null;
+        return;
     }
+
+    $order_id = $payment->order_id;
+
+    // Get all payments for the same order
+    $payments = payment::where('order_id', $order_id)
+        ->orderBy('payment_date', 'asc')
+        ->orderBy('id', 'asc')
+        ->get();
+
+    // Group by exact payment date for display grouping
+    $groupedPayments = $payments->groupBy(function ($item) {
+        return Carbon::parse($item->payment_date)->format('Y-m-d H:i:s');
+    });
+
+    $result = [];
+    $cumulativePaid = [];
+
+    // Track payment count per subcategory (or per order if you want)
+    $paymentCounters = [];
+
+    foreach ($groupedPayments as $date => $group) {
+        $paymentGroup = [];
+
+        foreach ($group as $pay) {
+            $order = Order::where('order_id', $pay->order_id)
+                ->where('subcategory_id', $pay->subcategory_id)
+                ->with('subcategory')
+                ->first();
+
+            $subcategoryId = $pay->subcategory_id;
+            $orderTotal = $order?->total ?? 0;
+
+            // Increment payment count for subcategory under this order
+            $paymentCounters[$subcategoryId] = ($paymentCounters[$subcategoryId] ?? 0) + 1;
+            $paymentLabel = 'Payment ' . $paymentCounters[$subcategoryId];
+
+            // Accumulate payment total per subcategory
+            $cumulativePaid[$subcategoryId] = ($cumulativePaid[$subcategoryId] ?? 0) + $pay->payment;
+
+            // Calculate balance
+            $balance = max($orderTotal - $cumulativePaid[$subcategoryId], 0);
+
+            $paymentGroup[] = [
+                'label' => $paymentLabel,
+                'name' => $pay->name,
+                'payment' => $pay->payment,
+                'balance' => $balance,
+                'total' => $orderTotal,
+                'payment_date' => $pay->payment_date,
+                'order_id' => $pay->order_id,
+                'subcategory_name' => $order?->subcategory?->subcategory_name ?? 'No Subcategory',
+                 'payment_method' => $pay->payment_method ?? '',
+            ];
+        }
+
+        $result[] = [
+            'date' => $date,
+            'items' => $paymentGroup,
+        ];
+    }
+
+    $this->showThreadPayment = $result;
+    $this->showPaymentThread = true;
+    $this->threadOrderId = $order_id;
+
+}
+
+
+    public function getFilteredRecords()
+{
+    return payment::query()
+        ->when($this->filterActivation !== '', fn($query) =>
+            $query->where('isActive', $this->filterActivation)
+        )
+
+        ->when($this->search !== '', function ($query) {
+            $query->where(function ($q) {
+                $q->where('order_id', 'like', "%{$this->search}%")
+                    ->orWhere('name', 'like', "%{$this->search}%")
+                    ->orWhere('payment_id', 'like', "%{$this->search}%");
+            });
+        })
+
+        ->when($this->paymentMethodFilter !== '', fn($query) =>
+            $query->where('payment_method', $this->paymentMethodFilter)
+        )
+
+        ->when($this->date_from, fn($query) =>
+            $query->whereDate('payment_date', '>=', $this->date_from)
+        )
+
+        ->when($this->date_to, fn($query) =>
+            $query->whereDate('payment_date', '<=', $this->date_to)
+        )
+
+        ->get();
+}
+
 
     public function getRowCountProperty()
     {
@@ -282,6 +380,12 @@ class PaymentTable extends Component implements HasTable
                        ->orwhere('name', 'like', "%{$this->search}%");
             });
         }
+
+        
+    // Apply payment method filter
+    if ($this->paymentMethodFilter !== '') {
+        $query->where('payment_method', $this->paymentMethodFilter);
+    }
 
         return view('livewire.payment-table', [
             'records' => $query->get(),

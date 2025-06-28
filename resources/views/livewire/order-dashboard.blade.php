@@ -91,7 +91,29 @@
                             <button wire:click="incrementQty({{ $id }})">+</button>
                         </div>
                     </div>
-                </div>
+                   
+                     </div>
+                       <div class="mt-1">
+                        <label class="text-xs block text-gray-500">Layout Fee</label>
+                       <select
+                            wire:model.lazy="cart.{{ $id }}.layout_option"
+                            class="form-select w-full text-sm text-gray-700">
+                            <option value="">-- Select --</option>
+                            <option value="with_fee">With Layout Fee</option>
+                            <option value="no_fee">No Layout Fee</option>
+                        </select>
+
+                        @if(($cart[$id]['layout_option'] ?? '') === 'with_fee')
+                            <input
+                                type="number"
+                                wire:model.lazy="cart.{{ $id }}.layout_fee"
+                                placeholder="₱0.00"
+                                class="form-input mt-1 w-24 text-right"
+                                min="0"
+                            />
+                        @endif
+                    </div>
+     
             @empty
                 <p class="cart-empty">Your cart is empty.</p>
             @endforelse
@@ -101,13 +123,25 @@
         <div class="cart-summary">
             <div class="summary-row">
                 <span>Subtotal</span>
-                <span>₱{{ number_format(collect($cart)->sum(fn($c) => $c['price'] * $c['qty']), 2) }}</span>
+                <span>
+                    ₱{{ number_format(collect($cart)->sum(fn($c) => ($c['price'] * $c['qty'])), 2) }}
+                </span>
             </div>
-            <div class="summary-row total">
+
+            <div class="summary-row">
+                <span>Layout Fee</span>
+                <span>
+                    ₱{{ number_format(collect($cart)->sum(fn($c) => $c['layout_fee'] ?? 0), 2) }}
+                </span>
+            </div>
+
+            <div class="summary-row total font-bold">
                 <span>Total</span>
-                <span>₱{{ number_format(collect($cart)->sum(fn($c) => $c['price'] * $c['qty']), 2) }}</span>
+                <span>
+                    ₱{{ number_format(collect($cart)->sum(fn($c) => ($c['price'] * $c['qty']) + ($c['layout_fee'] ?? 0)), 2) }}
+                </span>
             </div>
-        </div>
+
 
         <button wire:click="openModal" class="checkout-button">
             PROCEED TO CHECKOUT
@@ -162,6 +196,7 @@
                                     <select wire:model.defer="data.status" class="form-control" required>
                                         <option value="">-- Select --</option>
                                         <option value="Pending">Pending</option>
+                                        <option value="Pending">Layouting</option>
                                         <option value="Completed">Completed</option>
                                         <option value="Cancelled">Cancelled</option>
                                         <option value="Printing">Printing</option>

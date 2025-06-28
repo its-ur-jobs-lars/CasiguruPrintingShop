@@ -28,6 +28,7 @@ class Orders extends Migration
             $table->integer('qty');
             $table->decimal('price', 10, 2);
             $table->decimal('amount', 10, 2); // qty × price
+             $table->decimal('layout_fee', 10, 2); // qty × price
 
             // Financial Summary
             $table->decimal('total', 10, 2)->default(0.00);
