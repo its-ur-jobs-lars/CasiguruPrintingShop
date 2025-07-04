@@ -278,7 +278,7 @@ public function changePassword()
   // Fetch records and calculate row count dynamically
   protected function getFilteredRecords()
   {
-      return User::query() // Start with a query builder instance
+      return User::where('isActive', 1) // Start with a query builder instance
           ->when($this->filterActivation !== '', function ($query) {
               return $query->where('isActive', $this->filterActivation); // Apply brand filter
           })

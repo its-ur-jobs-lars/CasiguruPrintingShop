@@ -38,6 +38,7 @@ Route::get('/subcategory', [App\Http\Controllers\PrintingShopContoller::class, '
 Route::get('/services', [App\Http\Controllers\PrintingShopContoller::class, 'Services'])->name('Services');
 Route::get('/inventory', [App\Http\Controllers\PrintingShopContoller::class, 'Inventory'])->name('Inventory');
 Route::get('/reports', [App\Http\Controllers\PrintingShopContoller::class, 'Report'])->name('Report');
+Route::get('/supplier', [App\Http\Controllers\PrintingShopContoller::class, 'Supplier'])->name('Supplier');
 
 Route::get('/payment', [App\Http\Controllers\PrintingShopContoller::class, 'Payment'])->name('Payment');
 Route::get('/sales', [App\Http\Controllers\PrintingShopContoller::class, 'Sales'])->name('Sales');

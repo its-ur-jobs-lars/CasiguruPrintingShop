@@ -118,7 +118,7 @@ class EmployeeLogsTable extends Component implements HasTable
   // Fetch records and calculate row count dynamically
   protected function getFilteredRecords()
   {
-      return EmployeeActivityLogs::query() // Start with a query builder instance
+      return EmployeeActivityLogs::where('isActive', 1) // Start with a query builder instance
           ->when($this->filterAction !== '', function ($query) {
               return $query->where('action', $this->filterAction); // Apply brand filter
           })

@@ -154,7 +154,7 @@
     {{-- Order Modal --}}
     @if($showModal)
         <div class="fixed inset-0 bg-gray-700 bg-opacity-75 flex items-center justify-center z-50">
-            <div class="bg-white rounded shadow p-6 w-1/2">
+            <div class="showModal rounded shadow p-6 w-1/2">
            
         <h4 class="mb-4 text-left">Customer Details</h4>
         <form wire:submit.prevent="save">

@@ -228,7 +228,7 @@ public function edit($id)
   // Fetch records and calculate row count dynamically
   protected function getFilteredRecords()
   {
-      return Pricelist::query() // Start with a query builder instance
+      return Pricelist::where('isActive', 1) // Start with a query builder instance
           ->when($this->filterActivation !== '', function ($query) {
               return $query->where('isActive', $this->filterActivation); // Apply brand filter
           })

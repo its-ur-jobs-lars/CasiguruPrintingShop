@@ -318,7 +318,7 @@ public function showThread($id)
 
     public function getFilteredRecords()
 {
-    return payment::query()
+    return payment::where('isActive', 1)
         ->when($this->filterActivation !== '', fn($query) =>
             $query->where('isActive', $this->filterActivation)
         )

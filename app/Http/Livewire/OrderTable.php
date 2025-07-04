@@ -87,6 +87,15 @@ class OrderTable extends Component implements HasTable
         ];
     }
 
+    private function getLatestPayment($order_id, $subcategory_id)
+{
+    return \App\Models\payment::where('order_id', $order_id)
+        ->where('subcategory_id', $subcategory_id)
+        ->orderByDesc('payment_date')
+        ->orderByDesc('id')
+        ->first();
+}
+
     public function updated($field)
     {
         $category_id = $this->editOrders['category_id'] ?? null;
@@ -251,7 +260,7 @@ class OrderTable extends Component implements HasTable
 
     public function getFilteredRecords()
     {
-        return Order::query()
+        return Order::where('isActive', 1)
             ->when($this->filterActivation !== '', fn($query) => $query->where('isActive', $this->filterActivation))
             ->when($this->search !== '', function ($query) {
                 return $query->where(function ($q) {

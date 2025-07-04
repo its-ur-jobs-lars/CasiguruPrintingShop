@@ -91,6 +91,11 @@ class PrintingShopContoller extends Controller
         return view('reports_Orders');
     }
 
+    public function Supplier()
+    {
+        return view('supplier');
+    }
+
     
 
 
