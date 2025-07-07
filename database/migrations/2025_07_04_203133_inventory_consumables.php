@@ -17,14 +17,14 @@ class InventoryConsumables extends Migration
             $table->id();
             $table->string('inventory_id')->unique();
             $table->string('item_name');
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->unsignedBigInteger('subcategory_id')->nullable();
+            $table->string('category_id')->nullable();
+            $table->string('subcategory_id')->nullable();
             $table->string('unit')->default('pcs');
             $table->integer('quantity')->default(0);
             $table->integer('minimum_stock')->default(0)->nullable();
             $table->decimal('purchase_price', 10, 2)->nullable();
             $table->decimal('selling_price', 10, 2)->nullable();
-            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->string('supplier_id')->nullable();
             $table->date('expiration_date')->nullable();
             $table->text('remarks')->nullable();
             $table->boolean('isActive')->default(true);

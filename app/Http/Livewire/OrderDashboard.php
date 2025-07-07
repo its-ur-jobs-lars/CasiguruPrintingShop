@@ -7,6 +7,7 @@ use App\Models\Pricelist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Inventory; 
 
 class OrderDashboard extends Component
 {
@@ -17,6 +18,7 @@ class OrderDashboard extends Component
     public $items = [];
     public $orderItems = [];
     public $cart = [];
+    public $quantities = [];
 
     public $data = [
         'name' => '',
@@ -40,14 +42,92 @@ class OrderDashboard extends Component
         $this->showCart = true;
     }
 
+//    public function addToCart($id)
+// {
+//     $item = Pricelist::with(['category', 'subcategory'])->find($id);
+//     if (!$item) {
+//         session()->flash('error', 'Item not found.');
+//         return;
+//     }
+
+//     $requestedQty = isset($this->cart[$id]['qty']) ? intval($this->cart[$id]['qty']) : 1;
+
+//     if ($requestedQty < 1) {
+//         session()->flash('error', 'Quantity must be at least 1.');
+//         return;
+//     }
+
+//     // Check inventory for sufficient stock
+//     $inventory = inventory::where('category_id', $item->category_id)
+//         ->where('subcategory_id', $item->subcategory_id)
+//         ->first();
+
+//     if (!$inventory || $inventory->quantity < $requestedQty) {
+//         session()->flash('error', 'Not enough stock available.');
+//         return;
+//     }
+
+//     // Deduct from inventory
+//     $inventory->quantity -= $requestedQty;
+//     $inventory->save();
+
+//     // Add to cart (or update existing entry)
+//     if (isset($this->cart[$id])) {
+//         $this->cart[$id]['qty'] += $requestedQty;
+//         $this->cart[$id]['price'] = $this->getPriceFromPricelist(
+//             $item->category_id,
+//             $item->subcategory_id,
+//             $this->cart[$id]['qty']
+//         );
+//     } else {
+//         $this->cart[$id] = [
+//             'category_id' => $item->category_id,
+//             'subcategory_id' => $item->subcategory_id,
+//             'category_name' => $item->category->category_name ?? 'N/A',
+//             'subcategory_name' => $item->subcategory->subcategory_name ?? 'N/A',
+//             'image' => $item->subcategory->image ?? null,
+//             'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $requestedQty),
+//             'qty' => $requestedQty,
+//         ];
+//     }
+
+//     $this->showCart = true;
+// }
+
+
 public function addToCart($id)
 {
     $item = Pricelist::with(['category', 'subcategory'])->find($id);
-    if (!$item) return;
+    if (!$item) {
+        session()->flash('error', 'Item not found.');
+        return;
+    }
+
+    $requestedQty = intval($this->quantities[$id] ?? 1);
+    if ($requestedQty < 1) {
+        session()->flash('error', 'Quantity must be at least 1.');
+        return;
+    }
+
+    $inventory = Inventory::where('category_id', $item->category_id)
+        ->where('subcategory_id', $item->subcategory_id)
+        ->first();
+
+    if (!$inventory || $inventory->quantity < $requestedQty) {
+        session()->flash('error', 'Not enough stock available.');
+        return;
+    }
+
+    $inventory->quantity -= $requestedQty;
+    $inventory->save();
 
     if (isset($this->cart[$id])) {
-        $this->cart[$id]['qty']++;
-        $this->cart[$id]['price'] = $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $this->cart[$id]['qty']);
+        $this->cart[$id]['qty'] += $requestedQty;
+        $this->cart[$id]['price'] = $this->getPriceFromPricelist(
+            $item->category_id,
+            $item->subcategory_id,
+            $this->cart[$id]['qty']
+        );
     } else {
         $this->cart[$id] = [
             'category_id' => $item->category_id,
@@ -55,48 +135,17 @@ public function addToCart($id)
             'category_name' => $item->category->category_name ?? 'N/A',
             'subcategory_name' => $item->subcategory->subcategory_name ?? 'N/A',
             'image' => $item->subcategory->image ?? null,
-            'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, 1),
-            'qty' => 1,
+            'price' => $this->getPriceFromPricelist($item->category_id, $item->subcategory_id, $requestedQty),
+            'qty' => $requestedQty,
         ];
-          }
+    }
+
+    unset($this->quantities[$id]); // Clear input
     $this->showCart = true;
-    }           
+}
 
 
-    public function decrementQty($id)
-    {
-        if (isset($this->cart[$id]) && $this->cart[$id]['qty'] > 1) {
-            $this->cart[$id]['qty']--;
-            $this->updatePriceBasedOnQty($id);
-        }
-    }
 
-    public function updatedCart($value, $key)
-    {
-        [$id, $field] = explode('.', $key);
-
-        if ($field === 'qty' && isset($this->cart[$id])) {
-            $qty = (int) $value;
-            $item = Pricelist::with(['category', 'subcategory'])->find($id);
-
-            if ($item) {
-                $this->cart[$id]['qty'] = $qty;
-                $this->cart[$id]['price'] = $this->getPriceFromPricelist(
-                    $item->category_id,
-                    $item->subcategory_id,
-                    $qty
-                );
-            }
-        }
-    }
-
-    private function updatePriceBasedOnQty($id)
-    {
-        if (!isset($this->cart[$id])) return;
-
-        $item = $this->cart[$id];
-        $this->cart[$id]['price'] = $this->getPriceFromPricelist($item['category_id'], $item['subcategory_id'], $item['qty']);
-    }
 
     private function getPriceFromPricelist($category_id, $subcategory_id, $qty)
     {
@@ -149,12 +198,11 @@ public function addToCart($id)
 
             $this->recalculateTotal();
 
-                        $grandTotal = collect($this->cart)->sum(function ($item) {
+            $grandTotal = collect($this->cart)->sum(function ($item) {
                 return ($item['qty'] * $item['price']) + (
                     ($item['layout_option'] ?? '') === 'with_fee' ? ($item['layout_fee'] ?? 0) : 0
                 );
             });
-
 
             foreach ($this->cart as $item) {
                 Order::create([
@@ -168,7 +216,7 @@ public function addToCart($id)
                     'price' => $item['price'],
                     'amount' => $item['qty'] * $item['price'],
                     'layout_fee' => $item['layout_fee'] ?? 0,
-                     'total' => $grandTotal, //  Save the same grand total on all rows
+                    'total' => $grandTotal,
                     'jo_number' => $nextJoNumber,
                     'deadline' => $this->data['deadline'] ?? null,
                     'status' => $this->data['status'],

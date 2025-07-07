@@ -340,8 +340,8 @@
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
                     </li>
                     <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/modelDivisionManufacturer">
-                        <i class="fas fa-cubes"></i> Model</a>
+                        <a class="side-nav-menu-link" href="/supplier">
+                        <i class="fas fa-cubes"></i> Supplier</a>
                     </li>
                  
 

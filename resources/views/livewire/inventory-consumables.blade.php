@@ -91,6 +91,12 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                              {{-- Employee Number --}}
+                            <div class="form-group">
+                                <label style="color:black;">Minimum Stock</label>
+                                <input type="text" wire:model="data.minimum_stock" class="form-control" required>
+                            </div> 
                             
                             {{-- Employee Number --}}
                             <div class="form-group">

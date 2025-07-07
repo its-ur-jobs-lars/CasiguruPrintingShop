@@ -340,10 +340,6 @@
                         <a class="side-nav-menu-link" href="/supplier">
                         <i class="fas fa-solid fa-tags"></i>Supplier</a>
                     </li>
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/modelDivisionManufacturer">
-                        <i class="fas fa-cubes"></i> Model</a>
-                    </li>
                  
 
                        <li class="side-nav-menu-item">
@@ -433,6 +429,7 @@
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
                                    @livewire('supplier')
+                                   @livewire('supplier-table')
                             </div>
                         </div>
                     </div>

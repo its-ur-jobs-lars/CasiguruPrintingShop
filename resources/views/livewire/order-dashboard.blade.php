@@ -85,9 +85,9 @@
                         <div class="item-subtotal">₱{{ number_format($c['price'] * $c['qty'], 2) }}</div>
                         <div class="qty-control">
                             <button wire:click="decrementQty({{ $id }})">-</button>
-                            <input type="number"
-                                   wire:model.lazy="cart.{{ $id }}.qty"
-                                   min="1" />
+                           <input type="number"
+                                min="1"
+                            wire:model="cart.{{ $id }}.qty" />
                             <button wire:click="incrementQty({{ $id }})">+</button>
                         </div>
                     </div>
