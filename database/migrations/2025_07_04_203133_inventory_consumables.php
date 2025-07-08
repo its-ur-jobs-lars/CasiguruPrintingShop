@@ -24,6 +24,7 @@ class InventoryConsumables extends Migration
             $table->integer('minimum_stock')->default(0)->nullable();
             $table->decimal('purchase_price', 10, 2)->nullable();
             $table->decimal('selling_price', 10, 2)->nullable();
+            $table->string('location')->nullable();
             $table->string('supplier_id')->nullable();
             $table->date('expiration_date')->nullable();
             $table->text('remarks')->nullable();

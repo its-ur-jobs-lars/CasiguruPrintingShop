@@ -81,6 +81,15 @@
                             <!-- Page 2 -->
                             @if ($step === 2)
 
+                             <div class="form-group">
+                                <label style="color:black;">Location</label>
+                                 <select wire:model="data.location" class="form-control" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="Casiguro Office">Casiguro Office</option>
+                                    <option value="Storom Office">Storom Office</option>
+                                </select>
+                            </div>
+
                             {{-- Subcategory --}}
                             <div class="form-group">
                                 <label style="color:black;">Supplier</label>

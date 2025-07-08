@@ -240,6 +240,15 @@ public function addToCart($id)
     {
         $items = Pricelist::with(['category', 'subcategory'])->get();
 
+    // Filter items with inventory quantity > 0
+    $items = $items->filter(function ($item) {
+        $inventory = inventory::where('category_id', $item->category_id)
+            ->where('subcategory_id', $item->subcategory_id)
+            ->first();
+
+        return $inventory && $inventory->quantity > 0;
+    });
+
         if (!empty($this->search)) {
             $search = strtolower($this->search);
             $items = $items->filter(function ($item) use ($search) {

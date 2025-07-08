@@ -78,6 +78,8 @@ public function updatedDataSubcategoryId($value)
                 'data.quantity' => 'nullable|numeric',
                 'data.minimum_stock' => 'nullable|numeric',
                 'data.purchase_price' => 'nullable|numeric',
+                'data.selling_price' => 'nullable|numeric',
+                'data.location' => 'nullable|string|max:255',
                 'data.supplier_id' => 'required|string|max:255',
                 'data.expiration_date' => 'nullable|date',
                 'data.remarks' => 'nullable|string|max:255',
@@ -109,6 +111,7 @@ public function updatedDataSubcategoryId($value)
                 'minimum_stock' => $this->data['minimum_stock'] ?? 0,
                 'purchase_price' => $this->data['purchase_price'] ?? 0,
                 'selling_price' => $this->data['selling_price'] ?? 0,
+                'location' => $this->data['location'] ?? '',
                 'minimum_stock' => $this->data['minimum_stock'] ?? 0,
                 'supplier_id' => $this->data['supplier_id'],
                 'expiration_date' => !empty($this->data['expiration_date']) 

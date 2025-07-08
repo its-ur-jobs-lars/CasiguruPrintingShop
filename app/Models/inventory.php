@@ -21,6 +21,7 @@ class inventory extends Model
         'minimum_stock',
         'purchase_price',
         'selling_price',
+        'location',
         'supplier_id',
         'expiration_date',
         'remarks',

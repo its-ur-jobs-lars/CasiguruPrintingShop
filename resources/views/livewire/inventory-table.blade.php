@@ -26,6 +26,7 @@
                                 <th class="px-4 py-2">Minimum Stock</th>
                                 <th class="px-4 py-2">Purchase Price</th>
                                 <th class="px-4 py-2">Selling Price</th>
+                                <th class="px-4 py-2">Location</th>
                                  <th class="px-4 py-2">Supplier</th>
                                  <th class="px-4 py-2">Remarks</th>
                                   <th class="px-4 py-2">Added By</th>
@@ -54,6 +55,7 @@
                                    <td class="px-4 py-2">{{ $record->purchase_price }}</td>
 
                                     <td class="px-4 py-2">{{ $record->selling_price }}</td>
+                                    <td class="px-4 py-2">{{ $record->location }}</td>
                                      <td class="px-4 py-2">{{ $subcategory[$record->subcategory_id] ?? 'Not Available' }}</td>
 
                                     <td class="px-4 py-2">{{ $record->expiration_date }}</td>
@@ -171,7 +173,15 @@
                             <!-- Page 2 -->
                             @if ($step === 2)
 
-                          
+                             {{-- Price (101 to 500) --}}
+                            <div class="form-group">
+                                <label style="color:black;">Location</label>
+                                 <select wire:model="editSupplier.location" class="form-control" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="">Casiguro Office</option>
+                                    <option value="">Storom Office</option>
+                                </select>
+                            </div>
 
                             {{-- Price (101 to 500) --}}
                             <div class="form-group">
