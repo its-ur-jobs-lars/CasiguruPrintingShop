@@ -15334,6 +15334,10 @@ button.bg-lighter:hover {
     background-color: #00dffc;
 }
 
+.fc-direction-ltr .fc-daygrid-event.fc-event-end, .fc-direction-rtl .fc-daygrid-event.fc-event-start {
+  margin-right: 2px;
+  margin-bottom: 5px;
+}
 .rounded-8,
 .rounded-sm {
     border-radius: 5px !important;
@@ -26928,6 +26932,10 @@ tr:hover {
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
     height: 100vh; /* Optional: Adjust height as needed */
+  }
+
+  .production-butt{
+    background-color: green;
   }
   
   .product-type {

@@ -41,6 +41,7 @@ class Orders extends Migration
             // Optional Notes
             $table->text('remarks')->nullable();
              $table->boolean('isActive')->default(1);
+             $table->boolean('inventory_deducted')->default(false);
             $table->string('added_by')->nullable();  // Column to store the user who added the pricelist item
             $table->string('updated_by')->nullable();
              

@@ -37,6 +37,7 @@
                                 <th class="px-4 py-2">Status</th>
                                 <th class="px-4 py-2">Remarks</th>
                                 <th class="px-4 py-2">Activation</th>
+                                <th class="px-4 py-2">Production</th>
                                 <th class="px-4 py-2"></th>
                             </tr>
                         </thead>
@@ -102,6 +103,21 @@
                                         </span>
                                     @endif
                                 </td>  
+
+                      <td class="px-4 py-2 text-center">
+                            @if ($record->inventory_deducted ?? false)
+                                <span class="text-green-600 font-semibold">Already Deducted</span>
+                            @elseif ($record->status === 'Pending Production' || $record->status === 'For PickUp')
+                                <button wire:click="confirmProduction('{{ $record->order_id }}')" 
+                                        class="bg-green-600 text-white px-3 py-1 production-butt hover:bg-green-700">
+                                    Confirm Production
+                                </button>
+                            @else
+                                <span class="text-gray-400 text-sm italic">No action</span>
+                            @endif
+                        </td>
+
+
                         <td class="px-4 py-2">
                             <div class="button-column">
                                 <!-- Edit Button -->
@@ -275,18 +291,18 @@
 
 
 
-@if (session()->has('message') || session()->has('error'))
+@if (session()->has('messageInsert') || session()->has('error'))
     <div class="fixed-3 inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
         <div class="bg-white p-6 rounded shadow-lg w-1/3 text-center m-4">
-            @if (session()->has('message'))
+            @if (session()->has('messageInsert'))
                 <div class="text-green-600 font-semibold text-lg">
-                    {{ session('message') }}
+                    {{ session('messageInsert') }}
                 </div>
             @endif
 
-            @if (session()->has('error'))
+            @if (session()->has('errorInsert'))
                 <div class="text-red-600 font-semibold text-lg">
-                    {{ session('error') }}
+                    {{ session('errorInsert') }}
                 </div>
             @endif
 
