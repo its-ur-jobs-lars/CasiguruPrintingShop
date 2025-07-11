@@ -39,6 +39,7 @@ class OrderDashboard extends Component
     public function closeModal()
     {
         $this->showOrder = true;
+        $this->showModal = false;
     }
 
 //    public function addToCart($id)
@@ -348,8 +349,8 @@ public function addToCart($id)
                 return;
             }
 
-            $inventory->quantity -= $item['qty'];
-            $inventory->save();
+            // $inventory->quantity -= $item['qty'];
+            // $inventory->save();
 
             // Save order
             Order::create([

@@ -37,6 +37,7 @@ class payment extends Model
         'bank_name',
         'cheque_number',
         'cheque_date',
+        'status',
     ];
 
     protected $casts = [

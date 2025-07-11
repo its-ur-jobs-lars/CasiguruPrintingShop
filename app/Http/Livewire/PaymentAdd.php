@@ -19,6 +19,7 @@ class PaymentAdd extends Component
 
     public function mount()
     {
+        $this->data['payment_method'] = '';
 
         $this->data = [
             'order_id' => '',
@@ -49,6 +50,12 @@ class PaymentAdd extends Component
         });
 
         $this->Order = $ordersWithRemainingBalance->values();
+    }
+
+    public function getSelectedOrderName()
+    {
+        $order = Order::where('order_id', $this->order_id)->first();
+        return $order ? $order->name : '';
     }
 
     

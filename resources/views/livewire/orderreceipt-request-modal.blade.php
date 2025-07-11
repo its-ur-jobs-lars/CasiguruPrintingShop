@@ -23,12 +23,14 @@
                             {{-- Step 1 --}}
                             @if ($step === 1)
 
-                              <select wire:model="order_id" class="form-control">
-                                <option value="">-- Select Order --</option>
-                                @foreach($Order->unique('order_id') as $order)
-                                    <option value="{{ $order->order_id }}">{{ $order->order_id }}</option>
-                                @endforeach
-                            </select>
+                              <select wire:model="order_id" class="form-control" required>
+                            <option value="">-- Select Order --</option>
+                            @foreach($Order->unique('order_id') as $order)
+                                <option value="{{ $order->order_id }}">
+                                    {{ $order->order_id }} - {{ $order->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
                               
                             @if($order_id)

@@ -214,7 +214,7 @@
                         class="mt-2-1 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
                     Submit Order
                 </button>
-                <button wire:click="$set('showModal', false)" 
+                <button wire:click="closeModal" 
                         class="mt-2-1 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
                     Cancel
                 </button>

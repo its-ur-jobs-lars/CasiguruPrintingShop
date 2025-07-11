@@ -52,6 +52,7 @@ class Payment extends Migration
             $table->date('cheque_date')->nullable();
 
             $table->text('remarks')->nullable();
+            $table->text('status')->nullable();
 
             // Metadata
             $table->boolean('isActive')->default(true);
