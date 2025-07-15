@@ -433,7 +433,9 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
+                                
                                    @livewire('sales-table')
+                                      @livewire('export-sales')
                             </div>
                         </div>
                     </div>

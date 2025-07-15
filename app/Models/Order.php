@@ -26,6 +26,7 @@ class Order extends Model
         'total',
         'jo_number',
         'deadline',
+        'customer_type', // Added customer type
         'status',
         'remarks',
         'isActive',

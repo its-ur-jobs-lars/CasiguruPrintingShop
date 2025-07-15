@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\inventory;
 use App\Models\sales;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class SalesTable extends Component implements HasTable
 
@@ -131,6 +134,85 @@ class SalesTable extends Component implements HasTable
         }
     }
 
+     public $exportType = '';
+
+
+ public function exportSales()
+    {
+        if (!$this->exportType) {
+            session()->flash('error', 'Please select an export type.');
+            return;
+        }
+
+        $now = Carbon::now();
+
+        switch ($this->exportType) {
+            case 'weekly':
+                $start = $now->copy()->startOfWeek(Carbon::MONDAY);
+                $end = $now->copy()->endOfWeek();
+                break;
+            case 'monthly':
+                $start = $now->copy()->startOfMonth();
+                $end = $now->copy()->endOfMonth();
+                break;
+            case 'yearly':
+                $start = $now->copy()->startOfYear();
+                $end = $now->copy()->endOfYear();
+                break;
+            default:
+                session()->flash('error', 'Invalid export type selected.');
+                return;
+        }
+
+        $sales = sales::with(['category', 'subcategory'])
+            ->whereBetween('created_at', [$start, $end])
+            ->get();
+
+        if ($sales->isEmpty()) {
+            session()->flash('error', 'No sales records found for the selected period.');
+            return;
+        }
+
+        $templatePath = storage_path('app/templates/SalesReport.xlsx');
+        if (!file_exists($templatePath)) {
+            session()->flash('error', 'SalesReport.xlsx template not found.');
+            return;
+        }
+
+        $spreadsheet = IOFactory::load($templatePath);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $row = 9;
+        foreach ($sales as $sale) {
+            $categoryName = $sale->category?->category_name ?? 'N/A';
+            $subcategoryName = $sale->subcategory?->subcategory_name ?? 'N/A';
+
+            $sheet->setCellValue("A{$row}", $sale->order_id);
+            $sheet->setCellValue("B{$row}", $sale->jo_number);
+            $sheet->setCellValue("C{$row}", $sale->name);
+            $sheet->setCellValue("D{$row}", $categoryName);
+            $sheet->setCellValue("E{$row}", $subcategoryName);
+            $sheet->setCellValue("F{$row}", $sale->qty);
+            $sheet->setCellValue("G{$row}", $sale->price);
+            $sheet->setCellValue("H{$row}", $sale->payment_status);
+            $sheet->setCellValue("I{$row}", $sale->amount);
+            $row++;
+        }
+
+        $filename = "Sales_{$this->exportType}_" . now()->format('Ymd_His') . ".xlsx";
+        $directory = storage_path('app/reports');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filePath = $directory . '/' . $filename;
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
+
+        return response()->download($filePath)->deleteFileAfterSend();
+    }
+
     private function getPriceFromPricelist($category_id, $subcategory_id, $qty)
     {
         $pricelist = Pricelist::where('category_id', $category_id)
@@ -150,90 +232,90 @@ class SalesTable extends Component implements HasTable
         };
     }
 
-    public function update()
-    {
-        try{
-        $this->validate(
-            [
-            'editOrders.qty' => 'required|numeric|min:1',
-            'editOrders.price' => 'required|numeric',
-            'editOrders.amount' => 'required|numeric',
-            'editOrders.total' => 'required|numeric',
-            'editOrders.deadline' => 'required|date',
-            'editOrders.status' => 'required|string|max:255',
-            'editOrders.remarks' => 'required|string|max:255',
-            'editOrders.isActive' => 'required|boolean', 
-            ]
-        );
+    // public function update()
+    // {
+    //     try{
+    //     $this->validate(
+    //         [
+    //         'editOrders.qty' => 'required|numeric|min:1',
+    //         'editOrders.price' => 'required|numeric',
+    //         'editOrders.amount' => 'required|numeric',
+    //         'editOrders.total' => 'required|numeric',
+    //         'editOrders.deadline' => 'required|date',
+    //         'editOrders.status' => 'required|string|max:255',
+    //         'editOrders.remarks' => 'required|string|max:255',
+    //         'editOrders.isActive' => 'required|boolean', 
+    //         ]
+    //     );
 
-        $order = Order::find($this->editOrders['id']);
+    //     $order = Order::find($this->editOrders['id']);
 
-        if ($order) {
-            $order->update([
-                'qty' => $this->editOrders['qty'],
-                'price' => $this->editOrders['price'],
-                'amount' => $this->editOrders['amount'],
-                'total' => $this->editOrders['total'],
-                'deadline' => $this->editOrders['deadline'],
-                'status' => $this->editOrders['status'],
-                'remarks' => $this->editOrders['remarks'],
-                'isActive' => $this->editOrders['isActive'],
-                'updated_by' => Auth::user()->username,
-            ]);
+    //     if ($order) {
+    //         $order->update([
+    //             'qty' => $this->editOrders['qty'],
+    //             'price' => $this->editOrders['price'],
+    //             'amount' => $this->editOrders['amount'],
+    //             'total' => $this->editOrders['total'],
+    //             'deadline' => $this->editOrders['deadline'],
+    //             'status' => $this->editOrders['status'],
+    //             'remarks' => $this->editOrders['remarks'],
+    //             'isActive' => $this->editOrders['isActive'],
+    //             'updated_by' => Auth::user()->username,
+    //         ]);
 
              
-            $latestPayment = payment::where('order_id', $order->order_id)
-                ->where('subcategory_id', $order->subcategory_id)
-                ->latest()
-                ->first();
+    //         $latestPayment = payment::where('order_id', $order->order_id)
+    //             ->where('subcategory_id', $order->subcategory_id)
+    //             ->latest()
+    //             ->first();
 
-            if (
-                $this->editOrders['status'] === 'Completed' &&
-                $latestPayment &&
-                $latestPayment->balance == 0.00
-            ) {
+    //         if (
+    //             $this->editOrders['status'] === 'Completed' &&
+    //             $latestPayment &&
+    //             $latestPayment->balance == 0.00
+    //         ) {
 
-                            // Get Subcategory Name
-                $subcategory = SubCategory::find($order->subcategory_id);
-                $subcatName = $subcategory ? Str::slug($subcategory->subcategory_name, '_') : 'Unknown';
+    //                         // Get Subcategory Name
+    //             $subcategory = SubCategory::find($order->subcategory_id);
+    //             $subcatName = $subcategory ? Str::slug($subcategory->subcategory_name, '_') : 'Unknown';
 
-                // Count existing sales for this subcategory to increment the number
-                $count = sales::where('subcategory_id', $order->subcategory_id)->count() + 1;
+    //             // Count existing sales for this subcategory to increment the number
+    //             $count = sales::where('subcategory_id', $order->subcategory_id)->count() + 1;
 
-                // Format sales_id like: Sales_TShirt_001
-                $sales_id = 'Sales_' . $subcatName . '_' . str_pad($count, 3, '0', STR_PAD_LEFT);
+    //             // Format sales_id like: Sales_TShirt_001
+    //             $sales_id = 'Sales_' . $subcatName . '_' . str_pad($count, 3, '0', STR_PAD_LEFT);
               
-                    sales::create([
-                    'order_id' => $order->order_id,
-                    'jo_number' => $order->jo_number,
-                    'name' => $order->name,
-                    'contact_no' => $order->contact_no,
-                    'address' => $order->address,
-                    'category_id' => $order->category_id,
-                    'subcategory_id' => $order->subcategory_id,
-                    'qty' => $order->qty,
-                    'price' => $order->price,
-                    'amount' => $order->amount,
-                    'total' => $order->total,
-                    'payment' => $latestPayment->payment,
-                    'balance' => $latestPayment->balance,
-                    'payment_status' => $latestPayment->payment_status,
-                    'completed_at' => now(),
-                    'added_by' => Auth::user()->username,
-                ]);
-            }
+    //                 sales::create([
+    //                 'order_id' => $order->order_id,
+    //                 'jo_number' => $order->jo_number,
+    //                 'name' => $order->name,
+    //                 'contact_no' => $order->contact_no,
+    //                 'address' => $order->address,
+    //                 'category_id' => $order->category_id,
+    //                 'subcategory_id' => $order->subcategory_id,
+    //                 'qty' => $order->qty,
+    //                 'price' => $order->price,
+    //                 'amount' => $order->amount,
+    //                 'total' => $order->total,
+    //                 'payment' => $latestPayment->payment,
+    //                 'balance' => $latestPayment->balance,
+    //                 'payment_status' => $latestPayment->payment_status,
+    //                 'completed_at' => now(),
+    //                 'added_by' => Auth::user()->username,
+    //             ]);
+    //         }
 
            
 
-            $this->emit('refreshTable');
-            $this->isEditModalOpen = false;
-            $this->dispatchBrowserEvent('closeEditModal');
-            session()->flash('messageUpdate', 'Order updated successfully.');
-        } 
-    }catch (\Exception $e) {
-            session()->flash('errorUpdate', 'Failed to save order: ' . $e->getMessage());
-        }
-    }
+    //         $this->emit('refreshTable');
+    //         $this->isEditModalOpen = false;
+    //         $this->dispatchBrowserEvent('closeEditModal');
+    //         session()->flash('messageUpdate', 'Order updated successfully.');
+    //     } 
+    // }catch (\Exception $e) {
+    //         session()->flash('errorUpdate', 'Failed to save order: ' . $e->getMessage());
+    //     }
+    // }
 
     
     public function closeModal()
@@ -253,32 +335,32 @@ class SalesTable extends Component implements HasTable
     public $date_to;
     
 
-    public function edit($id)
-    {
-        $order = Order::find($id);
+    // public function edit($id)
+    // {
+    //     $order = Order::find($id);
 
-        if ($order) {
-            $this->editOrders = [
-                'id' => $order->id,
-                'category_id' => $order->category_id,
-                'subcategory_id' => $order->subcategory_id,
-                'qty' => $order->qty,
-                'price' => $order->price,
-                'amount' => $order->amount,
-                'payment' => $order->payment,
-                'balance' => $order->balance,
-                'total' => $order->total,
-                'deadline' => $order->deadline,
-                'status' => $order->status,
-                'remarks' => $order->remarks,
-                'isActive' => $order->isActive,
-            ];
+    //     if ($order) {
+    //         $this->editOrders = [
+    //             'id' => $order->id,
+    //             'category_id' => $order->category_id,
+    //             'subcategory_id' => $order->subcategory_id,
+    //             'qty' => $order->qty,
+    //             'price' => $order->price,
+    //             'amount' => $order->amount,
+    //             'payment' => $order->payment,
+    //             'balance' => $order->balance,
+    //             'total' => $order->total,
+    //             'deadline' => $order->deadline,
+    //             'status' => $order->status,
+    //             'remarks' => $order->remarks,
+    //             'isActive' => $order->isActive,
+    //         ];
 
-            $this->isEditModalOpen = true;
-        } else {
-            session()->flash('error', 'Order not found.');
-        }
-    }
+    //         $this->isEditModalOpen = true;
+    //     } else {
+    //         session()->flash('error', 'Order not found.');
+    //     }
+    // }
 
     public function cancelEdit()
     {
@@ -288,12 +370,12 @@ class SalesTable extends Component implements HasTable
 
     public function getTableQuery()
     {
-        return Order::where('isActive', 1);
+        return sales::where('isActive', 1);
     }
 
     public function getFilteredRecords()
     {
-        return Order::where('isActive', 1)
+        return sales::where('isActive', 1)
             ->when($this->filterActivation !== '', fn($query) => $query->where('isActive', $this->filterActivation))
             ->when($this->search !== '', function ($query) {
                 return $query->where(function ($q) {
@@ -310,7 +392,7 @@ class SalesTable extends Component implements HasTable
 
     public function render()
     {
-        $query = Order::query();
+        $query = sales::query();
 
         if ($this->filterActivation !== '') {
             $query->where('isActive', $this->filterActivation);
@@ -320,12 +402,12 @@ class SalesTable extends Component implements HasTable
 
          if ($this->date_from) {
         $query->where(function ($q) {
-            $q->whereDate('deadline', '>=', $this->date_from);
+            $q->whereDate('created_at', '>=', $this->date_from);
         });
     }
     if ($this->date_to) {
         $query->where(function ($q) {
-            $q->whereDate('deadline', '<=', $this->date_to);
+            $q->whereDate('created_at', '<=', $this->date_to);
         });
     }
 

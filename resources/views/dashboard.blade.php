@@ -292,7 +292,7 @@
               <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-solid fa-history"></i>
               </span>
-                    <span class="side-nav-fadeout-on-closed media-body">History</span>
+                    <span class="side-nav-fadeout-on-closed media-body">Account Payable</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
               </span>
@@ -301,13 +301,13 @@
 
             <!-- History: subHistory -->
             <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0">
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/goodconditionHistoryProduct">
-                    <i class="fas fa-solid fa-circle-check"></i>Good Condition</a>
+               <li class="side-nav-menu-item">
+                    <a class="side-nav-menu-link" href="/government">
+                    <i class=" fas fa-solid fa-building"></i></i>Government</a>
                 </li>
                 <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/defectiveHistoryProduct">
-                    <i class="fas fa-solid fa-circle-xmark"></i>Defective</a>
+                    <a class="side-nav-menu-link" href="/walkin">
+                    <i class="fas fa-solid fa-person-walking"></i>Walk-in</a>
                 </li>
                 <!-- <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/deletedProducts">

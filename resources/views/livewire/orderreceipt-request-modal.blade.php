@@ -118,7 +118,13 @@
                             {{-- Step 3 --}}
                             @if ($step === 3)
 
-                            
+                            @if (!$isGovernment)
+
+                                   <div class="form-group">
+                                    <label style="color:black;">Receipt Number</label>
+                                    <input type="text" wire:model="data.receipt_number" class="form-control" required>
+                                </div>
+
                                 <div class="form-group">
                                     <label style="color:black;">Payment</label>
                                     <input type="text" wire:model="data.payment" class="form-control" readonly>
@@ -149,6 +155,7 @@
                                         <option value="Cheque">Cheque</option>
                                     </select>
                                 </div>
+                                @endif
 
 
                                   <div class="form-group text-center">
@@ -159,6 +166,8 @@
                             
                              {{-- Step 3 --}}
                             @if ($step === 4)
+
+                                @if (!$isGovernment)
                                 <div class="form-group">
                                     <label style="color:black;">Payment Date</label>
                                     <input type="date" wire:model="data.payment_date" class="form-control" required>
@@ -203,6 +212,7 @@
                                     <label style="color:black;">Remarks</label>
                                     <input type="text" wire:model="data.remarks" class="form-control" required>
                                 </div>
+                                @endif
 
 
                                 <div class="form-group text-center">

@@ -367,6 +367,7 @@ public function addToCart($id)
                 'total' => $grandTotal,
                 'jo_number' => $nextJoNumber,
                 'deadline' => $this->data['deadline'] ?? null,
+                'customer_type' => $this->data['customer_type'],
                 'status' => 'Pending Production', // Set as pending
                 'remarks' => $this->data['remarks'] ?? '',
                 'added_by' => Auth::user()->username,

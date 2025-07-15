@@ -36,7 +36,7 @@ class Orders extends Migration
             $table->date('deadline')->nullable();
             $table->string('status')->nullable();
             // Status of the order
-
+             $table->string('customer_type')->nullable();
 
             // Optional Notes
             $table->text('remarks')->nullable();

@@ -15,12 +15,28 @@ use Livewire\WithPagination;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 
 class AddUserTable extends Component implements HasTable
 {
  
+public function isBlocked($employee_number, $role)
+{
+    $throttleKey = Str::lower('login:' . $employee_number);
+    $maxAttempts = ($role == 1) ? 5 : 3;
 
+    return RateLimiter::tooManyAttempts($throttleKey, $maxAttempts);
+}
+
+public function unblockUser($employee_number)
+{
+    $throttleKey = Str::lower('login:' . $employee_number);
+    RateLimiter::clear($throttleKey);
+
+    session()->flash('messageUpdate', 'User has been unblocked successfully.');
+}
      // use withPagination;
     // use Tables\Concerns\InteractsWithTable;
 
@@ -258,8 +274,18 @@ public function changePassword()
         $this->isEditModalOpen = false;
     }
 
-    // 
-    
+    //  public function unblockUser($employeeNumber)
+    // {
+    //     if (auth()->user()->admin != 1) {
+    //         session()->flash('error', 'Unauthorized action.');
+    //         return;
+    //     }
+
+    //     $key = Str::lower('login:' . $employeeNumber);
+    //     RateLimiter::clear($key);
+
+    //     session()->flash('messageUpdate', 'User login attempts have been reset.');
+    // }
 
 
     public function getTableQuery(){

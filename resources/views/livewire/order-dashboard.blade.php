@@ -191,7 +191,7 @@
                     </div>
 
                         <div class="form-group">
-                                    <label style="color:black;">Status</label>
+                                    <label>Status</label>
                                     <select wire:model.defer="data.status" class="form-control" required>
                                         <option value="">-- Select --</option>
                                         <option value="Pending">Pending</option>
@@ -208,6 +208,18 @@
                         <input type="text" wire:model.defer="data.remarks" class="form-control" required>
                         @error('remarks') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+                 </div>
+
+                   <div class="form-group">
+                                    <label>Customer Type</label>
+                                    <select wire:model.defer="data.customer_type" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Walk-in">Walk-in</option>
+                                        <option value="Government">Government</option>
+
+                                    </select>
+                                </div>
+                      
                  </div>
                 
                <button wire:click="save"

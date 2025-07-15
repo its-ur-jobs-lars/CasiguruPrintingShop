@@ -11,13 +11,27 @@
             <option value="1">Active</option>
             <option value="0">Inactive</option>   
         </select>
+
+    <select wire:model="exportType" class="border rounded px-4 py-2">
+        <option value="">-- Select Export Type --</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
+    </select>
+
+    <button wire:click="exportSales" 
+            class="flex space-x-2 items-center mb-4"
+            @disabled(!$exportType)>
+        Export Sales
+    </button>
+</div>
+
                
             <div class="overflow-x-auto-1 bg-white shadow-md rounded-lg relative">
                 <div class="overflow-y-auto max-h-[500px]">
                     <table class="min-w-full border-collapse">
                         <thead class="sticky top-0 bg-gray-100 z-10">
                             <tr class="bg-gray-100">
-                                <th class="px-4 py-2">Sales ID</th>
                                 <th class="px-4 py-2">Order ID</th>
                                 <th class="px-4 py-2">JO Number</th>
                                 <th class="px-4 py-2">Name</th>
@@ -28,9 +42,7 @@
                                 <th class="px-4 py-2">Quantity</th>
                                 <th class="px-4 py-2">Price</th>
                                  <th class="px-4 py-2">Amount</th>
-                                <th class="px-4 py-2">Layout Fee</th>
                                 <th class="px-4 py-2">Total</th>
-                                <th class="px-4 py-2">Payment</th>
                                 <th class="px-4 py-2">Payment</th>
                                 <th class="px-4 py-2">Balance</th>
                                 <th class="px-4 py-2">Payment Status</th>
@@ -43,12 +55,11 @@
                         <tbody>
                             @forelse($records as $index => $record)
                                 <tr class="border-b">
-                                    <td class="px-4 py-2">{{ $record->supplier_id }}</td>
 
                                     <td class="px-4 py-2">{{ $record->order_id }}</td>
                                     <td class="px-4 py-2">{{ $record->jo_number}}</td>
                                     <td class="px-4 py-2">{{ $record->name }}</td>
-                                    <td class="px-4 py-2">{{ $record->contact_number }}</td>
+                                    <td class="px-4 py-2">{{ $record->contact_no }}</td>
                                     <td class="px-4 py-2">{{ $record->address }}</td>
 
                                       <td class="px-4 py-2">{{ $Category[$record->category_id] ?? 'Not Available' }}</td>
@@ -79,7 +90,7 @@
                                 </td>  
 
                     
-                        <td class="px-4 py-2">
+                        {{-- <td class="px-4 py-2">
                             <div class="button-column">
                                 <!-- Edit Button -->
                                 <button wire:click="edit({{ $record->id }})"
@@ -91,7 +102,7 @@
                                             class="bg-red-500 text-white px-3 py-1 rounded-2">
                                             <i class="fas fa-solid fa-key"></i></button> -->
                                     </div>
-                                </td>    
+                                </td>  --}}  
                             </tr>
                         @empty
                             <tr>
@@ -107,7 +118,7 @@
 
 <!-- Fixed Footer for Row Count -->
 <div class="fixed bottom-0 left-0 w-full p-2 z-20">
-    <span class="text-sm text-gray-600">Total number of Active Orders : {{ $this->rowCount }}</span>
+    <span class="text-sm text-gray-600">Total number of Sales : {{ $this->rowCount }}</span>
 
      <input type="date" id="date_to" wire:model="date_to" class="border border-gray-300 rounded-12 px-3 py-2" placeholder="To" style="float: right;">
     <label for="date_to" class="mb-0 mr-2" style="color: black; float: right;">To:</label>

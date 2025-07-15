@@ -96,6 +96,19 @@ class PrintingShopContoller extends Controller
         return view('supplier');
     }
 
+    public function Government()
+    {
+        return view('government');
+    }
+
+    public function Walkin()
+    {
+        return view('walk-in');
+    }
+
+
+    
+
     
 
 

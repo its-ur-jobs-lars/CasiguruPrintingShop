@@ -94,54 +94,6 @@ public function updatedSelectedpayment($value)
         ];
     }
 
-    // public function updated($field)
-    // {
-    //     $category_id = $this->editOrders['category_id'] ?? null;
-    //     $subcategory_id = $this->editOrders['subcategory_id'] ?? null;
-    //     $qty = (float)($this->editOrders['qty'] ?? 0);
-
-    //     if (in_array($field, ['editOrders.category_id', 'editOrders.subcategory_id', 'editOrders.qty'])) {
-    //         if ($category_id && $subcategory_id && $qty) {
-    //             $price = $this->getPriceFromPricelist($category_id, $subcategory_id, $qty);
-    //             $amount = $price * $qty;
-
-    //             $this->editOrders['price'] = $price;
-    //             $this->editOrders['amount'] = $amount;
-    //             $this->editOrders['total'] = $amount;
-    //             $this->editOrders['balance'] = $amount;
-    //         }
-    //     }
-
-    //     if (in_array($field, ['editOrders.amount', 'editOrders.downpayment'])) {
-    //         $amount = (float)($this->editOrders['amount'] ?? 0);
-    //         $downpayment = (float)($this->editOrders['downpayment'] ?? 0);
-    //         $balance = max($amount - $downpayment, 0);
-
-    //         $this->editOrders['total'] = $amount;
-    //         $this->editOrders['balance'] = $balance;
-    //     }
-    // }
-
-    // private function getPriceFromPricelist($category_id, $subcategory_id, $qty)
-    // {
-    //     $pricelist = Pricelist::where('category_id', $category_id)
-    //         ->where('subcategory_id', $subcategory_id)
-    //         ->first();
-
-    //     if (!$pricelist) {
-    //         return 0;
-    //     }
-
-    //     if ($qty >= 10 && $qty <= 50) {
-    //         return $pricelist->price_10_50;
-    //     } elseif ($qty >= 51 && $qty <= 100) {
-    //         return $pricelist->price_51_100;
-    //     } elseif ($qty >= 101 && $qty <= 500) {
-    //         return $pricelist->price_101_500;
-    //     } else {
-    //         return $pricelist->price_10_50;
-    //     }
-    // }
 
      public function closeModal()
     {
@@ -222,56 +174,23 @@ public function updatedSelectedpayment($value)
         }
     }
 
+
     public function exportExcel($orderReceiptId)
 {
-    $receipt = RequestReceipt::where('order_receipt_id', $orderReceiptId)->firstOrFail();
-    $spreadsheet = IOFactory::load(storage_path('app/templates/requestReceipt.xlsx'));
-    $sheet = $spreadsheet->getActiveSheet();
+    $firstReceipt = RequestReceipt::where('order_receipt_id', $orderReceiptId)->firstOrFail();
+    $orderId = $firstReceipt->order_id;
 
-    // Fill in data as before
-    $this->fillSpreadsheet($sheet, $receipt);
-
-    $filename = $this->generateFilename($receipt, 'xlsx');
-    $directory = storage_path('app/receipts');
-    if (!file_exists($directory)) mkdir($directory, 0755, true);
-    $filePath = "{$directory}/{$filename}";
-
-    $writer = new Xlsx($spreadsheet);
-    $writer->save($filePath);
-
-    return response()->download($filePath)->deleteFileAfterSend();
-}
-
-   public function exportExcelMultiple($orderId)
-{
-    // Fetch all items for the given order_id
     $items = RequestReceipt::where('order_id', $orderId)->get();
-
     if ($items->isEmpty()) {
-        abort(404, 'No receipt found for the provided Order ID.');
+        abort(404, 'No receipts found for this Order ID.');
     }
 
-    // Load Excel template
     $spreadsheet = IOFactory::load(storage_path('app/templates/requestReceipt.xlsx'));
     $sheet = $spreadsheet->getActiveSheet();
 
-    // Start filling from row 2 (assuming row 1 is header)
-    $startRow = 2;
+    $this->fillSpreadsheet($sheet, $items); // Pass the whole collection
 
-    foreach ($items as $index => $item) {
-        $row = $startRow + $index;
-
-        // Fill Excel sheet columns (adjust based on your template)
-        $sheet->setCellValue("A{$row}", $index === 0 ? $item->order_id : ''); // show order_id only on first row
-        $sheet->setCellValue("B{$row}", $item->item_name);
-        $sheet->setCellValue("C{$row}", $item->category);
-        $sheet->setCellValue("D{$row}", $item->quantity);
-        $sheet->setCellValue("E{$row}", $item->unit_price);
-        $sheet->setCellValue("F{$row}", $item->total_price);
-    }
-
-    // Save to file
-    $filename = "Order_{$orderId}_Receipt.xlsx";
+    $filename = $this->generateFilename($firstReceipt, 'xlsx');
     $directory = storage_path('app/receipts');
     if (!file_exists($directory)) mkdir($directory, 0755, true);
     $filePath = "{$directory}/{$filename}";
@@ -279,9 +198,9 @@ public function updatedSelectedpayment($value)
     $writer = new Xlsx($spreadsheet);
     $writer->save($filePath);
 
-    // Return downloadable response
     return response()->download($filePath)->deleteFileAfterSend();
 }
+
 
 
 public function exportPDF($orderReceiptId)
@@ -365,24 +284,22 @@ public function exportPDF($orderReceiptId)
     
 
 
-private function fillSpreadsheet($sheet, $receipt)
-{
-    $sheet->setCellValue('B6', $receipt->name);
-    $sheet->setCellValue('B7', $receipt->address);
-    $sheet->setCellValue('G6', $receipt->payment_date);
-    $sheet->setCellValue('G7', $receipt->contact_no);
-    $sheet->setCellValue('B5', $receipt->order_receipt_id);
-
     
+    private function fillSpreadsheet($sheet, $items)
+{
+    $first = $items->first();
+
+    $sheet->setCellValue('B6', $first->name);
+    $sheet->setCellValue('B7', $first->address);
+    $sheet->setCellValue('G6', $first->payment_date);
+    $sheet->setCellValue('G7', $first->contact_no);
+    $sheet->setCellValue('B5', $first->receipt_number);
+
     $startRow = 11;
 
-    $items = \App\Models\RequestReceipt::with(['category', 'subcategory'])
-        ->where('order_receipt_id', $receipt->order_receipt_id)
-        ->get();
-
     foreach ($items as $item) {
-        $categoryName = $item->category ? $item->category->category_name : 'N/A';
-        $subcategoryName = $item->subcategory ? $item->subcategory->subcategory_name : 'N/A';
+        $categoryName = $item->category?->category_name ?? 'N/A';
+        $subcategoryName = $item->subcategory?->subcategory_name ?? 'N/A';
 
         $sheet->setCellValue("A{$startRow}", $item->order_id);
         $sheet->setCellValue("B{$startRow}", $item->qty);
@@ -393,22 +310,25 @@ private function fillSpreadsheet($sheet, $receipt)
         $startRow++;
     }
 
-    $sheet->setCellValue("I26", (float)$receipt->total);
-    $sheet->setCellValue("I27", (float)$receipt->payment);
-    $sheet->setCellValue("I28", (float)$receipt->balance);
-    $sheet->setCellValue("B30", $receipt->payment_method);
-    $sheet->setCellValue("B31", $receipt->reference_number);
-    $sheet->setCellValue("B32", $receipt->date);
-    $sheet->setCellValue("I30", $receipt->payment_status);
-    $sheet->setCellValue("I31", $receipt->remarks);
-    $sheet->setCellValue("I32", $receipt->service_by);
+    // You may want to calculate totals across all items
+    $total = $items->sum('amount');
+    $payment = $first->payment;
+    $balance = $first->balance;
 
-    $sheet->setCellValue("B39", strtoupper($receipt->name));
-    $sheet->setCellValue("G39", strtoupper($receipt->service_by));
+    $sheet->setCellValue("I26", (float)$total);
+    $sheet->setCellValue("I27", (float)$payment);
+    $sheet->setCellValue("I28", (float)$balance);
+    $sheet->setCellValue("B30", $first->payment_method);
+    $sheet->setCellValue("B31", $first->reference_number);
+    $sheet->setCellValue("B32", $first->date);
+    $sheet->setCellValue("I30", $first->payment_status);
+    $sheet->setCellValue("I31", $first->remarks);
+    $sheet->setCellValue("I32", $first->service_by);
 
-
-
+    $sheet->setCellValue("B39", strtoupper($first->name));
+    $sheet->setCellValue("G39", strtoupper($first->service_by));
 }
+
 
 
 

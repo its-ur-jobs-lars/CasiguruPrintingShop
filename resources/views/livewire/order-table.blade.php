@@ -33,6 +33,7 @@
                                 <th class="px-4 py-2">Balance</th>
                                 <th class="px-4 py-2">JO Number</th>
                                 <th class="px-4 py-2">Deadline</th>
+                                <th class="px-4 py-2">Customer Type</th>
                                 <th class="px-4 py-2">Added By</th>
                                 <th class="px-4 py-2">Status</th>
                                 <th class="px-4 py-2">Remarks</th>
@@ -71,6 +72,13 @@
                                     @endif
                                     <td class="px-4 py-2">{{ $record->jo_number }}</td>
                                     <td class="px-4 py-2">{{ $record->deadline }}</td>
+                                    <td class="px-4 py-2">
+                                        @if ($record->customer_type === 'Government')
+                                            <span class="text-blue-600 font-semibold">Government</span>
+                                        @else
+                                            <span class="text-green-600 font-semibold">Walk-in</span>
+                                        @endif
+                                    </td>
                                    
                                     <td class="px-4 py-2">{{ $record->added_by }}</td>
 

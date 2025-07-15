@@ -42,5 +42,7 @@ Route::get('/supplier', [App\Http\Controllers\PrintingShopContoller::class, 'Sup
 
 Route::get('/payment', [App\Http\Controllers\PrintingShopContoller::class, 'Payment'])->name('Payment');
 Route::get('/sales', [App\Http\Controllers\PrintingShopContoller::class, 'Sales'])->name('Sales');
+Route::get('/government', [App\Http\Controllers\PrintingShopContoller::class, 'Government'])->name('Government');
+Route::get('/walkin', [App\Http\Controllers\PrintingShopContoller::class, 'Walkin'])->name('Walkin');
 
 Route::post('/logout', [App\Http\Controllers\EmployeeLoginController::class, 'logout'])->name('logout');

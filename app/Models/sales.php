@@ -31,4 +31,15 @@ class sales extends Model
         'added_by',
         'isActive'
     ];
+
+
+        public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
+    }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'subcategory_id', 'subcategory_id', 'image');
+    }
 }

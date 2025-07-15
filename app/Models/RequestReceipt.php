@@ -30,6 +30,7 @@ class RequestReceipt extends Model
         'jo_number',
         'payment_method',
         'payment_status',
+        'receipt_number',
         'reference_number',
         'payment_date',
         'is_conforme_signed',

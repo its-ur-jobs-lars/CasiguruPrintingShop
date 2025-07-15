@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Price List</title>
+    <title>Walk-in</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -183,7 +183,7 @@
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subOrderManagement">
                   <span class="side-nav-menu-icon d-flex mr-3">
-                     <i class=" fas fa-solid fa-sitemap"></i>
+                    <i class=" fas fa-solid fa-sitemap"></i>
                   </span>
                     <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
@@ -192,10 +192,10 @@
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-              <!-- Order Management: subOrder Management -->
-              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0" style="display: block;">
+               <!-- Order Management: subOrder Management -->
+              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
 
-                       <li class="side-nav-menu-item">
+                   <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderdashboard">
                         <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
                     </li>
@@ -205,16 +205,15 @@
                         <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
                     </li>
 
-                      
-                    <li class="side-nav-menu-item active">
-                        <a class="side-nav-menu-link" href="/pricelist">
-                       <i class="fas fa-solid fa-list"></i>Price List</a>
+                    <li class="side-nav-menu-item">
+                       <a class="side-nav-menu-link" href="/pricelist">
+                        <i class="fas fa-solid fa-list"></i>Price List</a>
                     </li>
-                       <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/services">
                         <i class="fas fa-solid fa-layer-group"></i>Services</a>
                     </li>
-                   <li class="side-nav-menu-item">
+                       <li class="side-nav-menu-item">
                      <a class="side-nav-menu-link" href="/inventory">
                         <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
                     </li>
@@ -236,7 +235,7 @@
             </li>
             <!-- End Order Management -->
             
-            <!-- Sales Managemnt -->
+             <!-- Sales Managemnt -->
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subSalesManagemnt">
@@ -287,12 +286,12 @@
                 </a>
 
             <!-- History: subHistory -->
-            <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0">
-               <li class="side-nav-menu-item">
+            <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0"  style = "display:block;">
+                <li class="side-nav-menu-item ">
                     <a class="side-nav-menu-link" href="/government">
                     <i class=" fas fa-solid fa-building"></i></i>Government</a>
                 </li>
-                <li class="side-nav-menu-item">
+                <li class="side-nav-menu-item active">
                     <a class="side-nav-menu-link" href="/walkin">
                     <i class="fas fa-solid fa-person-walking"></i>Walk-in</a>
                 </li>
@@ -308,8 +307,7 @@
             <!-- End History: subHistory -->
         </li>
         <!-- End History -->
-
-             <!-- Manufacturer -->
+    <!-- Manufacturer -->
              <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subManufacturer">
@@ -323,27 +321,23 @@
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-                   <!-- Manufacturer: subManufacturer-->
+                  <!-- Manufacturer: subManufacturer-->
                <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    
-                  <!-- <li class="side-nav-menu-item">
-                      <a class="side-nav-menu-link" href="/category">
-                       <i class="fas fa-industry"></i>Category</a>
-                  </li> -->
-
-                  <li class="side-nav-menu-item">
+                   
+                   <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
-                  
+                
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
                     </li>
-                     <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/supplier">
                         <i class="fas fa-cubes"></i> Supplier</a>
                     </li>
+                  
                  
 
                        <li class="side-nav-menu-item">
@@ -351,13 +345,12 @@
                         <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
                     </li>
 
-                    
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
             </li>
             <!-- End Manufacturer -->
             
-               @can('view-personnel-profile')
+                 @can('view-personnel-profile')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subPersonnel">
@@ -395,6 +388,7 @@
             @endcan
         <!-- End History -->
           
+          
        <!-- Dark Mode Toggle -->
        <div class="ml-3">
             <button id="darkModeToggle" class="btn-1 btn-sm-1 btn-outline-secondary">
@@ -411,7 +405,7 @@
        <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Price List</div>
+                <div class="h3 mb-0">Account Payable Walk-in</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -432,8 +426,7 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   @livewire('price-list-item')
-                                   @livewire('price-list-item-table')
+                                   
                             </div>
                         </div>
                     </div>
@@ -444,7 +437,7 @@
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
-                    &copy; 2025 Casiguro Enterprises Inc.  All Rights Reserved.
+                    &copy; 2025 Casiguro Enterprises In. All Rights Reserved.
             </div>
         </div>
         </footer>
@@ -507,7 +500,7 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-            ['Services', 'Amount'],
+            ['Category', 'Amount'],
             ['Laptop and Accessories', 8000],
             ['Mouse', 5000],
             ['Printer', 3000],

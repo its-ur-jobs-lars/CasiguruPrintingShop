@@ -263,7 +263,7 @@
                       <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
                           <ul class="mb-0">
                               @foreach ($errors->all() as $error)
-                                  <li>{{ $error }}</li>
+                                  {{ $error }}
                               @endforeach
                           </ul>
                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
