@@ -17,6 +17,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\supplierInv;
 use App\Models\inventory;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class InventoryTable extends Component implements HasTable
@@ -26,10 +27,29 @@ class InventoryTable extends Component implements HasTable
         WithPagination::resetPage insteadof InteractsWithTable;
     }
 
+//     public function showThread()
+// {
+//     $this->showPaymentThread = true;
+//     $this->loadThreadWithInventoryCheck();
+// }
+
+public $showThreadPayment = false; // purely for visibility flag
+public $threadPaymentData = []; // holds the actual data
+
+
+public function closeThread()
+{
+    $this->showPaymentThread = false;
+}
+
     protected $listeners = ['refreshComponent' => '$refresh'];
 
     public function nextStep(){
         $this->step = 2;
+    }
+
+     public function nextStep1(){
+        $this->step = 3;
     }
 
     public function previousStep(){
@@ -51,8 +71,53 @@ class InventoryTable extends Component implements HasTable
  
     public $isEditModalOpen = '';
 
+    public $hasLowStock = false;
+     public $showPaymentThread = false;
 
-    
+    public function checkLowStockStatus()
+{
+    $this->hasLowStock = inventory::whereColumn('quantity', '<', 'minimum_stock')->exists();
+}
+
+public function loadThreadWithInventoryCheck()
+{
+    // Always trigger the modal
+    $this->showPaymentThread = true;
+
+    // Check for low stock items
+    $lowStockItems = inventory::with(['subcategory.category'])
+        ->whereColumn('quantity', '<', 'minimum_stock')
+        ->get();
+
+    // If no low stock items, just show an empty array to display "No low stock" message
+    if ($lowStockItems->isEmpty()) {
+        $this->showThreadPayment = [];
+        return;
+    }
+
+    // Otherwise, group and format the results
+    $grouped = $lowStockItems->groupBy(function ($item) {
+        return $item->updated_at->toDateString();
+    });
+
+    $this->showThreadPayment = $grouped->map(function ($group, $date) {
+        return [
+            'date' => $date,
+            'items' => $group->map(function ($item) {
+                return [
+                    'label' => $item->subcategory->category->category_name ?? 'N/A',
+                    'subcategory_name' => $item->subcategory->subcategory_name ?? 'N/A',
+                    'quantity' => $item->quantity,
+                    'minimum_stock' => $item->minimum_stock,
+                    'status' => $item->quantity == 0 ? 'Out of Stock' : 'Low Stock',
+                ];
+            }),
+        ];
+    })->values()->all();
+}
+
+
+
    //for edit
    public $editInventory = [
     'id' => null,
@@ -63,9 +128,9 @@ class InventoryTable extends Component implements HasTable
     'quantity' => null,
     'minimum_stock' => null,
     'purchase_price' => null,
-    'selling_price' => null,
+    'available_rolls' => null,
     'supplier_id' => null,
-    'expiration_date' => null,
+    'location' => null,
     'remarks' => null,
     'isActive' => null,
 
@@ -81,11 +146,11 @@ class InventoryTable extends Component implements HasTable
         'editInventory.quantity' => 'required|string|max:255',
         'editInventory.minimum_stock' => 'required|string|max:255',
          'editInventory.purchase_price' => 'required|string|max:255',
-        'editInventory.selling_price' => 'required|string|max:255',
+        'editInventory.available_rolls' => 'required|string|max:255',
         'editInventory.supplier_id' => 'required|string|max:255',
-        'editInventory.expiration_date' => 'required|string|max:255',
+        'editInventory.location' => 'required|string|max:255',
         'editInventory.remarks' => 'required|string|max:255',
-        'editInventory.isActive' => 'required|string|max:255'
+        'editInventory.isActive' =>  'required|boolean',
 
     ];
 
@@ -95,19 +160,19 @@ public function update()
 {
     try {
         $this->validate([
-        'editInventory.item_name' => 'required|string|max:255',
-        'editInventory.category_id' => 'required|string|max:255',
-        'editInventory.subcategory_id' => 'required|string|max:255',
-        'editInventory.unit' => 'required|string|max:255',
-        'editInventory.quantity' => 'required|string|max:255',
-        'editInventory.minimum_stock' => 'required|string|max:255',
-         'editInventory.purchase_price' => 'required|string|max:255',
-        'editInventory.selling_price' => 'required|string|max:255',
-        'editInventory.supplier_id' => 'required|string|max:255',
-        'editInventory.expiration_date' => 'required|string|max:255',
-        'editInventory.remarks' => 'required|string|max:255',
-        'editInventory.isActive' => 'required|string|max:255'
-        ]);
+    'editInventory.item_name' => 'required|string|max:255',
+    'editInventory.category_id' => 'required|string|max:255',
+    'editInventory.subcategory_id' => 'required|string|max:255',
+    'editInventory.unit' => 'required|string|max:255',
+    'editInventory.quantity' => 'required|numeric',
+    'editInventory.minimum_stock' => 'required|numeric',
+    'editInventory.purchase_price' => 'required|numeric',
+    'editInventory.available_rolls' => 'required|numeric',
+    'editInventory.supplier_id' => 'required|string|max:255',
+    'editInventory.location' => 'required|string|max:255',
+    'editInventory.remarks' => 'required|string|max:255',
+    'editInventory.isActive' => 'required|boolean',
+]);
 
         $supplierDetails = inventory::find($this->editInventory['id']);
 
@@ -121,9 +186,9 @@ public function update()
                 'quantity' => $this->editInventory['quantity'],
                 'minimum_stock' => $this->editInventory['minimum_stock'],
                 'purchase_price' => $this->editInventory['purchase_price'],
-                'selling_price' => $this->editInventory['selling_price'],
+                'available_rolls' => $this->editInventory['available_rolls'],
                 'supplier_id' => $this->editInventory['supplier_id'],
-                'expiration_date' => $this->editInventory['expiration_date'],
+                'location' => $this->editInventory['location'],
                 'remarks' => $this->editInventory['remarks'],
                 'isActive' => $this->editInventory['isActive'],
                 'updated_by' => Auth::user()->id, // Assuming you want to track who
@@ -159,9 +224,9 @@ public function update()
             'quantity' => $supplier->quantity,
             'minimum_stock' => $supplier->minimum_stock,
             'purchase_price' => $supplier->purchase_price,
-            'selling_price' => $supplier->selling_price,
+            'available_rolls' => $supplier->available_rolls,
             'supplier_id' => $supplier->supplier_id,
-            'expiration_date' => $supplier->expiration_date,
+            'location' => $supplier->location,
             'remarks' => $supplier->remarks,
             'isActive' => $supplier->isActive
             
@@ -170,6 +235,7 @@ public function update()
         // Load category and subcategory for dropdowns
         $this->Category = Category::all(); // for select option using ->id and ->category_name
         $this->SubCategory = SubCategory::where('category_id', $supplier->category_id)->get();
+         $this->Supplier = supplierInv::where('category_id', $supplier->category_id)->get();
 
         $this->isEditModalOpen = true;
     } else {
@@ -185,8 +251,12 @@ public function update()
    public $subcategory = [];
    public $supplier = [];
 
+  
+
     public function mount()
     {
+        $this->checkLowStockStatus();
+        $this->loadThreadWithInventoryCheck();
        $this->category = Category::pluck('category_name', 'category_id')->toArray();
         $this->subcategory = SubCategory::pluck('subcategory_name', 'subcategory_id')->toArray();
           $this->supplier = supplierInv::pluck('name', 'supplier_id')->toArray();

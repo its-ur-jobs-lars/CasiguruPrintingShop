@@ -19,4 +19,9 @@ class Category extends Model
         'added_by',
         'updated_by'
     ];
+
+    public function subcategories()
+    {
+        return $this->hasMany(SubCategory::class, 'category_id', 'category_id');
+    }
 }

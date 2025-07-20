@@ -35,8 +35,9 @@ class OrderReciept extends Migration
             $table->decimal('total', 10, 2)->default(0.00);
             $table->decimal('payment', 10, 2)->default(0.00);
             $table->decimal('balance', 10, 2)->default(0.00);
-             $table->string('jo_number')->nullable();
-              $table->string('receipt_number')->nullable();
+            $table->string('jo_number')->nullable();
+            $table->string('receipt_number')->nullable();
+            $table->decimal('layout_fee', 10, 2); // Layout fee for the order
             $table->string('payment_method')->nullable(); // e.g., Cash, Check, Bank Transfer
             $table->string('reference_number')->nullable(); // e.g., 123456
             $table->date('payment_date')->nullable(); // Date of payment

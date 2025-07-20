@@ -38,27 +38,33 @@ class OrderreceiptRequestModal extends Component
         return view('livewire.orderreceipt-request-modal');
     }
 
+    public $isFullSublimation = false;
+
     public function mount()
 {
     $this->Category = Category::where('isActive', 1)->get();
     $this->SubCategory = SubCategory::where('isActive', 1)->get();
 
-    // Fetch all issued receipt combinations
-    $existingReceipts = RequestReceipt::select('order_id', 'subcategory_id')->get();
+    $this->Order = Order::where('isActive', 1)->get()->filter(function ($order) {
+    // Get the latest receipt for this order_id + subcategory_id
+    $latestReceipt = RequestReceipt::where('order_id', $order->order_id)
+        ->where('subcategory_id', $order->subcategory_id)
+        ->latest('id')
+        ->first();
 
-    $this->Order = Order::where('isActive', 1)->get()->filter(function ($order) use ($existingReceipts) {
-        foreach ($existingReceipts as $receipt) {
-            if (
-                $order->order_id == $receipt->order_id &&
-                $order->subcategory_id == $receipt->subcategory_id
-            ) {
-                return false; // Exclude if receipt already exists for this order_id + subcategory
-            }
-        }
+    if (!$latestReceipt) {
         return true;
-    })->values();
+    }
+    if (floatval($latestReceipt->payment) == 0.00) {
+        return true;
+    }
+    if (strtolower($latestReceipt->payment_status) !== 'paid') {
+        return true;
+    }
+    // Otherwise, block if already paid
+    return false;
+})->values();
 }
-
 
     public function openModal()
     {
@@ -72,19 +78,32 @@ class OrderreceiptRequestModal extends Component
         $this->step = 1;
     }
 
-    public function updatedOrderId($value)
+public function updatedOrderId($value)
 {
-    // Get subcategory IDs from all orders matching the selected order_id
+    // Get all subcategory IDs for this order
     $subcatIds = Order::where('order_id', $value)
         ->pluck('subcategory_id')
         ->unique();
 
-    // Get subcategory IDs that already have a receipt for this order_id
-    $issuedSubcatIds = RequestReceipt::where('order_id', $value)
-        ->pluck('subcategory_id');
+    // Filter subcategory IDs: allow if no receipt exists, or latest receipt is unpaid/0.00
+    $filteredIds = $subcatIds->filter(function ($subcatId) use ($value) {
+        $latestReceipt = RequestReceipt::where('order_id', $value)
+            ->where('subcategory_id', $subcatId)
+            ->latest('id')
+            ->first();
 
-    // Filter out issued subcategory IDs
-    $filteredIds = $subcatIds->diff($issuedSubcatIds);
+        if (!$latestReceipt) {
+            return true;
+        }
+        if (floatval($latestReceipt->payment) == 0.00) {
+            return true;
+        }
+        if (strtolower($latestReceipt->payment_status) !== 'paid') {
+            return true;
+        }
+        // Otherwise, block if already paid
+        return false;
+    });
 
     // Get subcategory details
     $this->filteredSubCategories = SubCategory::whereIn('subcategory_id', $filteredIds)->get();
@@ -93,61 +112,126 @@ class OrderreceiptRequestModal extends Component
 }
 
 
+    // public function updatedSelectedSubcategoryId($value)
+    // {
+    //     $order = Order::where('order_id', $this->order_id)
+    //         ->where('subcategory_id', $value)
+    //         ->first();
+
+    //     if ($order) {
+    //         $isGovernment = strtolower($order->customer_type) === 'government';
+    //         $this->isGovernment = $isGovernment;
+
+    //          // Determine if full sublimation
+    //     $this->isFullSublimation = strtolower($order->subcategory->subcategory_name) === 'Full Sublimation Printing';
+
+    //         $this->data = [
+    //             'date' => $order->date,
+    //             'name' => $order->name,
+    //             'contact_no' => $order->contact_no,
+    //             'address' => $order->address,
+    //             'jo_number' => $order->jo_number,
+    //             'category_id' => $order->category_id,
+    //             'subcategory_id' => $order->subcategory_id,
+    //             'qty' => $order->qty,
+    //             'amount' => $order->amount,
+    //             'price' => $order->price,
+    //             'status' => $order->status,
+    //             'layout_fee' => $order->layout_fee,
+    //             'customer_type' => $order->customer_type,
+    //             'is_government' => $isGovernment,
+    //         ];
+
+    //         if ($isGovernment) {
+    //             $this->data['total'] = $order->total;
+    //             $this->data['payment'] = 0;
+    //             $this->data['balance'] = $order->total;
+    //             $this->data['payment_status'] = 'Unpaid';
+    //             $this->data['payment_method'] = 'None';
+    //             $this->data['reference_number'] = 'None';
+    //             $this->data['payment_date'] = null;
+    //             $this->data['remarks'] = 'Government client — no payment yet';
+    //         } else {
+    //             $latestPayment = Payment::where('order_id', $this->order_id)
+    //                 ->where('subcategory_id', $value)
+    //                 ->where('isActive', 1)
+    //                 ->latest('id')
+    //                 ->first();
+
+    //             $this->data['total'] = $order->total;
+    //             $this->data['payment'] = $latestPayment->payment ?? 0;
+    //             $this->data['balance'] = $latestPayment->balance ?? 0;
+    //             $this->data['payment_status'] = $latestPayment->payment_status ?? '';
+    //             $this->data['payment_method'] = $latestPayment->payment_method ?? '';
+    //             $this->data['reference_number'] = $latestPayment->reference_number ?? '';
+    //             $this->data['payment_date'] = $latestPayment?->payment_date
+    //                 ? \Carbon\Carbon::parse($latestPayment->payment_date)->format('Y-m-d')
+    //                 : null;
+    //             $this->data['remarks'] = $latestPayment->remarks ?? '';
+    //         }
+    //     }
+    // }
+    
     public function updatedSelectedSubcategoryId($value)
-    {
-        $order = Order::where('order_id', $this->order_id)
-            ->where('subcategory_id', $value)
-            ->first();
+{
+    $order = Order::where('order_id', $this->order_id)
+        ->where('subcategory_id', $value)
+        ->first();
 
-        if ($order) {
-            $isGovernment = strtolower($order->customer_type) === 'government';
-            $this->isGovernment = $isGovernment;
+    if (!$order) return;
 
-            $this->data = [
-                'date' => $order->date,
-                'name' => $order->name,
-                'contact_no' => $order->contact_no,
-                'address' => $order->address,
-                'jo_number' => $order->jo_number,
-                'category_id' => $order->category_id,
-                'subcategory_id' => $order->subcategory_id,
-                'qty' => $order->qty,
-                'amount' => $order->amount,
-                'price' => $order->price,
-                'status' => $order->status,
-                'customer_type' => $order->customer_type,
-                'is_government' => $isGovernment,
-            ];
+    $this->isGovernment = strtolower($order->customer_type) === 'government';
+    $this->isFullSublimation = strtolower($order->subcategory->subcategory_name) === 'full sublimation printing';
 
-            if ($isGovernment) {
-                $this->data['total'] = $order->total;
-                $this->data['payment'] = 0;
-                $this->data['balance'] = $order->total;
-                $this->data['payment_status'] = 'Unpaid';
-                $this->data['payment_method'] = 'None';
-                $this->data['reference_number'] = 'None';
-                $this->data['payment_date'] = null;
-                $this->data['remarks'] = 'Government client — no payment yet';
-            } else {
-                $latestPayment = Payment::where('order_id', $this->order_id)
-                    ->where('subcategory_id', $value)
-                    ->where('isActive', 1)
-                    ->latest('id')
-                    ->first();
+    $this->data = [
+        'date' => $order->date,
+        'name' => $order->name,
+        'contact_no' => $order->contact_no,
+        'address' => $order->address,
+        'jo_number' => $order->jo_number,
+        'category_id' => $order->category_id,
+        'subcategory_id' => $order->subcategory_id,
+        'qty' => $order->qty,
+        'amount' => $order->amount,
+        'price' => $order->price,
+        'status' => $order->status,
+        'layout_fee' => $order->layout_fee,
+        'customer_type' => $order->customer_type,
+        'is_government' => $this->isGovernment,
+        'total' => $order->total,
+    ];
 
-                $this->data['total'] = $order->total;
-                $this->data['payment'] = $latestPayment->payment ?? 0;
-                $this->data['balance'] = $latestPayment->balance ?? 0;
-                $this->data['payment_status'] = $latestPayment->payment_status ?? '';
-                $this->data['payment_method'] = $latestPayment->payment_method ?? '';
-                $this->data['reference_number'] = $latestPayment->reference_number ?? '';
-                $this->data['payment_date'] = $latestPayment?->payment_date
-                    ? \Carbon\Carbon::parse($latestPayment->payment_date)->format('Y-m-d')
-                    : null;
-                $this->data['remarks'] = $latestPayment->remarks ?? '';
-            }
-        }
+    $latestPayment = Payment::where('order_id', $this->order_id)
+        ->where('subcategory_id', $value)
+        ->where('isActive', 1)
+        ->latest('id')
+        ->first();
+
+    if ($latestPayment) {
+        $this->data['payment'] = $latestPayment->payment;
+        $this->data['balance'] = $latestPayment->balance;
+        $this->data['payment_status'] = $latestPayment->payment_status;
+        $this->data['payment_method'] = $latestPayment->payment_method;
+        $this->data['reference_number'] = $latestPayment->reference_number;
+        $this->data['payment_date'] = $latestPayment->payment_date
+            ? \Carbon\Carbon::parse($latestPayment->payment_date)->format('Y-m-d')
+            : null;
+        $this->data['remarks'] = $latestPayment->remarks ?? '';
+    } else {
+        $this->data['payment'] = 0;
+        $this->data['balance'] = $order->total;
+        $this->data['payment_status'] = 'Unpaid';
+        $this->data['payment_method'] = $this->isGovernment ? 'None' : '';
+        $this->data['reference_number'] = $this->isGovernment ? 'None' : '';
+        $this->data['payment_date'] = null;
+        $this->data['remarks'] = $this->isGovernment
+            ? 'Government client — no payment yet'
+            : 'No payment made yet';
     }
+}
+
+
+
 
     public function updatedSelectedpayment($value)
     {
@@ -176,6 +260,15 @@ class OrderreceiptRequestModal extends Component
         try {
             $isGovernment = strtolower($this->data['customer_type'] ?? '') === 'government';
 
+            // Check if there is a valid payment even for government clients
+            $existingPayment = Payment::where('order_id', $this->order_id)
+                ->where('subcategory_id', $this->data['subcategory_id'])
+                ->where('isActive', 1)
+                ->latest('id')
+                ->first();
+
+            $isPaidGovernment = $isGovernment && $existingPayment;
+
             $rules = [
                 'data.name' => 'required',
                 'data.contact_no' => 'required',
@@ -186,6 +279,7 @@ class OrderreceiptRequestModal extends Component
                 'data.price' => 'required|numeric',
                 'data.amount' => 'required|numeric',
                 'data.jo_number' => 'nullable|string|max:255',
+                'data.layout_fee' => 'nullable|string|max:255',
                 'data.status' => 'nullable|string|max:50',
                 'data.receipt_number' => 'nullable|string|max:50',
                 'data.remarks' => 'nullable|string|max:500',
@@ -210,6 +304,7 @@ class OrderreceiptRequestModal extends Component
             $order_receipt_id = 'OR-' . str_pad($nextId, 7, '0', STR_PAD_LEFT);
             $paymentDate = !$isGovernment && $this->data['payment_date'] ? $this->data['payment_date'] : null;
 
+            
             RequestReceipt::create([
                 'order_receipt_id' => $order_receipt_id,
                 'order_id' => $this->order_id,
@@ -227,15 +322,23 @@ class OrderreceiptRequestModal extends Component
                 'price' => $this->data['price'],
                 'amount' => $this->data['amount'],
                 'total' => $this->data['total'] ?? 0,
-                'payment' => $isGovernment ? 0 : ($this->data['payment'] ?? 0),
-                'balance' => $isGovernment ? 0 : ($this->data['balance'] ?? 0),
-                'payment_method' => $isGovernment ? 'None' : ($this->data['payment_method'] ?? ''),
-                'reference_number' => $isGovernment ? 'None' : ($this->data['reference_number'] ?? ''),
-                'receipt_number' => $isGovernment ? 'None' : ($this->data['receipt_number'] ?? ''),
-                'payment_date' => $paymentDate,
-                'status' => $this->data['status'] ?? '',
-                'payment_status' => $isGovernment ? 'Unpaid' : ($this->data['payment_status'] ?? ''),
-                'remarks' => $isGovernment ? 'Government client — no payment required.' : ($this->data['remarks'] ?? ''),
+                 'layout_fee' => $this->data['layout_fee'] ?? 0,
+            'payment' => $isPaidGovernment ? $existingPayment->payment : ($isGovernment ? 0 : ($this->data['payment'] ?? 0)),
+            'balance' => $isPaidGovernment ? $existingPayment->balance : ($isGovernment ? 0 : ($this->data['balance'] ?? 0)),
+            'payment_method' => $isPaidGovernment ? $existingPayment->payment_method : ($isGovernment ? 'None' : ($this->data['payment_method'] ?? '')),
+            'reference_number' => $isPaidGovernment ? $existingPayment->reference_number : ($isGovernment ? 'None' : ($this->data['reference_number'] ?? '')),
+            'receipt_number' => $isGovernment ? 'None' : ($this->data['receipt_number'] ?? ''),
+            'payment_date' => $isPaidGovernment && $existingPayment->payment_date
+                ? $existingPayment->payment_date
+                : ($isGovernment ? null : $paymentDate),
+            'status' => $this->data['status'] ?? '',
+            'payment_status' => $isPaidGovernment
+                ? $existingPayment->payment_status
+                : ($isGovernment ? 'Unpaid' : ($this->data['payment_status'] ?? '')),
+            'remarks' => $isPaidGovernment
+                ? $existingPayment->remarks
+                : ($isGovernment ? 'Government client — no payment required.' : ($this->data['remarks'] ?? '')),
+
 
                 'is_conforme_signed' => true,
                 'is_received_signed' => true,

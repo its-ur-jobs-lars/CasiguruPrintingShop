@@ -59,15 +59,21 @@
                                 <input type="text" wire:model="data.quantity" class="form-control" required>
                             </div>
 
-                              <div class="form-group">
+                                                        <!-- Available Rolls Field -->
+                                @if($selectedSubcategoryName === 'Full Sublimation Printing')
+                                    <div class="form-group">
+                                        <label style="color:black;">Available Rolls</label>
+                                        <input type="text" wire:model.defer="data.available_rolls" class="form-control" readonly>
+                                    </div>
+                                @endif
+
+
+                          <div class="form-group">
                                 <label style="color:black;">Purchase Price</label>
                                 <input type="text" wire:model="data.purchase_price" class="form-control" required>
                             </div>
 
-                              <div class="form-group">
-                                <label style="color:black;">Selling Price</label>
-                                <input type="text" wire:model="data.selling_price" class="form-control" required>
-                            </div>
+                              
 
 
                             {{-- Next Button--}}
@@ -113,11 +119,19 @@
                                 <input type="date" wire:model="data.expiration_date" class="form-control" required>
                             </div> 
 
-                            {{-- Employee Number --}}
+                         {{-- User Remarks --}}
                             <div class="form-group">
-                                <label style="color:black;">Remarks</label>
-                                <input type="text" wire:model="data.remarks" class="form-control" required>
-                            </div> 
+                                <label style="color:black;">User Remarks</label>
+                                <input type="text" wire:model="data.remarks" class="form-control">
+                            </div>
+
+                            @if($showAutoRemarks)
+                                <div class="form-group mt-2">
+                                    <label style="color:black;">Auto Remarks</label>
+                                    <input type="text" class="form-control" value="{{ $autoRemarks }}" readonly>
+                                </div>
+                            @endif
+
 
                             
                         

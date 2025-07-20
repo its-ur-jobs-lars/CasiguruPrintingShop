@@ -20,4 +20,14 @@ class SubCategory extends Model
         'added_by',
         'updated_by'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
+    }
+
+    public function inventories()
+    {
+        return $this->hasMany(inventory::class, 'subcategory_id', 'subcategory_id');
+    }
 }

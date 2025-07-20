@@ -31,6 +31,7 @@ class RequestReceipt extends Model
         'payment_method',
         'payment_status',
         'receipt_number',
+        'layout_fee',
         'reference_number',
         'payment_date',
         'is_conforme_signed',

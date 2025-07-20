@@ -26937,6 +26937,14 @@ tr:hover {
   .production-butt{
     background-color: green;
   }
+
+  .font-semibold-2{
+    color:green;
+  }
+
+   .font-semibold-1{
+    color:violet;
+  }
   
   .product-type {
     text-align: center;

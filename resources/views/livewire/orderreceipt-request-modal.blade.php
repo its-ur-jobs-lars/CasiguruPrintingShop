@@ -89,7 +89,12 @@
                             @if ($step === 2)
                                 <div class="form-group">
                                     <label style="color:black;">Quantity</label>
-                                    <input type="number" wire:model="data.qty" class="form-control" required>
+                                    <input type="text" wire:model="data.qty" class="form-control" required>
+                                </div>
+
+                                 <div class="form-group">
+                                    <label style="color:black;">Layout Fee</label>
+                                    <input type="text" wire:model="data.layout_fee" class="form-control" required>
                                 </div>
 
                                 <div class="form-group">

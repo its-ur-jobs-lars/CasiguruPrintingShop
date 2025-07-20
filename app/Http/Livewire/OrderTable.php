@@ -29,7 +29,47 @@ class OrderTable extends Component implements HasTable
     public function nextStep1() { $this->step = 3; }
     public function previousStep1() { $this->step = 2; }
 
-      public function confirmProduction($order_id)
+//       public function confirmProduction($order_id)
+// {
+//     $orders = Order::where('order_id', $order_id)->get();
+
+//     DB::beginTransaction();
+
+//     try {
+//         foreach ($orders as $order) {
+//             $inventory = inventory::where('category_id', $order->category_id)
+//                 ->where('subcategory_id', $order->subcategory_id)
+//                 ->first();
+
+//             if (!$inventory || $inventory->quantity < $order->qty) {
+//                 DB::rollBack();
+//                 session()->flash('errorInsert', 'Not enough stock for ' . $order->subcategory->subcategory_name ?? 'item');
+//                 return;
+//             }
+
+            
+//             // Deduct stock
+//             $inventory->quantity -= $order->qty;
+//             $inventory->save();
+
+//             // Update order status
+//             $order->status = 'For PickUp'; // or 'Completed'
+//             $order->inventory_deducted = true;
+//             $order->save();
+
+          
+//         }
+
+//         DB::commit();
+//         session()->flash('messageInsert', 'Production confirmed and inventory deducted.');
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+//         session()->flash('errorInsert', 'Failed to confirm production: ' . $e->getMessage());
+//     }
+// }
+
+
+    public function confirmProduction($order_id)
 {
     $orders = Order::where('order_id', $order_id)->get();
 
@@ -43,40 +83,43 @@ class OrderTable extends Component implements HasTable
 
             if (!$inventory || $inventory->quantity < $order->qty) {
                 DB::rollBack();
-                session()->flash('errorInsert', 'Not enough stock for ' . $order->subcategory->subcategory_name ?? 'item');
+                session()->flash('errorInsert', 'Not enough stock for ' . ($order->subcategory->subcategory_name ?? 'item'));
                 return;
             }
 
-            
-            // Deduct stock
+            // Deduct quantity
             $inventory->quantity -= $order->qty;
+
+                // Handle rolls if Full Sublimation Printing
+            if (strcasecmp($order->subcategory->subcategory_name, 'Full Sublimation Printing') === 0) {
+                 $estimatedItemsPerRoll = 75;
+                 $rollsUsed = round($order->$estimatedItemsPerRoll / $qty, 2);
+
+        if ($inventory->available_rolls < $rollsUsed) {
+            DB::rollBack();
+            session()->flash('errorInsert', 'Not enough rolls for Full Sublimation Printing');
+            return;
+        }
+
+        $inventory->available_rolls -= $rollsUsed;
+    }
+
             $inventory->save();
 
-            // Update order status
-            $order->status = 'For PickUp'; // or 'Completed'
+            // Update order
+            $order->status = 'For PickUp';
             $order->inventory_deducted = true;
             $order->save();
-
-            // // Create payment record
-            // $payment = new payment();
-            // $payment->order_id = $order->order_id;
-            // $payment->subcategory_id = $order->subcategory_id;
-            // $payment->amount = $order->amount;
-            // $payment->total = $order->total;
-            // $payment->balance = 0; // Assuming full payment
-            // $payment->status = 'Paid'; // or 'Pending'
-            // $payment->remarks = 'Production confirmed';
-            // $payment->added_by = Auth::user()->username;
-            // $payment->save();   
         }
 
         DB::commit();
-        session()->flash('messageInsert', 'Production confirmed and inventory deducted.');
+        session()->flash('messageInsert', 'Production confirmed. Inventory and rolls deducted.');
     } catch (\Exception $e) {
         DB::rollBack();
         session()->flash('errorInsert', 'Failed to confirm production: ' . $e->getMessage());
     }
 }
+
 
     protected $listeners = ['refreshComponent' => '$refresh'];
 

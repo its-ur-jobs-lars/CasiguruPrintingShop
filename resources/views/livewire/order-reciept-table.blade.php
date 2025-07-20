@@ -27,6 +27,7 @@
                                 <th class="px-4 py-2">Payment Method</th>
                                 <th class="px-4 py-2">Reference Number</th>
                                 <th class="px-4 py-2">Payment Date</th>
+                                <th class="px-4 py-2">Laoyout Fee</th>
                                 <th class="px-4 py-2">Service By</th>
                                 <th class="px-4 py-2">Status</th>
                                  <th class="px-4 py-2">Payment Status</th>
@@ -49,7 +50,7 @@
 
                                       <td class="px-4 py-2">{{ $record->reference_number }}</td>
                                        <td class="px-4 py-2">{{ $record->payment_date }}</td>
-                                   
+                                      <td class="px-4 py-2">{{ $record->layout_fee }}</td>
                                     <td class="px-4 py-2">{{ $record->service_by }}</td>
 
 
