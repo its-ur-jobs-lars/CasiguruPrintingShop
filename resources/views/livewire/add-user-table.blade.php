@@ -61,8 +61,10 @@
                                     <td class="px-4 py-2">
                                     @php 
                                     $role = [
-                                        1 => 'Administrator',
-                                        2 => 'User'
+                                        "Administrator" => 'Administrator',
+                                        "Graphic Artist" => 'Graphic Artist',
+                                        "Secretary" => 'Secretary',
+                                        "User" => 'User',
                                     ]
                                     @endphp
                                     {{ $role[$record->role] ?? 'Not Applicable' }}

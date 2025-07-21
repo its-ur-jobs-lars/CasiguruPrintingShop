@@ -89,6 +89,12 @@
                          <input type="text" wire:model="data.description" class="form-control" required>
                        @error('data.description') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+
+                    <div class="col">
+                          <label for="task" style="float: left;">Job Description</label>
+                         <input type="text" wire:model="data.description" class="form-control" required>
+                       @error('data.description') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
               </div>
 
                 {{-- Submit Button --}}

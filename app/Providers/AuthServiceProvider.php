@@ -26,7 +26,34 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('view-personnel-profile', function ($user) {
-        return $user->role !== '2'; // Only allow if NOT 'user'
+        return $user->role === 'Administrator';
     });
+
+      Gate::define('view-account-payable', function ($user) {
+        return $user->role === 'Administrator';
+    });
+
+     Gate::define('view-sales-management', function ($user) {
+    return in_array($user->role, ['Administrator', 'Secretary']);
+    });
+
+    Gate::define('view-store-management', function ($user) {
+        return in_array($user->role, ['Administrator', 'Secretary']);
+    });
+
+    Gate::define('view-order-management', function ($user) {
+    return in_array($user->role, ['Administrator', 'Secretary']);
+    });
+
+    Gate::define('view-order-details', function ($user) {
+        return in_array($user->role, ['Administrator', 'Secretary', 'Graphic Artist', 'Production']);
+    });
+
+    Gate::define('view-inventory', function ($user) {
+        return in_array($user->role, ['Administrator', 'Secretary', 'Graphic Artist', 'Production']);
+    });
+
+    
+
     }
 }

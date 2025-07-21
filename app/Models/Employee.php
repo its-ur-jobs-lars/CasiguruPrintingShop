@@ -26,4 +26,9 @@ class Employee extends Model
         'updated_by',
 
     ];
+
+     public function benefits()
+{
+    return $this->hasMany(employee_benefits::class, 'employee_number', 'employee_number');
+}
 }

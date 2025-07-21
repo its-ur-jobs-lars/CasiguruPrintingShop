@@ -86,8 +86,11 @@
                                 <label style="color:black;">Role</label>
                             <select wire:model="data.role" class="form-control" required>
                                     <option value="">-- Select --</option>
-                                    <option value="1">Administrator</option>
-                                    <option value="2">User</option>
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Graphic Artist">Graphic Artist</option>
+                                    <option value="Secretary">Secretary</option>
+                                    <option value="User">User</option>
+                                    <option value="Production">Production</option>
                                 </select>
                             </div>
 

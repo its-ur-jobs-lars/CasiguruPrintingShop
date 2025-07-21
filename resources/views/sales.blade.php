@@ -178,67 +178,112 @@
         </li>
         <!-- End Dashboard -->
            
-            <!-- Order Management -->
+                <!-- Order Management -->
+        @can('view-order-management')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
-                   data-target="#subOrderManagement">
-                  <span class="side-nav-menu-icon d-flex mr-3">
-                    <i class=" fas fa-solid fa-sitemap"></i>
-                  </span>
+                data-target="#subOrderManagement">
+                    <span class="side-nav-menu-icon d-flex mr-3">
+                        <i class="fas fa-solid fa-sitemap"></i>
+                    </span>
                     <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
-              </span>
+                    </span>
                     <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
                 </a>
 
-              <!-- Order Management: subOrder Management -->
-              <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
-
-                       <li class="side-nav-menu-item">
+                <!-- Order Management: subOrder Management -->
+                <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/orderdashboard">
-                        <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard</a>
-                    </li>
-                    
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/orderDetails">
-                        <i class="fas fa-solid fa-file-invoice"></i>Order Details</a>
+                            <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard
+                        </a>
                     </li>
 
-                    
+                    @can('view-order-details')
+                        <li class="side-nav-menu-item">
+                            <a class="side-nav-menu-link" href="/orderDetails">
+                                <i class="fas fa-solid fa-file-invoice"></i>Order Details
+                            </a>
+                        </li>
+                    @endcan
 
-                    
                     <li class="side-nav-menu-item">
-                       <a class="side-nav-menu-link" href="/pricelist">
-                        <i class="fas fa-solid fa-list"></i>Price List</a>
+                        <a class="side-nav-menu-link" href="/pricelist">
+                            <i class="fas fa-solid fa-list"></i>Price List
+                        </a>
                     </li>
-                      <li class="side-nav-menu-item">
+
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/services">
-                        <i class="fas fa-solid fa-layer-group"></i>Services</a>
+                            <i class="fas fa-solid fa-layer-group"></i>Services
+                        </a>
                     </li>
+
+                    @can('view-inventory')
+                        <li class="side-nav-menu-item">
+                            <a class="side-nav-menu-link" href="/inventory">
+                                <i class="fas fa-solid fa-warehouse"></i>Inventory
+                            </a>
+                        </li>
+                    @endcan
+
                     <li class="side-nav-menu-item">
-                     <a class="side-nav-menu-link" href="/inventory">
-                        <i class="fas fa-solid fa-warehouse"></i>Inventory</a>
+                        <a class="side-nav-menu-link" href="/category">
+                            <i class="fas fa-industry"></i>Category
+                        </a>
                     </li>
 
-                     <li class="side-nav-menu-item">
-                      <a class="side-nav-menu-link" href="/category">
-                       <i class="fas fa-industry"></i>Category</a>
-                  </li>
-
-
-                   <li class="side-nav-menu-item">
-                      <a class="side-nav-menu-link" href="/reports">
-                       <i class="fas fa-solid fa-square-poll-horizontal"></i>Reports</a>
-                  </li>
-
-                 
+                    <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/reports">
+                            <i class="fas fa-solid fa-square-poll-horizontal"></i>Reports
+                        </a>
+                    </li>
                 </ul>
                 <!-- End Order Management: subOrder Management -->
             </li>
-            <!-- End Order Management -->
+        @endcan
+        <!-- End Order Management -->
+
+       <!-- Graphic Artist View (only order details & inventory) -->
+@cannot('view-order-management')
+<li class="side-nav-menu-item side-nav-has-menu">
+    <a class="side-nav-menu-link media align-items-center" href="#" data-target="#subOrderManagementGraphic">
+        <span class="side-nav-menu-icon d-flex mr-3">
+            <i class="fas fa-sitemap"></i>
+        </span>
+        <span class="side-nav-fadeout-on-closed media-body">Order Management</span>
+        <span class="side-nav-control-icon d-flex">
+            <i class="fas fa-caret-right"></i>
+        </span>
+        <span class="side-nav__indicator side-nav-fadeout-on-closed"></span>
+    </a>
+
+    <!-- Submenu specifically for Graphic Artist -->
+    <ul id="subOrderManagementGraphic" class="side-nav-menu side-nav-menu-second-level mb-0">
+        @can('view-order-details')
+        <li class="side-nav-menu-item">
+            <a class="side-nav-menu-link" href="/orderDetails">
+                <i class="fas fa-file-invoice"></i>Order Details
+            </a>
+        </li>
+        @endcan
+
+        @can('view-inventory')
+        <li class="side-nav-menu-item">
+            <a class="side-nav-menu-link" href="/inventory">
+                <i class="fas fa-warehouse"></i>Inventory
+            </a>
+        </li>
+        @endcan
+    </ul>
+</li>
+@endcannot
+
+
             
-            <!-- Sales Managemnt -->
+             @can('view-sales-management')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subSalesManagemnt">
@@ -253,12 +298,12 @@
                 </a>
 
             <!-- Pages: subSales Managemnt -->
-             <ul id="subSalesManagemnt" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display:block;">
-                <li class="side-nav-menu-item">
+             <ul id="subSalesManagemnt" class="side-nav-menu side-nav-menu-second-level mb-0">
+                 <li class="side-nav-menu-item">
                     <a class="side-nav-menu-link" href="/payment">
                     <i class="fas fa-solid fa-cash-register"></i>Payment of Orders</a>
                 </li>
-                <li class="side-nav-menu-item active">
+                <li class="side-nav-menu-item">
                     <a class="side-nav-menu-link" href="/sales">
                     <i class="fas fa-solid fa-money-bill"></i>Sales</a>
                 </li>
@@ -272,16 +317,18 @@
             </ul>
             <!-- End Sales Managemnt: subSales Managemnt -->
         </li>
+        @endcan
         <!-- End Sales Managemnt -->
              
             <!-- History -->
+            @can('view-account-payable')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subHistory">
               <span class="side-nav-menu-icon d-flex mr-3">
                     <i class="fas fa-solid fa-history"></i>
               </span>
-                    <span class="side-nav-fadeout-on-closed media-body">History</span>
+                    <span class="side-nav-fadeout-on-closed media-body">Account Payable</span>
                     <span class="side-nav-control-icon d-flex">
                         <i class="fas fa-solid fa-caret-right"></i>
               </span>
@@ -289,14 +336,14 @@
                 </a>
 
             <!-- History: subHistory -->
-            <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0">
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/goodconditionHistoryProduct">
-                    <i class="fas fa-solid fa-circle-check"></i>Good Condition</a>
+            <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0"  style = "display:block;">
+                <li class="side-nav-menu-item ">
+                    <a class="side-nav-menu-link" href="/government">
+                    <i class=" fas fa-solid fa-building"></i></i>Government</a>
                 </li>
-                <li class="side-nav-menu-item">
-                    <a class="side-nav-menu-link" href="/defectiveHistoryProduct">
-                    <i class="fas fa-solid fa-circle-xmark"></i>Defective</a>
+                <li class="side-nav-menu-item active">
+                    <a class="side-nav-menu-link" href="/walkin">
+                    <i class="fas fa-solid fa-person-walking"></i>Walk-in</a>
                 </li>
                 <!-- <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/deletedProducts">
@@ -309,9 +356,11 @@
             </ul>
             <!-- End History: subHistory -->
         </li>
+        @endcan
         <!-- End History -->
+    <!-- Manufacturer -->
 
-             <!-- Manufacturer -->
+            @can('view-store-management')
              <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subManufacturer">
@@ -327,21 +376,17 @@
 
                   <!-- Manufacturer: subManufacturer-->
                <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
-                     <!-- <li class="side-nav-menu-item">
-                      <a class="side-nav-menu-link" href="/category">
-                       <i class="fas fa-industry"></i>Category</a>
-                  </li> -->
-                  <li class="side-nav-menu-item">
+                   
+                   <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
-                    
                 
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
                         <i class="fas fa-solid fa-tags"></i>Brand</a>
                     </li>
-                     <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/supplier">
                         <i class="fas fa-cubes"></i> Supplier</a>
                     </li>
@@ -356,9 +401,10 @@
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
             </li>
+            @endcan
             <!-- End Manufacturer -->
             
-               @can('view-personnel-profile')
+                 @can('view-personnel-profile')
             <li class="side-nav-menu-item side-nav-has-menu">
                 <a class="side-nav-menu-link media align-items-center" href="#"
                    data-target="#subPersonnel">
@@ -379,9 +425,14 @@
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
                         </li>
-                     <li class="side-nav-menu-item">
+                      <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/employee">
-                        <i class="fas fa-solid fa-user-plus"></i>Employee Information</a>
+                        <i class="fas fa-solid fa-users"></i>Employee Information</a>
+                    </li>
+
+                    <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/benefits">
+                        <i class="fa-solid fa-hand-holding-heart"></i>Employee Benefits</a>
                     </li>
 
                       <li class="side-nav-menu-item">

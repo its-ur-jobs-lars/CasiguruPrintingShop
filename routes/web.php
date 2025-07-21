@@ -25,6 +25,7 @@ Route::get('/dashboard', [App\Http\Controllers\PrintingShopContoller::class, 'Pr
 
 Route::get('/personnel', [App\Http\Controllers\PrintingShopContoller::class, 'Personnel'])->name('personnel');
 Route::get('/employee', [App\Http\Controllers\PrintingShopContoller::class, 'EmployeeInfo'])->name('Employee Information');
+Route::get('/benefits', [App\Http\Controllers\PrintingShopContoller::class, 'Benefits'])->name('Employee Benefits');
 Route::get('/addUser', [App\Http\Controllers\PrintingShopContoller::class, 'addUser'])->name('addUser');
 Route::get('/employeeActivityLogs', [App\Http\Controllers\PrintingShopContoller::class, 'ActivityLogs'])->name('activityLogs');
 Route::get('/profile', [App\Http\Controllers\PrintingShopContoller::class, 'profile'])->name('profile');

@@ -106,6 +106,11 @@ class PrintingShopContoller extends Controller
         return view('walk-in');
     }
 
+    public function Benefits()
+    {
+        return view('benefits');
+    }
+
 
     
 
