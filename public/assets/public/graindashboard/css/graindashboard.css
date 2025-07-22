@@ -26945,6 +26945,15 @@ tr:hover {
    .font-semibold-1{
     color:violet;
   }
+
+  .rounded-10{
+   border-radius: 5px !important;
+   border: 0px;
+   margin-right: 10px;
+   text-align: left;
+   background-color: green;
+   margin-bottom: 35px;
+  }
   
   .product-type {
     text-align: center;

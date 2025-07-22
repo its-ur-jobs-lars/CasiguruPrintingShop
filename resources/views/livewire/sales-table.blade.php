@@ -12,19 +12,18 @@
             <option value="0">Inactive</option>   
         </select>
 
-    <select wire:model="exportType" class="border rounded px-4 py-2">
-        <option value="">-- Select Export Type --</option>
-        <option value="weekly">Weekly</option>
-        <option value="monthly">Monthly</option>
-        <option value="yearly">Yearly</option>
-    </select>
+    <!-- <div>
+    <label for="exportDate" class="block font-semibold text-gray-700">Select Date & Time for Export:</label>
+    <input type="datetime-local" id="exportDate" wire:model="exportDateTime"
+           class="border rounded px-4 py-2 mt-2 mb-4" />
 
-    <button wire:click="exportSales" 
-            class="flex space-x-2 items-center mb-4"
-            @disabled(!$exportType)>
+    <button wire:click="exportSales"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
+            @disabled(!$exportDateTime)>
         Export Sales
     </button>
-</div>
+</div> -->
+
 
                
             <div class="overflow-x-auto-1 bg-white shadow-md rounded-lg relative">
@@ -115,16 +114,25 @@
             </div>
 
             
-
 <!-- Fixed Footer for Row Count -->
-<div class="fixed bottom-0 left-0 w-full p-2 z-20">
+<div class="fixed bottom-0 left-0 w-full p-2 z-20 bg-white border-t">
     <span class="text-sm text-gray-600">Total number of Sales : {{ $this->rowCount }}</span>
 
-     <input type="date" id="date_to" wire:model="date_to" class="border border-gray-300 rounded-12 px-3 py-2" placeholder="To" style="float: right;">
-    <label for="date_to" class="mb-0 mr-2" style="color: black; float: right;">To:</label>
-    <input type="date" id="date_from" wire:model="date_from" class="border border-gray-300 rounded-12 px-3 py-2 mr-3" placeholder="From" style="float: right;">
-    <label for="date_from" class="mb-0 mr-2" style="color: black; float: right;">From:</label>
+    <button wire:click="exportSales"
+            class="bg-blue-500 text-white px-3 py-1 rounded-10 ml-3 float-right"
+            @disabled="!date_from || !date_to">
+        Export Sales
+    </button>
+
+    <input type="date" id="date_to" wire:model="date_to"
+           class="border border-gray-300 rounded-12 px-3 py-2 float-right ml-2" placeholder="To">
+    <label for="date_to" class="mb-0 mr-2 float-right" style="color: black;">To:</label>
+
+    <input type="date" id="date_from" wire:model="date_from"
+           class="border border-gray-300 rounded-12 px-3 py-2 mr-3 float-right" placeholder="From">
+    <label for="date_from" class="mb-0 mr-2 float-right" style="color: black;">From:</label>
 </div>
+
        
             {{-- Edit Function --}}
         @if($isEditModalOpen)

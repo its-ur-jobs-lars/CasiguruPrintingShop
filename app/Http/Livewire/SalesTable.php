@@ -71,6 +71,83 @@ class SalesTable extends Component implements HasTable
     //     }
     // }
 
+    public $date_from;
+    public $date_to;
+    public $rowCount = 0;
+
+
+    public function updateRowCount()
+    {
+        if ($this->date_from && $this->date_to) {
+            $this->rowCount = Sales::whereBetween('created_at', [
+                Carbon::parse($this->date_from)->startOfDay(),
+                Carbon::parse($this->date_to)->endOfDay()
+            ])->count();
+        } else {
+            $this->rowCount = Sales::count();
+        }
+    }
+
+    public function exportSales()
+    {
+        if (!$this->date_from || !$this->date_to) {
+            session()->flash('error', 'Please select both "From" and "To" dates.');
+            return;
+        }
+
+        $start = Carbon::parse($this->date_from)->startOfDay();
+        $end = Carbon::parse($this->date_to)->endOfDay();
+
+        if ($start->gt($end)) {
+            session()->flash('error', '"From" date must be earlier than "To" date.');
+            return;
+        }
+
+        $sales = Sales::with(['category', 'subcategory'])
+            ->whereBetween('created_at', [$start, $end])
+            ->get();
+
+        if ($sales->isEmpty()) {
+            session()->flash('error', 'No sales records found for the selected date range.');
+            return;
+        }
+
+        $templatePath = storage_path('app/templates/SalesReport.xlsx');
+        if (!file_exists($templatePath)) {
+            session()->flash('error', 'SalesReport.xlsx template not found.');
+            return;
+        }
+
+        $spreadsheet = IOFactory::load($templatePath);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $row = 9;
+        foreach ($sales as $sale) {
+            $sheet->setCellValue("A{$row}", $sale->order_id);
+            $sheet->setCellValue("B{$row}", $sale->jo_number);
+            $sheet->setCellValue("C{$row}", $sale->name);
+            $sheet->setCellValue("D{$row}", $sale->category->category_name ?? 'N/A');
+            $sheet->setCellValue("E{$row}", $sale->subcategory->subcategory_name ?? 'N/A');
+            $sheet->setCellValue("F{$row}", $sale->qty);
+            $sheet->setCellValue("G{$row}", $sale->price);
+            $sheet->setCellValue("H{$row}", $sale->payment_status);
+            $sheet->setCellValue("I{$row}", $sale->amount);
+            $row++;
+        }
+
+        $filename = "Sales_Export_" . now()->format('Ymd_His') . ".xlsx";
+        $directory = storage_path('app/reports');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filePath = $directory . '/' . $filename;
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
 
      public function mount()
     {
@@ -136,82 +213,6 @@ class SalesTable extends Component implements HasTable
 
      public $exportType = '';
 
-
- public function exportSales()
-    {
-        if (!$this->exportType) {
-            session()->flash('error', 'Please select an export type.');
-            return;
-        }
-
-        $now = Carbon::now();
-
-        switch ($this->exportType) {
-            case 'weekly':
-                $start = $now->copy()->startOfWeek(Carbon::MONDAY);
-                $end = $now->copy()->endOfWeek();
-                break;
-            case 'monthly':
-                $start = $now->copy()->startOfMonth();
-                $end = $now->copy()->endOfMonth();
-                break;
-            case 'yearly':
-                $start = $now->copy()->startOfYear();
-                $end = $now->copy()->endOfYear();
-                break;
-            default:
-                session()->flash('error', 'Invalid export type selected.');
-                return;
-        }
-
-        $sales = sales::with(['category', 'subcategory'])
-            ->whereBetween('created_at', [$start, $end])
-            ->get();
-
-        if ($sales->isEmpty()) {
-            session()->flash('error', 'No sales records found for the selected period.');
-            return;
-        }
-
-        $templatePath = storage_path('app/templates/SalesReport.xlsx');
-        if (!file_exists($templatePath)) {
-            session()->flash('error', 'SalesReport.xlsx template not found.');
-            return;
-        }
-
-        $spreadsheet = IOFactory::load($templatePath);
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $row = 9;
-        foreach ($sales as $sale) {
-            $categoryName = $sale->category?->category_name ?? 'N/A';
-            $subcategoryName = $sale->subcategory?->subcategory_name ?? 'N/A';
-
-            $sheet->setCellValue("A{$row}", $sale->order_id);
-            $sheet->setCellValue("B{$row}", $sale->jo_number);
-            $sheet->setCellValue("C{$row}", $sale->name);
-            $sheet->setCellValue("D{$row}", $categoryName);
-            $sheet->setCellValue("E{$row}", $subcategoryName);
-            $sheet->setCellValue("F{$row}", $sale->qty);
-            $sheet->setCellValue("G{$row}", $sale->price);
-            $sheet->setCellValue("H{$row}", $sale->payment_status);
-            $sheet->setCellValue("I{$row}", $sale->amount);
-            $row++;
-        }
-
-        $filename = "Sales_{$this->exportType}_" . now()->format('Ymd_His') . ".xlsx";
-        $directory = storage_path('app/reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
-        $filePath = $directory . '/' . $filename;
-
-        $writer = new Xlsx($spreadsheet);
-        $writer->save($filePath);
-
-        return response()->download($filePath)->deleteFileAfterSend();
-    }
 
     private function getPriceFromPricelist($category_id, $subcategory_id, $qty)
     {
@@ -331,8 +332,6 @@ class SalesTable extends Component implements HasTable
 //for the date filter
     public $filterDate;
     public $dateRange;
-    public $date_from;
-    public $date_to;
     
 
     // public function edit($id)
@@ -393,6 +392,8 @@ class SalesTable extends Component implements HasTable
     public function render()
     {
         $query = sales::query();
+
+         $this->updateRowCount();
 
         if ($this->filterActivation !== '') {
             $query->where('isActive', $this->filterActivation);

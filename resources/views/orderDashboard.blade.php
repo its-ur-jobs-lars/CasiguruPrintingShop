@@ -195,8 +195,8 @@
                 </a>
 
                 <!-- Order Management: subOrder Management -->
-                <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0">
-                    <li class="side-nav-menu-item">
+                <ul id="subOrderManagement" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display:block;">
+                    <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/orderdashboard">
                             <i class="fas fa-solid fa-file-invoice"></i>Order Dashboard
                         </a>
@@ -337,12 +337,12 @@
                 </a>
 
             <!-- History: subHistory -->
-            <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0"  style = "display:block;">
+            <ul id="subHistory" class="side-nav-menu side-nav-menu-second-level mb-0"  >
                 <li class="side-nav-menu-item ">
                     <a class="side-nav-menu-link" href="/government">
                     <i class=" fas fa-solid fa-building"></i></i>Government</a>
                 </li>
-                <li class="side-nav-menu-item active">
+                <li class="side-nav-menu-item">
                     <a class="side-nav-menu-link" href="/walkin">
                     <i class="fas fa-solid fa-person-walking"></i>Walk-in</a>
                 </li>

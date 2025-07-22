@@ -95,7 +95,7 @@ class EmployeeBenefitsTable extends Component implements HasTable
         'editBenefit.pagibig_number' => 'required|string|max:255',
         'editBenefit.philhealth' => 'required|string|max:255',
         'editBenefit.philhealth_number' => 'required|string|max:255',
-        'editBenefit.isActive' => 'required|string|max:255'
+         'editBenefit.isActive' => 'required|in:0,1',
 
     ];
 
@@ -134,7 +134,7 @@ public function update()
         'editBenefit.pagibig_number' => 'required|string|max:255',
         'editBenefit.philhealth' => 'required|string|max:255',
         'editBenefit.philhealth_number' => 'required|string|max:255',
-        'editBenefit.isActive' => 'required|string|max:255'
+         'editBenefit.isActive' => 'required|in:0,1',
     ]);
 
     // Find the product by ID

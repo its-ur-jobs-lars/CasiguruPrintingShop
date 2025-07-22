@@ -15,7 +15,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="color:black;">Request Order Receipt</h5>
+                        <h5 class="modal-title" style="color:black;">Employee Benefits</h5>
                         <button type="button" class="close" wire:click="closeModal">&times;</button>
                     </div>
                     <div class="modal-body">

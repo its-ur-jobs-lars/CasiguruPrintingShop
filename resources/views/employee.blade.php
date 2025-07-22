@@ -427,7 +427,7 @@
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
                         </li>
-                     <li class="side-nav-menu-item">
+                     <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/employee">
                         <i class="fas fa-solid fa-users"></i>Employee Information</a>
                     </li>

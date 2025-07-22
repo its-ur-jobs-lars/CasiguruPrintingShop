@@ -97,7 +97,7 @@ class EmployeeBenefits extends Component
             'pagibig' => $this->data['pagibig'],
             'philhealth_number' => $this->data['philhealth_number'],
             'philhealth' => $this->data['philhealth'],
-            'updated_by' => Auth::user()->username,
+            'added_by' => Auth::user()->username,
         ]);
 
             $this->emit('refreshComponent');
