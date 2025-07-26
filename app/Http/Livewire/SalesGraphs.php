@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\payment;
+use App\Models\sales;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -102,7 +102,7 @@ public function generateChartData($groupBy)
         END
     ";
 
-    $query = payment::select(
+    $query = sales::select(
             DB::raw("$rawGroup as period"),
             DB::raw("MIN(created_at) as date_for_label"),
             DB::raw("SUM(CASE WHEN payment_status = 'paid' THEN 1 ELSE 0 END) as paid_total"),
@@ -151,14 +151,6 @@ public function generateChartData($groupBy)
                 'data' => $paidData,
                 'borderColor' => 'rgba(75, 192, 192, 1)',
                 'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
-                'fill' => false,
-                'tension' => 0.3
-            ],
-            [
-                'label' => 'Collection',
-                'data' => $collectionData,
-                'borderColor' => 'rgba(255, 99, 132, 1)',
-                'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
                 'fill' => false,
                 'tension' => 0.3
             ]

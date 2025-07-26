@@ -111,6 +111,16 @@ class PrintingShopContoller extends Controller
         return view('benefits');
     }
 
+    public function RawInventory()
+    {
+        return view('raw_inventory');
+    }
+
+    public function ExpensesMonitoring()
+    {
+        return view('expensemanagement');
+    }
+
 
     
 

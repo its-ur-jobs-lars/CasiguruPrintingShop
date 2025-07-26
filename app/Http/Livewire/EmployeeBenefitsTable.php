@@ -276,11 +276,11 @@ public function edit($id)
           ->when($this->search !== '', function ($query) {
               return $query->where(function ($q) {
                   $q->where('employee_number', 'like', "%{$this->search}%")
-                  ->orWhere('lastname', 'like', "%{$this->search}%")
-                   ->orWhere('firstname', 'like', "%{$this->search}%")
-                    ->orWhere('middlename', 'like', "%{$this->search}%")
-                    ->orwhere('username', 'like', "%{$this->search}%")
-                   ->orWhere('role', 'like', "%{$this->search}%");
+                  ->orWhere('date', 'like', "%{$this->search}%")
+                   ->orWhere('employee_name', 'like', "%{$this->search}%")
+                    ->orWhere('sss_number', 'like', "%{$this->search}%")
+                    ->orwhere('pagibig_number', 'like', "%{$this->search}%")
+                   ->orWhere('philhealth_number', 'like', "%{$this->search}%");
                 
               }); // Apply search filter to multiple fields
           })
@@ -310,12 +310,12 @@ public function render()
     // Apply search filter if search term is provided
     if (!empty($this->search)) {
         $query->where(function ($q) {
-            $q->where('employee_number', 'like', "%{$this->search}%")
-             ->orWhere('lastname', 'like', "%{$this->search}%")
-                   ->orWhere('firstname', 'like', "%{$this->search}%")
-                    ->orWhere('middlename', 'like', "%{$this->search}%")
-                    ->orwhere('username', 'like', "%{$this->search}%")
-              ->orWhere('role', 'like', "%{$this->search}%");
+               $q->where('employee_number', 'like', "%{$this->search}%")
+                  ->orWhere('date', 'like', "%{$this->search}%")
+                   ->orWhere('employee_name', 'like', "%{$this->search}%")
+                    ->orWhere('sss_number', 'like', "%{$this->search}%")
+                    ->orwhere('pagibig_number', 'like', "%{$this->search}%")
+                   ->orWhere('philhealth_number', 'like', "%{$this->search}%");
         });
     }
 

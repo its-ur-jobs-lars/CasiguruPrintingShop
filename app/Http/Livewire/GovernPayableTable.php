@@ -365,12 +365,12 @@ public function edit($id)
           })
           ->when($this->search !== '', function ($query) {
               return $query->where(function ($q) {
-                  $q->where('employee_number', 'like', "%{$this->search}%")
-                  ->orWhere('lastname', 'like', "%{$this->search}%")
-                   ->orWhere('firstname', 'like', "%{$this->search}%")
-                    ->orWhere('middlename', 'like', "%{$this->search}%")
-                    ->orwhere('username', 'like', "%{$this->search}%")
-                   ->orWhere('role', 'like', "%{$this->search}%");
+                  $q->where('order_id', 'like', "%{$this->search}%")
+                  ->orWhere('po_number', 'like', "%{$this->search}%")
+                   ->orWhere('name', 'like', "%{$this->search}%")
+                    ->orWhere('payment_date', 'like', "%{$this->search}%")
+                    ->orwhere('process_date', 'like', "%{$this->search}%")
+                   ->orWhere('title', 'like', "%{$this->search}%");
                 
               }); // Apply search filter to multiple fields
           })
@@ -400,12 +400,12 @@ public function render()
     // Apply search filter if search term is provided
     if (!empty($this->search)) {
         $query->where(function ($q) {
-            $q->where('employee_number', 'like', "%{$this->search}%")
-             ->orWhere('lastname', 'like', "%{$this->search}%")
-                   ->orWhere('firstname', 'like', "%{$this->search}%")
-                    ->orWhere('middlename', 'like', "%{$this->search}%")
-                    ->orwhere('username', 'like', "%{$this->search}%")
-              ->orWhere('role', 'like', "%{$this->search}%");
+            $q->where('order_id', 'like', "%{$this->search}%")
+                  ->orWhere('po_number', 'like', "%{$this->search}%")
+                   ->orWhere('name', 'like', "%{$this->search}%")
+                    ->orWhere('payment_date', 'like', "%{$this->search}%")
+                    ->orwhere('process_date', 'like', "%{$this->search}%")
+                   ->orWhere('title', 'like', "%{$this->search}%");
         });
     }
 

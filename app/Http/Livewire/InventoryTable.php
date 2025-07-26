@@ -326,9 +326,9 @@ public function update()
           })
           ->when($this->search !== '', function ($query) {
               return $query->where(function ($q) {
-                  $q->where('pricelist_id', 'like', "%{$this->search}%")
-                  ->orWhere('category_id', 'like', "%{$this->search}%")
-                   ->orWhere('subcategory_id', 'like', "%{$this->search}%");
+                  $q->where('item_name', 'like', "%{$this->search}%")
+                  ->orWhere('unit', 'like', "%{$this->search}%")
+                   ->orWhere('location', 'like', "%{$this->search}%");
                 
               }); // Apply search filter to multiple fields
           })
@@ -358,9 +358,9 @@ public function render()
     // Apply search filter if search term is provided
     if (!empty($this->search)) {
         $query->where(function ($q) {
-            $q->where('pricelist_id', 'like', "%{$this->search}%")
-                  ->orWhere('category_id', 'like', "%{$this->search}%")
-                   ->orWhere('subcategory_id', 'like', "%{$this->search}%");
+            $q->where('item_name', 'like', "%{$this->search}%")
+                  ->orWhere('unit', 'like', "%{$this->search}%")
+                   ->orWhere('location', 'like', "%{$this->search}%");
         });
     }
 

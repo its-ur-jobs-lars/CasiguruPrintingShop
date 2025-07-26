@@ -341,10 +341,10 @@
                     <a class="side-nav-menu-link" href="/government">
                     <i class=" fas fa-solid fa-building"></i></i>Government</a>
                 </li>
-                <li class="side-nav-menu-item active">
+                <!-- <li class="side-nav-menu-item active">
                     <a class="side-nav-menu-link" href="/walkin">
                     <i class="fas fa-solid fa-person-walking"></i>Walk-in</a>
-                </li>
+                </li> -->
                 <!-- <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/deletedProducts">
                         <i class="fa-solid fa-trash-can-arrow-up"></i>Deleted Products</a>
@@ -382,10 +382,11 @@
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
                 
-                    <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/brandDivisionManufacturer">
-                        <i class="fas fa-solid fa-tags"></i>Brand</a>
+                   <li class="side-nav-menu-item">
+                        <a class="side-nav-menu-link" href="/expenses_management">
+                        <i class="fas fa-solid fa-tags"></i>Expense Management</a>
                     </li>
+                    
                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/supplier">
                         <i class="fas fa-cubes"></i> Supplier</a>
@@ -394,8 +395,8 @@
                  
 
                        <li class="side-nav-menu-item">
-                        <a class="side-nav-menu-link" href="/personnelProductSearching">
-                        <i class="fas fa-solid fa-magnifying-glass"></i>Product Searching</a>
+                        <a class="side-nav-menu-link" href="/rawinventory">
+                        <i class="fas fa-solid fa-magnifying-glass"></i>Raw Inventory</a>
                     </li>
 
                 </ul>

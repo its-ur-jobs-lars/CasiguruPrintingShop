@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>Add Employee</title>
+    <title>Raw Inventory</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -138,20 +138,19 @@
                                 </span>
                             </a>
                         </li>
-                         <li class="unfold-item unfold-item-has-divider">
-                                <a class="unfold-link d-flex align-items-center text-nowrap" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                                <span class="unfold-item-icon d-flex align-items-center">
-                                    <i class="fas fa-solid fa-power-off mr-5"></i>
-                                    <span style="font-size: 15px;">Logout</span>
-                                </span>
-                                </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
-                   
+                        <li class="unfold-item unfold-item-has-divider">
+                        <a class="unfold-link d-flex align-items-center text-nowrap" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <span class="unfold-item-icon d-flex align-items-center">
+                                <i class="fas fa-solid fa-power-off mr-5"></i>
+                                <span style="font-size: 15px;">Logout</span>
+                            </span>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                                    
                     </ul>
                 </div>
                 <!-- End User Avatar -->
@@ -179,7 +178,7 @@
         </li>
         <!-- End Dashboard -->
            
-          
+           
                 <!-- Order Management -->
         @can('view-order-management')
             <li class="side-nav-menu-item side-nav-has-menu">
@@ -377,14 +376,14 @@
                 </a>
 
                   <!-- Manufacturer: subManufacturer-->
-               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0">
+               <ul id="subManufacturer" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display:block">
                    
                    <li class="side-nav-menu-item">
                       <a class="side-nav-menu-link" href="/subcategory">
                        <i class="fas fa-industry"></i>SubCategory</a>
                   </li>
                 
-                   <li class="side-nav-menu-item">
+                    <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/expenses_management">
                         <i class="fas fa-solid fa-tags"></i>Expense Management</a>
                     </li>
@@ -396,7 +395,7 @@
                   
                  
 
-                       <li class="side-nav-menu-item">
+                       <li class="side-nav-menu-item active">
                         <a class="side-nav-menu-link" href="/rawinventory">
                         <i class="fas fa-solid fa-magnifying-glass"></i>Raw Inventory</a>
                     </li>
@@ -423,12 +422,12 @@
 
             
             <!-- History: subHistory -->
-            <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0" style = "display:block;">
+            <ul id="subPersonnel" class="side-nav-menu side-nav-menu-second-level mb-0"   style = "display:block;">
                  <li class="side-nav-menu-item">
                             <a class="side-nav-menu-link" href="/addUser">
                             <i class="fas fa-solid fa-user-plus"></i>Add User Accounts</a>
                         </li>
-                     <li class="side-nav-menu-item active">
+                     <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/employee">
                         <i class="fas fa-solid fa-users"></i>Employee Information</a>
                     </li>
@@ -437,6 +436,7 @@
                         <a class="side-nav-menu-link" href="/benefits">
                         <i class="fa-solid fa-hand-holding-heart"></i>Employee Benefits</a>
                     </li>
+                    
 
                       <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/employeeActivityLogs">
@@ -464,10 +464,10 @@
 <!-- End Sidebar Nav -->
  
     <div class="content">
-        <div class="py-4 px-3 px-md-4">
+       <div class="py-4 px-3 px-md-4">
 
             <div class="mb-3 mb-md-4 d-flex justify-content-between">
-                <div class="h3 mb-0">Add Employee</div>
+                <div class="h3 mb-0">Raw Material Inventory</div>
                 <p id="datetime" class="mb-0"></p>
             </div>  
 
@@ -488,8 +488,6 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="table-responsive-xl">
-                                   @livewire('add-employee')
-                                   @livewire('employee-table')
                             </div>
                         </div>
                     </div>
@@ -500,7 +498,7 @@
         <!-- Footer -->
         <footer>
             <div class="col-lg text-center fixed-bottom text-lg-right" style="margin-bottom: 10px;">
-                    &copy; 2025 Casiguro Enterprises Inc. All Rights Reserved.
+                    &copy; 2025 Casiguro Enterprises In. All Rights Reserved.
             </div>
         </div>
         </footer>
@@ -563,7 +561,7 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-            ['Services', 'Amount'],
+            ['Category', 'Amount'],
             ['Laptop and Accessories', 8000],
             ['Mouse', 5000],
             ['Printer', 3000],

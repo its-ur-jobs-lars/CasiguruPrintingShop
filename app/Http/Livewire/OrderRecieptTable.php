@@ -296,16 +296,15 @@ private function fillSpreadsheet($sheet, $items)
         $startRow++;
     }
 
-    // Calculate grand total
     $grandTotal = $totalAmount + $totalLayout;
 
-    // Fill totals
-    // $sheet->setCellValue("I25", (float) $totalAmount);    // Total item amount
-    // $sheet->setCellValue("I26", (float) $totalLayout);    // Total layout fee
-    $sheet->setCellValue("I26", (float) $grandTotal);     // Grand total (amount + layout)
+   // Compute actual payment based on payment status
+        $computedPayment = strtolower($first->payment_status) === 'paid' ? $grandTotal : (float) $first->payment;
 
-    $sheet->setCellValue("I27", (float) $first->payment); // Payment
-    $sheet->setCellValue("I28", (float) $first->balance); // Balance
+        // Fill totals
+        $sheet->setCellValue("I26", (float) $grandTotal); // Grand total
+        $sheet->setCellValue("I27", $computedPayment);    // Payment
+        $sheet->setCellValue("I28", (float) $first->balance); // Balance
 
     $sheet->setCellValue("B28", (float) $totalLayout);    // Total layout fee
     $sheet->setCellValue("B30", $first->payment_method);
@@ -353,7 +352,9 @@ private function generateFilename($receipt, $ext = 'xlsx')
                 return $query->where(function ($q) {
                     $q->where('order_receipt_id', 'like', "%{$this->search}%")
                       ->orwhere('name', 'like', "%{$this->search}%")
-                      ->orwhere('order_id', 'like', "%{$this->search}%");
+                      ->orwhere('order_id', 'like', "%{$this->search}%")
+                      ->orwhere('jo_number', 'like', "%{$this->search}%")
+                      ->orwhere('customer_type', 'like', "%{$this->search}%");
                 });
             })->get();
     }
@@ -387,9 +388,11 @@ private function generateFilename($receipt, $ext = 'xlsx')
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
-                 $q->where('order_receipt_id', 'like', "%{$this->search}%")
-                    ->orwhere('order_id', 'like', "%{$this->search}%")
-                      ->orwhere('name', 'like', "%{$this->search}%");
+                  $q->where('order_receipt_id', 'like', "%{$this->search}%")
+                      ->orwhere('name', 'like', "%{$this->search}%")
+                      ->orwhere('order_id', 'like', "%{$this->search}%")
+                      ->orwhere('jo_number', 'like', "%{$this->search}%")
+                      ->orwhere('customer_type', 'like', "%{$this->search}%");
             });
         }
 
