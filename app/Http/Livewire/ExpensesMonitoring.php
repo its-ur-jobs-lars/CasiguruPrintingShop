@@ -56,13 +56,13 @@ class ExpensesMonitoring extends Component
     {
         // Basic validation (you can add more rules if needed)
         $this->validate([
-            'data.date' => 'required|date',
-            'data.si_or_no' => 'required|string|max:255',
-            'data.particular' => 'required|string|max:255',
-            'data.qty' => 'required|numeric|min:1',
-            'data.amount' => 'required|numeric|min:0',
-            'data.subtotal' => 'required|numeric|min:0',
-            'data.remarks' => 'nullable|string|max:255',
+                'data.date' => 'required|date',
+                'data.si_or_no' => 'required|string|max:255',
+                'data.particular' => 'required|string|max:255',
+                'data.qty' => 'required|numeric|min:1',
+                'data.amount' => 'required|numeric|min:0',
+                'data.subtotal' => 'required|numeric|min:0',
+                'data.remarks' => 'nullable|string|max:255',
         ]);
 
         try {
@@ -77,6 +77,11 @@ class ExpensesMonitoring extends Component
                 'supplier_id' => $this->data['supplier_id'],
                  'added_by' => Auth::user()->username,
             ]);
+
+            $this->emit('refreshComponent');
+            $this->reset(['data']);
+            $this->isOpen = false;
+            $this->step = 1;
 
             session()->flash('messageInsert', 'Expense added successfully!');
         } catch (\Exception $e) {

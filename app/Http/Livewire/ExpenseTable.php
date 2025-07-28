@@ -9,6 +9,8 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use App\Models\Expmonitoring;
 use App\Models\supplierInv;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use App\Models\User;
 
 class ExpenseTable extends Component implements HasTable
 {
@@ -22,98 +24,39 @@ class ExpenseTable extends Component implements HasTable
     public $search = '';
     public $filterActivation = 'all';
     public $editId = null;
+    public $suppliers = [];
 
-    public $data = [
-        'date' => '',
-        'si_or_no' => '',
-        'supplier_id' => '',
-        'particular' => '',
+    public $editExpenses = [
+        'id' => null,
+        'date' => null,
+        'si_or_no' => null,
+        'supplier_id' => null,
+        'particular' => null,
         'amount' => 0,
         'qty' => 1,
         'subtotal' => 0,
-        'remarks' => '',
-        'added_by' => '',
-        'updated_by' => '',
+        'remarks' => null,
+        'added_by' => null,
+        'updated_by' => null,
         'isActive' => 1,
     ];
 
-    public $suppliers = [];
+    protected $rules = [
+        'editExpenses.id' => 'required|exists:expenses,id',
+        'editExpenses.date' => 'required|date',
+        'editExpenses.si_or_no' => 'required|string|max:255',
+        'editExpenses.supplier_id' => 'required|exists:suppliers,id',
+        'editExpenses.particular' => 'required|string|max:255',
+        'editExpenses.amount' => 'required|numeric|min:0',
+        'editExpenses.qty' => 'required|numeric|min:1',
+        'editExpenses.subtotal' => 'required|numeric|min:0',
+        'editExpenses.remarks' => 'nullable|string|max:255',
+        'editExpenses.isActive' => 'required|in:0,1',
+    ];
 
-    public function mount()
-    {
-        $this->suppliers = supplierInv::pluck('name', 'id');
-    }
-
-    public function openModal()
-    {
-        $this->isOpen = true;
-        $this->step = 1;
-    }
-
-    public function closeModal()
-    {
-        $this->isOpen = false;
-        $this->resetForm();
-    }
-
-    public function resetForm()
-    {
-        $this->data = [
-            'date' => '',
-            'si_or_no' => '',
-            'supplier_id' => '',
-            'particular' => '',
-            'amount' => 0,
-            'qty' => 1,
-            'subtotal' => 0,
-            'remarks' => '',
-            'added_by' => '',
-            'updated_by' => '',
-            'isActive' => 1,
-        ];
-        $this->editId = null;
-    }
-
-    public function updated($field)
-    {
-        if (in_array($field, ['data.amount', 'data.qty'])) {
-            $this->data['subtotal'] = $this->data['amount'] * $this->data['qty'];
-        }
-    }
-
-    public function edit($id)
-    {
-        $expense = Expmonitoring::findOrFail($id);
-        $this->editId = $expense->id;
-        $this->data = $expense->toArray();
-        $this->isOpen = true;
-        $this->step = 1;
-    }
-
-    public function update()
-    {
-        $this->validate([
-            'data.date' => 'required|date',
-            'data.supplier_id' => 'required|exists:suppliers,id',
-            'data.particular' => 'required|string|max:255',
-            'data.amount' => 'required|numeric|min:0',
-            'data.qty' => 'required|numeric|min:1',
-        ]);
-
-        if (!$this->editId) {
-            session()->flash('error', 'No record selected for update.');
-            return;
-        }
-
-        $expense = Expmonitoring::findOrFail($this->editId);
-        $this->data['subtotal'] = $this->data['amount'] * $this->data['qty'];
-        $this->data['updated_by'] = Auth::user()->name;
-
-        $expense->update($this->data);
-
-        session()->flash('messageInsert', 'Expense updated successfully.');
-        $this->closeModal();
-    }
+   public $supplier = [];
+   public $Suppliers = [];
+   public $editSupplier = [];
 
     public function getTableQuery()
     {
@@ -138,8 +81,6 @@ class ExpenseTable extends Component implements HasTable
         return $query->count();
     }
 
-     public $isEditModalOpen = '';
-
     public function render()
     {
         $query = Expmonitoring::query();
@@ -155,13 +96,166 @@ class ExpenseTable extends Component implements HasTable
             });
         }
 
-        $records = $query->get();
+        $records = $query->paginate(10);
         $rowCount = $query->count();
 
         return view('livewire.expense-table', [
             'records' => $records,
             'rowCount' => $rowCount,
-            'suppliers' => $this->suppliers, // ✅ Pass it to the view
         ]);
     }
+
+   public function mount(){
+    $this->Suppliers = supplierInv::where('is_active', 1)->get();
+   $this->supplier = supplierInv::pluck('name', 'supplier_id')->toArray();
+   }
+    public function openModal()
+    {
+        $this->isOpen = true;
+        $this->step = 1;
+    }
+
+    public function closeModal1()
+    {
+        $this->isOpen = false;
+        $this->resetForm();
+    }
+
+    public $data = [
+        'qty' => 1,
+        'amount' => 0,
+        'subtotal' => 0,
+    ];
+
+    public function resetForm()
+    {
+        $this->editExpenses = [
+            'id' => '',
+            'date' => '',
+            'si_or_no' => '',
+            'supplier_id' => '',
+            'particular' => '',
+            'amount' => 0,
+            'qty' => 1,
+            'subtotal' => 0,
+            'remarks' => '',
+            'updated_by' => '',
+            'isActive' => 1,
+        ];
+        $this->editId = null;
+    }
+
+  public function update()
+{
+    try {
+        $this->validate([
+            'editExpenses.date' => 'required|date',
+            'editExpenses.si_or_no' => 'required|string|max:255',
+            'editExpenses.supplier_id' => 'required|exists:suppliers,supplier_id',
+            'editExpenses.particular' => 'required|string|max:255',
+            'editExpenses.amount' => 'required|numeric|min:0',
+            'editExpenses.qty' => 'required|numeric|min:1',
+            'editExpenses.subtotal' => 'required|numeric|min:0',
+            'editExpenses.remarks' => 'nullable|string|max:255',
+            'editExpenses.isActive' => 'required|in:0,1',
+        ]);
+
+        $expenseId = $this->editExpenses['id'] ?? null;
+
+        if (!$expenseId) {
+            session()->flash('error', 'Missing expense ID.');
+            return;
+        }
+
+        $expensesDetails = Expmonitoring::find($expenseId);
+
+        if (!$expensesDetails) {
+            session()->flash('error', 'Expense record not found.');
+            return;
+        }
+
+        $expensesDetails->update([
+            'date' => $this->editExpenses['date'],
+            'si_or_no' => $this->editExpenses['si_or_no'],
+            'supplier_id' => $this->editExpenses['supplier_id'],
+            'particular' => $this->editExpenses['particular'],
+            'amount' => $this->editExpenses['amount'],
+            'qty' => $this->editExpenses['qty'],
+            'subtotal' => $this->editExpenses['subtotal'],
+            'remarks' => $this->editExpenses['remarks'],
+            'isActive' => $this->editExpenses['isActive'],
+            'updated_by' => Auth::user()->username,
+        ]);
+
+        // Emit an event to refresh the table
+        $this->emit('refreshTable');
+
+        // Close the modal
+        $this->isEditModalOpen = false;
+
+        // Show a success message
+        session()->flash('messageUpdate', 'Government Payable is updated successfully.');
+
+        // Dispatch a browser event to close the modal
+        $this->dispatchBrowserEvent('closeEditModal');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        session()->flash('error', 'Validation failed: ' . json_encode($e->errors()));
+        return;
+    } catch (\Exception $e) {
+        session()->flash('error', 'An unexpected error occurred: ' . $e->getMessage());
+        return;
+    }
+}
+
+
+  public $isEditModalOpen = '';
+
+    
+public function edit($id)
+{
+    $expensesDetails = Expmonitoring::find($id);
+
+    if ($expensesDetails) {
+        $this->editExpenses = [
+            'id' => $expensesDetails->id,
+            'date' => $expensesDetails->date,
+            'si_or_no' => $expensesDetails->si_or_no,
+            'supplier_id' => $expensesDetails->supplier_id,
+            'particular' => $expensesDetails->particular,
+            'amount' => $expensesDetails->amount,
+            'qty' => $expensesDetails->qty,
+            'subtotal' => $expensesDetails->subtotal,
+            'remarks' => $expensesDetails->remarks,
+            'isActive' => $expensesDetails->isActive,
+        ];
+
+        // ✅ Retrieve supplier name from supplierInv table
+        $supplier = supplierInv::where('supplier_id', $expensesDetails->supplier_id)->first();
+        $this->editSupplierName = $supplier ? $supplier->name : 'Not Available';
+
+        
+        $this->isEditModalOpen = true;
+
+    } else {
+        session()->flash('error', 'Record not found.');
+    }
+}
+
+ 
+    public function nextStep()
+    {
+        // Auto-calculate subtotal (qty * amount)
+        $this->data['subtotal'] = $this->data['qty'] * $this->data['amount'];
+        $this->step = 2;
+    }
+
+     public function nextStep1(){
+        $this->step = 3;
+    }
+
+    public function previousStep(){
+        $this->step = 1;
+    }
+
 }

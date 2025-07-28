@@ -37,7 +37,7 @@
 
                                     <td class="px-4 py-2">{{ $record->si_or_no }}</td>
 
-                                    <td class="px-4 py-2">{{ $suppliers[$record->supplier_id] ?? 'Not Available' }}</td>
+                                    <td class="px-4 py-2">{{ $supplier[$record->supplier_id] ?? 'Not Available' }}</td>
 
                                       <td class="px-4 py-2">{{ $record->particular }}</td>
                                     <td class="px-4 py-2">{{ $record->amount }}</td>        
@@ -99,7 +99,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="color:black;">Edit Employee Information</h5>
+                        <h5 class="modal-title" style="color:black;">Edit Expenses</h5>
                     </div>
                     <div class="modal-body">
                         <form>
@@ -107,40 +107,33 @@
 
                             {{-- Last Name --}}
                             <div class="form-group">
-                                <label style="color:black;">Last Name</label>
-                                <input type="text" wire:model="editEmployee.emp_Lastname" class="form-control" required>
+                                <label style="color:black;">Date</label>
+                                <input type="date" wire:model="editExpenses.date" class="form-control" required>
                             </div>
 
                             {{-- First Name --}}
                             <div class="form-group">
-                                <label style="color:black;">First Name</label>
-                                <input type="text" wire:model="editEmployee.emp_Firstname" class="form-control" required>
+                                <label style="color:black;">SI / OR Number</label>
+                                <input type="text" wire:model="editExpenses.si_or_no" class="form-control" required>
                             </div>
 
-                            {{-- Middle Name --}}
+                               {{-- Subcategory --}}
                             <div class="form-group">
-                                <label style="color:black;">Middle Name</label>
-                                <input type="text" wire:model="editEmployee.emp_Middlename" class="form-control" required>
+                                <label style="color:black;">Supplier</label>
+                                <select wire:model="editExpenses.supplier_id" class="form-control" required>
+                                    <option value="">-- Select --</option>
+                                    @foreach($Suppliers as $supplier)
+                                        <option value="{{ $supplier->supplier_id }}">{{ $supplier->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
-                            <div class="form-group">
-                                <label style="color:black;">Extension Name</label>
-                               <select wire:model="editEmployee.ext_name" class="form-control" required>
-                                 <option value="">Select extension name...</option>
-                                <option value="0">N/A</option>
-                                <option value="1">Jr.</option>
-                                <option value="2">Sr.</option>
-                                <option value="3">II</option>
-                                <option value="4">III</option>
-                                <option value="5">IV</option>
-                                <option value="6">V</option>
-                             </select>
-                            </div>
+
 
                             {{-- Username --}}
                             <div class="form-group">
-                                <label style="color:black;">Task</label>
-                                <input type="text" wire:model="editEmployee.task" class="form-control" required>
+                                <label style="color:black;">Particular</label>
+                                <input type="text" wire:model="editExpenses.particular" class="form-control" required>
                             </div>
 
                             {{-- Next Button--}}
@@ -158,25 +151,32 @@
 
                             {{-- Employee Number --}}
                             <div class="form-group">
-                                <label style="color:black;">Employee Number</label>
-                                <input type="text" wire:model="editEmployee.employee_number" class="form-control" required>
+                                <label style="color:black;">Amount</label>
+                                <input type="text" wire:model="editExpenses.amount" class="form-control" required>
                             </div>
+
+                            {{-- Employee Number --}}
+                            <div class="form-group">
+                                <label style="color:black;">Quantity</label>
+                                <input type="text" wire:model="editExpenses.qty" class="form-control" required>
+                            </div>
+
 
                              {{-- Date Hired --}}
                             <div class="form-group">
-                                <label style="color:black;">Date Hired</label>
-                                <input type="date" wire:model="editEmployee.date_Hired" class="form-control" required>
+                                <label style="color:black;">SubTotal</label>
+                                <input type="text" wire:model="editExpenses.subtotal" class="form-control" required>
                             </div>
 
                              {{-- Description --}}
                             <div class="form-group">
-                                <label style="color:black;">Description</label>
-                                <input type="text" wire:model="editEmployee.description" class="form-control" required>
+                                <label style="color:black;">Remarks</label>
+                                <input type="text" wire:model="editExpenses.remarks" class="form-control" required>
                             </div>
                             
                             <div class="form-group">
                                 <label style="color:black;">Activation</label>
-                                <select wire:model="editEmployee.isActive" class="form-control" required>
+                                <select wire:model="editExpenses.isActive" class="form-control" required>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
                                 </select>

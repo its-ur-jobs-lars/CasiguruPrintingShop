@@ -19,7 +19,6 @@ use Livewire\WithFileUploads;
 class SubCategoryAdd extends Component
 {
      use WithFileUploads; 
-     public $data = [];
 
      public $Category = [];
       public function mount()
@@ -34,10 +33,21 @@ class SubCategoryAdd extends Component
 
     public bool $isOpen = false; // Controls modal visibility
 
-//     public function showImagePreview()
-// {
-//     $this->showPreview = true;
-// }
+           public $selectedCategoryName;
+            public $data = [
+                'category_id' => '',
+                'subcategory_name' => '',
+                'size' => '',
+            ];
+            public function updated($propertyName)
+            {
+                if ($propertyName === 'data.category_id') {
+                    $category = Category::find($this->data['category_id']);
+                    $this->selectedCategoryName = $category?->category_name;
+                }
+            }
+
+
 
     public function openModal()
     {
@@ -79,7 +89,7 @@ class SubCategoryAdd extends Component
         $subCon = $category ? $this->getFirstLetters($category->category_name) : 'XXX';
 
         // Get the last subcategory globally
-        $lastSubCategory = \App\Models\SubCategory::where('subcategory_id', 'like', "CTG-%-%-%")
+        $lastSubCategory = SubCategory::where('subcategory_id', 'like', "CTG-%-%-%")
             ->orderByDesc('subcategory_id')
             ->first();
 
@@ -122,10 +132,12 @@ class SubCategoryAdd extends Component
         return strtoupper(implode('', $matches[1]));
     }
 
-    public function render()
-    {
-        return view('livewire.sub-category-add');
-    }
+public function render()
+{
+    return view('livewire.sub-category-add', [
+        'Category' => Category::all(),
+    ]);
+}
 
 }
 
