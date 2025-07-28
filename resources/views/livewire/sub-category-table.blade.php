@@ -24,6 +24,7 @@
                                 <th class="px-4 py-2">Category Name</th>
                                 <th class="px-4 py-2">SubCategory Name</th>
                                 <th class="px-4 py-2">Description</th>
+                                <th class="px-4 py-2">Size</th>
                                 <!-- <th class="px-4 py-2">Image</th> -->
                                 <th class="px-4 py-2">Updated By</th>
                                 <th class="px-4 py-2">Updated At</th>
@@ -40,7 +41,7 @@
                                     <td class="px-4 py-2">{{ $record->subcategory_name }}</td>
 
                                     <td class="px-4 py-2">{{ $record->description }}</td>
-
+                                    <td class="px-4 py-2">{{ $record->size ?? 'N/A' }}</td>                         
                                     <!-- <td class="px-4 py-2">
                                         @if ($record->image)
                                             <img src="{{ asset('storage/' . $record->image) }}" alt="Category Image"

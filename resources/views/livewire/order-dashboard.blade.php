@@ -36,7 +36,12 @@
                                 alt="{{ $item->subcategory->subcategory_name }}"
                                 class="h-24 w-full object-contain mb-2-3"
                                 style="max-height: 150px; max-width: 150px;">
-                            <h3 class="font-semibold font-bold px-4 mb-2-3">{{ $item->subcategory->subcategory_name ?? 'No Subcategory' }}</h3>
+                           <h3 class="font-semibold font-bold px-4 mb-2-3">
+                                {{ $item->subcategory->subcategory_name ?? 'No Subcategory' }} <br>
+                                @if(!empty($item->subcategory->size))
+                                    ({{ $item->subcategory->size }})
+                                @endif
+                        </h3>
                             <div class="text-sm space-y-1 mb-2">
                                 <!-- <p class="text-green-600 font-bold">₱{{ number_format($item->price_10_50, 2) }} <span class="text-gray-500 text-xs">(10–50 pcs)</span></p>
                                 <p class="text-green-600 font-bold">₱{{ number_format($item->price_51_100, 2) }} <span class="text-gray-500 text-xs">(51–100 pcs)</span></p>

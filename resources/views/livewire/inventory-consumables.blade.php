@@ -99,7 +99,7 @@
                             {{-- Subcategory --}}
                             <div class="form-group">
                                 <label style="color:black;">Supplier</label>
-                                <select wire:model="data.supplier_id" class="form-control" required>
+                                <select wire:model="data.supplier_id" class="form-control">
                                     <option value="">-- Select --</option>
                                     @foreach($Suppliers as $supplier)
                                         <option value="{{ $supplier->supplier_id }}">{{ $supplier->name }}</option>

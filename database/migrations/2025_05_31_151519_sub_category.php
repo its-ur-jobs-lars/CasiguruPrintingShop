@@ -20,6 +20,7 @@ class SubCategory extends Migration
             $table->string('subcategory_name')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
+            $table->string('size')->nullable(); // Column to store size information
             $table->boolean('isActive')->default(1);
             $table->string('added_by')->nullable(); // Column to store the user who added the category
             $table->string('updated_by')->nullable(); // Column to store the user who updated the category

@@ -41,7 +41,7 @@
                                     <td class="px-4 py-2">{{ $record->pricelist_id }}</td>
 
                                       <td class="px-4 py-2">{{ $Category[$record->category_id] ?? 'Not Available' }}</td>
-
+`
                                       <td class="px-4 py-2">{{ $SubCategory[$record->subcategory_id] ?? 'Not Available' }}</td>
 
                                       <td class="px-4 py-2">{{ $record->price_1 }}</td>

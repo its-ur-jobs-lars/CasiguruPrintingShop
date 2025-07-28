@@ -34,11 +34,33 @@
                                 </select>
                             </div>
 
+
+
                             {{-- Subcategory --}}
                             <div class="form-group">
                                 <label style="color:black;">Subcategory Name</label>
                                 <input type="text" wire:model="data.subcategory_name" class="form-control" required>
                             </div>
+
+                            
+                                <div class="form-group">
+                                    <label style="color:black;">Size (Tarpaulin)</label>
+                                    <select wire:model="data.size" class="form-control">
+                                        <option value="">-- Select Size --</option>
+                                        <option value="3.5 ft x 98 ft">3.5 ft x 98 ft</option>
+                                        <option value="3.5 ft x 164 ft">3.5 ft x 164 ft</option>
+                                        <option value="4.1 ft x 164 ft">4.1 ft x 164 ft</option>
+                                        <option value="4.2 ft x 98 ft">4.2 ft x 98 ft</option>
+                                        <option value="4.2 ft x 164 ft">4.2 ft x 164 ft</option>
+                                        <option value="4.5 ft x 164 ft">4.5 ft x 164 ft</option>
+                                        <option value="5 ft x 59 ft">5 ft x 59 ft</option>
+                                        <option value="5 ft x 164 ft">5 ft x 164 ft</option>
+                                    </select>
+                                </div>
+
+                            {{-- Price --}}
+
+                            
 
                             {{-- Description --}}
                             <div class="form-group">

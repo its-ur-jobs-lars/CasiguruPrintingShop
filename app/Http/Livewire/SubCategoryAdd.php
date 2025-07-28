@@ -33,19 +33,21 @@ class SubCategoryAdd extends Component
 
     public bool $isOpen = false; // Controls modal visibility
 
-           public $selectedCategoryName;
-            public $data = [
-                'category_id' => '',
-                'subcategory_name' => '',
-                'size' => '',
-            ];
-            public function updated($propertyName)
-            {
-                if ($propertyName === 'data.category_id') {
-                    $category = Category::find($this->data['category_id']);
-                    $this->selectedCategoryName = $category?->category_name;
-                }
+          public $data = [
+            'category_id' => '',
+            'subcategory_name' => '',
+            'size' => '',
+        ];
+
+        public $selectedCategoryName = '';
+
+        public function updated($propertyName)
+        {
+            if ($propertyName === 'data.category_id') {
+                $category = Category::find($this->data['category_id']);
+                $this->selectedCategoryName = $category?->category_name;
             }
+        }
 
 
 
@@ -75,6 +77,7 @@ class SubCategoryAdd extends Component
             'data.category_id' => 'required',
             'data.subcategory_name' => 'required',
             'data.description' => 'nullable',
+            'data.size' => 'nullable|string|max:255',
             'image' => 'nullable|image|max:2048',
         ]);
 
@@ -107,6 +110,7 @@ class SubCategoryAdd extends Component
             'subcategory_id'   => $subcategory_id,
             'category_id'      => $this->data['category_id'],
             'subcategory_name' => $this->data['subcategory_name'],
+            'size'             => $this->data['size'] ?? null,
             'description'      => $this->data['description'],
             'image'            => $this->data['image'] ?? null,
             'added_by'         => Auth::user()->username,

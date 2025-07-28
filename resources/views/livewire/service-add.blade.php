@@ -38,8 +38,29 @@
                             <div class="form-group">
                                 <label style="color:black;">Subcategory Name</label>
                                 <input type="text" wire:model="data.subcategory_name" class="form-control" required>
+
                             </div>
 
+                            
+                        <div class="form-group">
+                            <label style="color:black;">Size</label>
+                            <select wire:model="data.size" class="form-control" required>
+                                <option value="">-- Select Size --</option>
+                                <option value="3.3 ft x 164 ft">3.3 ft x 164 ft</option>
+                                <option value="3.5 ft x 98 ft">3.5 ft x 98 ft</option>
+                                <option value="3.5 ft x 164 ft">3.5 ft x 164 ft</option>
+                                <option value="4.1 ft x 164 ft">4.1 ft x 164 ft</option>
+                                <option value="4.2 ft x 98 ft">4.2 ft x 98 ft</option>
+                                <option value="4.2 ft x 164 ft">4.2 ft x 164 ft</option>
+                                <option value="4.5 ft x 164 ft">4.5 ft x 164 ft</option>
+                                <option value="5 ft x 59 ft">5 ft x 59 ft</option>
+                                <option value="5 ft x 164 ft">5 ft x 164 ft</option>
+                                <option value="5.25 ft x 164 ft">5.25 ft x 164 ft</option>
+                                <option value="6.1 ft x 164 ft">6.1 ft x 164 ft</option>
+                                <option value="10.5 ft x 164 ft">10.5 ft x 164 ft</option>
+                            </select>
+                        </div>
+                                
                             {{-- Description --}}
                             <div class="form-group">
                                 <label style="color:black;">Description</label>

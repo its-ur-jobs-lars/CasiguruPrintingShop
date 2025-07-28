@@ -61,12 +61,23 @@ class ServiceAdd extends Component
 
     public bool $isOpen = false; // Controls modal visibility
 
+    public $selectedCategoryName = '';
+
+public function updated($property)
+{
+    if ($property === 'data.category_id') {
+        $category = Category::find($this->data['category_id']);
+        $this->selectedCategoryName = $category?->category_name;
+    }
+}
+
   public function save()
 {
     try {
         $this->validate([
             'data.category_id' => 'required',
             'data.subcategory_name' => 'required',
+            'data.size' => 'nullable',
             'data.description' => 'nullable',
             'image' => 'nullable|image|max:2048', // 2MB max
         ]);
@@ -106,6 +117,7 @@ class ServiceAdd extends Component
             'category_id'      => $this->data['category_id'],
             'subcategory_name' => $this->data['subcategory_name'],
             'description'      => $this->data['description'],
+            'size'             => $this->data['size'],
             'image'            => $this->data['image'] ?? null,
             'added_by'         => Auth::user()->username,
         ]);
