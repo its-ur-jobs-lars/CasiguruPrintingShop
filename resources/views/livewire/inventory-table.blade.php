@@ -25,7 +25,6 @@
                                 <th class="px-4 py-2">Quantity</th>
                                 <th class="px-4 py-2">Minimum Stock</th>
                                 <th class="px-4 py-2">Purchase Price</th>
-                                <th class="px-4 py-2">Available Rolls</th>
                                 <th class="px-4 py-2">Location</th>
                                  <th class="px-4 py-2">Supplier</th>
                                  <th class="px-4 py-2">Remarks</th>
@@ -57,7 +56,6 @@
                                                 </td>
                                    <td class="px-4 py-2">{{ $record->purchase_price }}</td>
 
-                                    <td class="px-4 py-2">{{ $record->available_rolls }}</td>
                                     <td class="px-4 py-2">{{ $record->location }}</td>
                                      <td class="px-4 py-2">{{ $supplier[$record->supplier_id] ?? 'Not Available' }}</td>
 
