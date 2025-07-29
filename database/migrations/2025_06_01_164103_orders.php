@@ -35,6 +35,8 @@ class Orders extends Migration
             $table->string('jo_number')->nullable(); // Job Order Number
             $table->date('deadline')->nullable();
             $table->string('status')->nullable();
+            $table->string('email')->nullable();
+
             // Status of the order
              $table->string('customer_type')->nullable();
 

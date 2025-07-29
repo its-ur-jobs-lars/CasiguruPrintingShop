@@ -207,12 +207,17 @@
                                         <option value="For PickUp">For PickUp</option>
 
                                     </select>
-                                </div>
-                        <div class="form-group">
+                     </div>
+
+                    <div class="form-group">
                         <label for="remarks" style="float: left;">Remarks</label>
                         <input type="text" wire:model.defer="data.remarks" class="form-control" required>
                         @error('remarks') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+                     
+                     
+
+                    
                  </div>
 
                    <div class="form-group">
@@ -224,6 +229,12 @@
 
                                     </select>
                                 </div>
+
+                  <div class="form-group">
+                        <label for="email" style="float: left;">Email</label>
+                        <input type="text" wire:model.defer="data.email" class="form-control" required>
+                        @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
                       
                  </div>
                 

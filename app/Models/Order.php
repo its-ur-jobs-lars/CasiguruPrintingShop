@@ -22,6 +22,7 @@ class Order extends Model
         'qty',
         'price',
         'amount',
+        'email',
         'layout_fee', // Added layout fee
         'total',
         'jo_number',

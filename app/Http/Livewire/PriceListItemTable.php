@@ -110,7 +110,7 @@ public function update()
             'category_id' => $this->editPricelist['category_id'],
             'subcategory_id' => $this->editPricelist['subcategory_id'],
             'price_1' => $this->editPricelist['price_1'],
-            'price_2_50' => $this->editPricelist['price_51_100'],
+            'price_2_50' => $this->editPricelist['price_2_50'],
             'price_51_100' => $this->editPricelist['price_51_100'],
             'price_101_500' => $this->editPricelist['price_101_500'],
             'price_501_999' => $this->editPricelist['price_501_999'],

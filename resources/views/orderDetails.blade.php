@@ -395,10 +395,10 @@
                   
                  
 
-                       <li class="side-nav-menu-item">
+                       <!-- <li class="side-nav-menu-item">
                         <a class="side-nav-menu-link" href="/rawinventory">
                         <i class="fas fa-solid fa-magnifying-glass"></i>Raw Inventory</a>
-                    </li>
+                    </li> -->
 
                 </ul>
                 <!-- End Manufacturer: subManufacturer -->
